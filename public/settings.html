@@ -27,18 +27,104 @@
             </div>
 
             <div id="settingsView" class="view-section">
-                <div class="detail-card-full">
-                    <h4>Storage Settings</h4>
-                    <p class="text-muted mb-4">Your leads are stored locally in the <code>local-data/</code> directory.</p>
+                <div class="detail-card-full" style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.7)); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 24px; box-shadow: var(--shadow-sm);">
+                    <h4 style="font-size: 18px; font-weight: 600; margin-bottom: 8px; color: var(--text-main);"><i class="fa-solid fa-database" style="color: var(--primary); margin-right: 8px;"></i> Storage Settings</h4>
+                    <p class="text-muted mb-4" style="color: var(--text-muted); font-size: 14px; margin-bottom: 20px;">Your leads, companies, and contacts are stored locally in the <code>local-data/</code> directory.</p>
                     
-                    <div class="form-group">
-                        <label>Current Year</label>
-                        <select disabled>
-                            <option>2026</option>
+                    <div class="form-group" style="max-width: 300px;">
+                        <label style="display: block; font-size: 13px; font-weight: 500; color: var(--text-muted); margin-bottom: 8px;">Active Data Year</label>
+                        <select disabled style="width: 100%; padding: 10px 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-main); font-size: 14px;">
+                            <option>2026 (Active)</option>
                         </select>
                     </div>
                 </div>
+
+                <!-- Credits & Developer Info Card -->
+                <div class="credits-container" style="margin-top: 24px;">
+                    <div class="credit-card" style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9)); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 28px; box-shadow: var(--shadow-sm); backdrop-filter: blur(10px);">
+                        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; margin-bottom: 24px;">
+                            <div style="display: flex; align-items: center; gap: 16px;">
+                                <div style="width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(135deg, #6366f1, #ec4899); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 24px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);">
+                                    <i class="fa-solid fa-heart"></i>
+                                </div>
+                                <div>
+                                    <h3 style="margin: 0; font-size: 20px; font-weight: 700; color: var(--text-main);">Credits & Attribution</h3>
+                                    <p style="margin: 4px 0 0; font-size: 14px; color: var(--text-muted);">Built with ❤️ and dedicated to open-source excellence</p>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <span style="background: rgba(99, 102, 241, 0.15); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.3); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                                    <i class="fa-solid fa-code-branch"></i> v1.0.0
+                                </span>
+                                <span style="background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                                    <i class="fa-solid fa-shield-halved"></i> MIT License
+                                </span>
+                                <span style="background: rgba(236, 72, 153, 0.15); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                                    <i class="fa-solid fa-database"></i> 100% Local-First
+                                </span>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                            <!-- Harshal Mevada Card -->
+                            <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+                                <div>
+                                    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 14px;">
+                                        <div style="width: 46px; height: 46px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #6366f1); display: flex; align-items: center; justify-content: center; font-size: 18px; color: white; font-weight: 700; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);">
+                                            HM
+                                        </div>
+                                        <div>
+                                            <h4 style="margin: 0; font-size: 17px; font-weight: 700; color: #f8fafc;">Harshal Mevada</h4>
+                                            <span style="font-size: 12px; color: #94a3b8;">Creator & Lead Developer</span>
+                                        </div>
+                                    </div>
+                                    <p style="font-size: 13px; color: #94a3b8; line-height: 1.6; margin-bottom: 18px;">
+                                        Architect of Ezzy Free CRM, passionate about building fast, clean, local-first software and automated business solutions.
+                                    </p>
+                                </div>
+                                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                    <a href="https://www.linkedin.com/in/harshal-mevada/" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: #0a66c2; color: #fff; text-decoration: none; border-radius: 8px; font-size: 13px; font-weight: 500; transition: opacity 0.2s;">
+                                        <i class="fa-brands fa-linkedin"></i> LinkedIn
+                                    </a>
+                                    <a href="https://wa.me/919714606805" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: #25d366; color: #fff; text-decoration: none; border-radius: 8px; font-size: 13px; font-weight: 500; transition: opacity 0.2s;">
+                                        <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- HMEC Infosoft Card -->
+                            <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+                                <div>
+                                    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 14px;">
+                                        <div style="width: 46px; height: 46px; border-radius: 12px; background: linear-gradient(135deg, #ec4899, #8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 20px; color: white; box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);">
+                                            <i class="fa-solid fa-building"></i>
+                                        </div>
+                                        <div>
+                                            <h4 style="margin: 0; font-size: 17px; font-weight: 700; color: #f8fafc;">HMEC Infosoft</h4>
+                                            <span style="font-size: 12px; color: #94a3b8;">Technology & Machinery Solutions</span>
+                                        </div>
+                                    </div>
+                                    <p style="font-size: 13px; color: #94a3b8; line-height: 1.6; margin-bottom: 18px;">
+                                        Pioneering digital automation, sales intelligence tooling, and modern machinery systems at HMEC Machines & Infosoft.
+                                    </p>
+                                </div>
+                                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                    <a href="https://www.hmec-machines.com/" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: var(--primary); color: #fff; text-decoration: none; border-radius: 8px; font-size: 13px; font-weight: 500; transition: opacity 0.2s;">
+                                        <i class="fa-solid fa-globe"></i> Website
+                                    </a>
+                                    <a href="https://www.youtube.com/@hmecmachines" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: #ff0000; color: #fff; text-decoration: none; border-radius: 8px; font-size: 13px; font-weight: 500; transition: opacity 0.2s;">
+                                        <i class="fa-brands fa-youtube"></i> YouTube
+                                    </a>
+                                    <a href="https://github.com/hmec-infosoft-free-repo/ezzy-free-crm" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: #24292e; color: #fff; text-decoration: none; border-radius: 8px; font-size: 13px; font-weight: 500; border: 1px solid #444; transition: opacity 0.2s;">
+                                        <i class="fa-brands fa-github"></i> GitHub
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
 
             <!-- Hidden elements for app.js compatibility -->
             <div id="dashboardView" class="hidden"></div>
