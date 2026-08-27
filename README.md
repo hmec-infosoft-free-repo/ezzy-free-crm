@@ -12,7 +12,9 @@ Built with ❤️ by **[Harshal Mevada](https://www.linkedin.com/in/harshal-meva
 [![Express](https://img.shields.io/badge/Express-4.19-lightgrey.svg)](https://expressjs.com/)
 [![Local First](https://img.shields.io/badge/Data-Local--First%20JSON-orange.svg)]()
 
-[🌐 HMEC Machines Website](https://www.hmec-machines.com/) • [💼 LinkedIn Profile](https://www.linkedin.com/in/harshal-mevada/) • [📺 YouTube Channel](https://www.youtube.com/@hmecmachines) • [💬 WhatsApp Support](https://wa.me/919714606805)
+[🌐 HMEC Machines Website](https://www.hmec-machines.com/) • 
+[💼 LinkedIn Profile](https://www.linkedin.com/in/harshal-mevada/) • 
+[📺 YouTube Channel](https://www.youtube.com/@hmecmachines) • 
 
 </div>
 
@@ -153,8 +155,6 @@ This project is conceptualized, designed, and developed by:
 *Software Developer & Industrial Solutions Specialist*
 - **Personal LinkedIn:** [linkedin.com/in/harshal-mevada](https://www.linkedin.com/in/harshal-mevada/)
 - **GitHub:** [@harshaloo7yt](https://github.com/harshaloo7yt)
-- **WhatsApp Support:** [+91 9714606805](https://wa.me/919714606805)
-- **Email:** [Hmecmachines1@outlook.com](mailto:Hmecmachines1@outlook.com)
 
 ---
 
