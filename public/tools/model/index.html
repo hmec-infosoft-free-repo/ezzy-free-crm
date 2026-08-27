@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HMEC Machines Model Search - Ezzy Free CRM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="../../site-hf/version.js"></script>
+    <style>
+        .filter-panel {
+            background-color: rgba(30, 41, 59, 0.3);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin: 0 32px 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            align-items: end;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .filter-group label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+        }
+        .filter-group input, .filter-group select {
+            background-color: var(--bg-main);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            outline: none;
+            font-size: 14px;
+            transition: var(--transition);
+            width: 100%;
+        }
+        .filter-group input:focus, .filter-group select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+        .action-bar {
+            padding: 0 32px 20px;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .btn-add {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar"><script>if(localStorage.getItem('sidebarCollapsed')==='true')document.querySelector('.sidebar').classList.add('collapsed');</script></aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Admin+User&background=6366f1&color=fff" alt="Profile">
+                    <span>Admin</span>
+                </div>
+            </header>
+
+            <div class="view-section">
+                <div class="content-header">
+                    <div class="header-titles">
+                        <h1>HMEC Machines Model Search</h1>
+                        <p>Search, filter, and manage machinery models.</p>
+                    </div>
+                </div>
+
+                <div class="action-bar">
+                    <a href="add-model.html" class="btn-add"><i class="fas fa-plus"></i> Add New Model</a>
+                </div>
+
+                <div class="filter-panel">
+                    <div class="filter-group" style="grid-column: span 2;">
+                        <label for="searchQuery">Search Query</label>
+                        <input type="text" id="searchQuery" placeholder="Search by model name, series, or keywords...">
+                    </div>
+                    <div class="filter-group">
+                        <label for="filterType">Machine Type</label>
+                        <select id="filterType">
+                            <option value="All">All Types</option>
+                            <option value="Capping">Capping Machines</option>
+                            <option value="Filling">Filling Machines</option>
+                            <option value="Labeling">Labeling Machines</option>
+                            <option value="Washing">Washing Machines</option>
+                            <option value="Counting">Counting Lines</option>
+                            <option value="Turnkey">Turnkey Lines</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="sortBy">Sort By</label>
+                        <select id="sortBy">
+                            <option value="name-asc">Model Name (A-Z)</option>
+                            <option value="name-desc">Model Name (Z-A)</option>
+                            <option value="latest">Latest Added</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Models Table View -->
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Model Image</th>
+                                <th>Model Name</th>
+                                <th>Machine Type</th>
+                                <th>Specifications</th>
+                                <th>Status</th>
+                                <th style="text-align: right; padding-right: 24px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modelsList">
+                            <!-- Injected by JS, placeholder for now -->
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                                    <i class="fas fa-box-open" style="font-size: 32px; margin-bottom: 12px; display: block; color: var(--border-color);"></i>
+                                    No models found. Try adjusting your search or add a new model.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Footer -->
+                <footer style="text-align: center; padding: 24px 32px; color: var(--text-muted); font-size: 13px; margin-top: auto; border-top: 1px solid var(--border-color);">
+                    Ezzy Free CRM &copy; 2026 | Version <span class="appVersionDisplay"></span>
+                </footer>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (typeof APP_VERSION !== 'undefined') {
+                document.querySelectorAll('.appVersionDisplay').forEach(el => el.textContent = APP_VERSION);
+            }
+
+            try {
+                const sidebarRes = await fetch('../../site-hf/sidebar.html');
+                let sidebarHtml = await sidebarRes.text();
+                sidebarHtml = sidebarHtml.replace(/href="(?!\.\.\/|http)([^"]+)"/g, 'href="../../$1"');
+                const sidebarEl = document.querySelector('.sidebar');
+                if (sidebarEl) {
+                    sidebarEl.innerHTML = sidebarHtml;
+                    if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                        sidebarEl.classList.add('collapsed');
+                    }
+                    const toggleBtn = sidebarEl.querySelector('#sidebarToggle');
+                    if (toggleBtn) {
+                        toggleBtn.addEventListener('click', () => {
+                            sidebarEl.classList.toggle('collapsed');
+                            localStorage.setItem('sidebarCollapsed', sidebarEl.classList.contains('collapsed'));
+                        });
+                    }
+                }
+            } catch (err) {
+                console.error('Error loading sidebar:', err);
+            }
+        });
+    </script>
+</body>
+</html>

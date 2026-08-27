@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company-Wise Export Analysis - Market Research</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .page-container {
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .company-header {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .company-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .company-logo {
+            width: 64px;
+            height: 64px;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+        .company-details h2 {
+            margin: 0 0 4px 0;
+            font-size: 24px;
+            color: var(--text-main);
+        }
+        .company-details p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .company-select-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .company-select-wrap label {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        .company-select-wrap select {
+            width: 250px;
+        }
+
+        /* Stats Row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+        }
+        .stat-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .stat-icon {
+            font-size: 28px;
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .icon-blue { color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+        .icon-green { color: #10b981; background: rgba(16, 185, 129, 0.1); }
+        .icon-purple { color: #8b5cf6; background: rgba(139, 92, 246, 0.1); }
+        .icon-orange { color: #f59e0b; background: rgba(245, 158, 11, 0.1); }
+
+        .stat-details h4 {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        .stat-details .value {
+            margin: 4px 0 0 0;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* Table Card */
+        .card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .card-header h3 {
+            font-size: 18px;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar"><script>if(localStorage.getItem('sidebarCollapsed')==='true')document.querySelector('.sidebar').classList.add('collapsed');</script></aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search company exports..." disabled>
+                </div>
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=6366f1&color=fff" alt="Profile">
+                    <span>Admin</span>
+                </div>
+            </header>
+
+            <div class="content-header">
+                <div class="header-titles">
+                    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 8px;">
+                        <a href="index.html" style="color: var(--text-muted); text-decoration: none;"><i class="fas fa-arrow-left"></i> Back to Hub</a>
+                    </div>
+                    <h1><i class="fas fa-building" style="color: var(--primary); margin-right: 12px;"></i> Company-Wise Export Analysis</h1>
+                    <p>Deep dive into a specific company's export operations, performance, and average selling prices.</p>
+                </div>
+            </div>
+
+            <div class="view-section">
+                <div class="page-container">
+                    
+                    <!-- Company Search Bar -->
+                    <div class="card" style="padding: 20px 24px;">
+                        <div class="company-select-wrap" style="flex-direction: row; align-items: center; gap: 16px;">
+                            <label style="margin: 0; font-size: 15px; font-weight: 500; color: var(--text-main);">Analyze Company (Search):</label>
+                            <input type="text" list="companies-list" placeholder="Search company..." onchange="updateCompanyData(this.value)" value="IMA-PG INDIA PRIVATE LIMITED" style="flex: 1; max-width: 500px; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main);">
+                            <datalist id="companies-list">
+                                <option value="IMA-PG INDIA PRIVATE LIMITED"></option>
+                                <option value="ELMACH PACKAGES INDIA PRIVATE LIMITED"></option>
+                                <option value="ACG INSPECTION SYSTEMS PRIVATE LIMITED"></option>
+                                <option value="N K P PHARMA PRIVATE LIMITED"></option>
+                                <option value="HELIOS CONCREW PRIVATE LIMITED"></option>
+                            </datalist>
+                        </div>
+                    </div>
+
+                    <!-- Company Header -->
+                    <div class="company-header">
+                        <div class="company-info">
+                            <div class="company-logo"><i class="fas fa-industry"></i></div>
+                            <div class="company-details">
+                                <h2 id="active-company-name">TechMachinery LLC</h2>
+                                <p>
+                                    <span><i class="fas fa-map-marker-alt"></i> Headquarters: USA</span>
+                                    <span>|</span>
+                                    <span><i class="fas fa-certificate"></i> Verified Exporter</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Statistics -->
+                    <div class="stats-row">
+                        <div class="stat-card">
+                            <div class="stat-icon icon-blue"><i class="fas fa-truck-loading"></i></div>
+                            <div class="stat-details">
+                                <h4>Total Exports</h4>
+                                <div class="value" id="stat-total-exports">142</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon icon-green"><i class="fas fa-tags"></i></div>
+                            <div class="stat-details">
+                                <h4>Avg Selling Price</h4>
+                                <div class="value" id="stat-avg-price">$135,000</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon icon-orange"><i class="fas fa-boxes"></i></div>
+                            <div class="stat-details">
+                                <h4>Top Machine Type</h4>
+                                <div class="value" style="font-size: 18px; margin-top:8px;" id="stat-top-machine">Industrial CNC Lathe</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon icon-purple"><i class="fas fa-map-marked-alt"></i></div>
+                            <div class="stat-details">
+                                <h4>Primary Market</h4>
+                                <div class="value" style="font-size: 18px; margin-top:8px;" id="stat-primary-market">Middle East (UAE)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Export List Table -->
+                    <div class="card">
+                        <div class="card-header" style="flex-wrap: wrap; gap: 16px;">
+                            <h3>Complete Export History</h3>
+                            <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                                <div style="position: relative;">
+                                    <i class="fas fa-search" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                                    <input type="text" id="table-search" placeholder="Search machine, date..." style="padding: 8px 12px 8px 32px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main); width: 200px;">
+                                </div>
+                                <select id="table-filter-category" style="padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main); max-width: 180px;">
+                                    <option value="">All Categories</option>
+                                </select>
+                                <select id="table-filter-country" style="padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main); max-width: 180px;">
+                                    <option value="">All Countries</option>
+                                </select>
+                                <button class="btn btn-primary"><i class="fas fa-download"></i> Export Report</button>
+                            </div>
+                        </div>
+                        <div style="overflow-x: auto;">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Machine Details</th>
+                                        <th>Qty</th>
+                                        <th>Unit Price</th>
+                                        <th>Total Value</th>
+                                        <th>Destination</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="export-table-body">
+                                    <!-- Dynamic rows will go here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Mock Database
+        const companyData = {
+            'IMA-PG INDIA PRIVATE LIMITED': {
+                headquarters: 'INDIA',
+                totalExports: 2047,
+                avgPrice: '$2,500',
+                topMachine: 'AUTOMATIC CARTONING MACHINE IC150',
+                primaryMarket: 'BELARUS',
+                history: [
+                    { date: 'Aug 12, 2026', machine: 'SPARE PART FOR AUTOMATIC CARTONING MACHINE', qty: 6, unitPrice: '$379.28', total: '$2,275.71', dest: '🇧🇾 Belarus (Minsk)' },
+                    { date: 'Aug 10, 2026', machine: 'CARTON CARRYING CHAIN (IC150)', qty: 1, unitPrice: '$3,410.93', total: '$3,410.93', dest: '🇧🇾 Belarus (Minsk)' },
+                    { date: 'Aug 08, 2026', machine: 'CHANGE PART FOR IC150CM BUCKET GAUGE', qty: 1, unitPrice: '$4,060.00', total: '$4,060.00', dest: '🇵🇪 Peru (Lima)' },
+                ]
+            },
+            'ELMACH PACKAGES INDIA PRIVATE LIMITED': {
+                headquarters: 'INDIA',
+                totalExports: 561,
+                avgPrice: '$1,500',
+                topMachine: 'EPI-3000 FB SERVO BLISTER PACKING MACHINE',
+                primaryMarket: 'NIGERIA',
+                history: [
+                    { date: 'Aug 15, 2026', machine: 'CHANGE PARTS - EMBOSSING TOOL', qty: 3, unitPrice: '$1,856.07', total: '$5,568.23', dest: '🇳🇬 Nigeria' },
+                    { date: 'Aug 12, 2026', machine: 'CHANGE PARTS - COUNTER SEALING ROLLER', qty: 3, unitPrice: '$1,328.98', total: '$3,986.94', dest: '🇳🇬 Nigeria' },
+                    { date: 'Aug 10, 2026', machine: 'CHANGE PARTS - WEB INDEXING ROLLER', qty: 3, unitPrice: '$1,132.42', total: '$3,397.26', dest: '🇳🇬 Nigeria' },
+                    { date: 'Aug 08, 2026', machine: 'MOTORISED ROTARY BRUSH FEEDER', qty: 1, unitPrice: '$1,999.83', total: '$1,999.83', dest: '🇳🇬 Nigeria' },
+                ]
+            },
+            'ACG INSPECTION SYSTEMS PRIVATE LIMITED': {
+                headquarters: 'INDIA',
+                totalExports: 852,
+                avgPrice: '$1,500',
+                topMachine: 'TRACK AND TRACE INSPECTION SYSTEM',
+                primaryMarket: 'USA',
+                history: [
+                    { date: 'Aug 05, 2026', machine: 'WINDOWS 11 LICENSE FOR TRACK AND TRACE', qty: 1, unitPrice: '$1,850.00', total: '$1,850.00', dest: '🇺🇸 USA (New York)' },
+                    { date: 'Aug 01, 2026', machine: 'SPARES FOR TRACK & TRACE SYSTEM', qty: 1, unitPrice: '$1,325.00', total: '$1,325.00', dest: '🇺🇸 USA (Newark)' },
+                ]
+            },
+            'N K P PHARMA PRIVATE LIMITED': {
+                headquarters: 'INDIA',
+                totalExports: 412,
+                avgPrice: '$3,500',
+                topMachine: 'PARTS OF PHARMACEUTICAL MACHINERY',
+                primaryMarket: 'SRI LANKA',
+                history: [
+                    { date: 'Aug 12, 2026', machine: 'PARTS OF PHARMA MACHINERY (TOP SEAL)', qty: 10, unitPrice: '$103.08', total: '$1,030.81', dest: '🇱🇰 Sri Lanka (Colombo)' },
+                    { date: 'Aug 10, 2026', machine: 'PARTS OF PHARMA MACHINERY (O RINGFO)', qty: 24, unitPrice: '$16.71', total: '$401.18', dest: '🇱🇰 Sri Lanka (Colombo)' },
+                    { date: 'Aug 05, 2026', machine: 'DPTE-XS 105 ALPHA PORT', qty: 5, unitPrice: '$8,790.88', total: '$43,954.44', dest: '🇫🇷 France (Paris)' },
+                ]
+            },
+            'HELIOS CONCREW PRIVATE LIMITED': {
+                headquarters: 'INDIA',
+                totalExports: 218,
+                avgPrice: '$450',
+                topMachine: 'SEALING PLATE ALUMINIUM',
+                primaryMarket: 'NEPAL',
+                history: [
+                    { date: 'Aug 10, 2026', machine: 'SEALING PLATE ALUMINIUM (ALU)', qty: 1, unitPrice: '$232.89', total: '$232.89', dest: '🇳🇵 Nepal (Birgunj)' },
+                    { date: 'Aug 08, 2026', machine: 'GADGET FOR NFD SYSTEM', qty: 1, unitPrice: '$824.85', total: '$824.85', dest: '🇳🇵 Nepal (Birgunj)' },
+                ]
+            }
+        };
+
+        let currentDataHistory = [];
+
+        const companyJsonMap = {
+            'IMA-PG INDIA PRIVATE LIMITED': 'ima-export-json.json',
+            'ELMACH PACKAGES INDIA PRIVATE LIMITED': 'elmach-export-json.json',
+            'ACG INSPECTION SYSTEMS PRIVATE LIMITED': 'acg-export-json.json',
+            'N K P PHARMA PRIVATE LIMITED': 'nkp-export-json.json',
+            'HELIOS CONCREW PRIVATE LIMITED': 'helios-export-json.json'
+        };
+
+        async function updateCompanyData(companyName) {
+            const data = companyData[companyName];
+            if (!data) return;
+
+            document.getElementById('active-company-name').textContent = companyName;
+
+            const jsonFile = companyJsonMap[companyName];
+            if (jsonFile) {
+                try {
+                    const response = await fetch(`../local-data/ex-im-data/compwise-export-json/${jsonFile}`);
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    const jsonData = await response.json();
+                    
+                    currentDataHistory = jsonData.map(item => ({
+                        date: item.Date || '',
+                        machine: item.Product_Description || '',
+                        category: item.Industry || 'Uncategorized',
+                        country: item.Buyer_Country || 'Unknown',
+                        qty: item.Quantity || 0,
+                        unitPrice: '$' + (item.Unit_Price ? Number(item.Unit_Price).toFixed(2) : '0.00'),
+                        total: '$' + (item.Value_USD ? Number(item.Value_USD).toFixed(2) : '0.00'),
+                        dest: item.Buyer_Country ? (item.Buyer_Country + (item.Destination_Port ? ` (${item.Destination_Port})` : '')) : ''
+                    }));
+
+                    document.getElementById('stat-total-exports').textContent = currentDataHistory.length;
+                    
+                    const totalValue = jsonData.reduce((sum, item) => sum + (Number(item.Value_USD) || 0), 0);
+                    const avgPrice = totalValue / (currentDataHistory.length || 1);
+                    document.getElementById('stat-avg-price').textContent = '$' + Math.round(avgPrice).toLocaleString();
+                } catch (error) {
+                    console.error("Error loading JSON data:", error);
+                    currentDataHistory = data.history || [];
+                    document.getElementById('stat-total-exports').textContent = data.totalExports || 0;
+                    document.getElementById('stat-avg-price').textContent = data.avgPrice || '$0';
+                }
+            } else {
+                currentDataHistory = data.history || [];
+                document.getElementById('stat-total-exports').textContent = data.totalExports || 0;
+                document.getElementById('stat-avg-price').textContent = data.avgPrice || '$0';
+            }
+
+            document.getElementById('stat-top-machine').textContent = data.topMachine;
+            document.getElementById('stat-primary-market').textContent = data.primaryMarket;
+
+            populateFilters();
+            renderTable();
+        }
+
+        function populateFilters() {
+            const catSelect = document.getElementById('table-filter-category');
+            const countrySelect = document.getElementById('table-filter-country');
+            
+            if (catSelect) catSelect.innerHTML = '<option value="">All Categories</option>';
+            if (countrySelect) countrySelect.innerHTML = '<option value="">All Countries</option>';
+            
+            const uniqueCats = [...new Set(currentDataHistory.map(row => row.category))].filter(Boolean);
+            uniqueCats.sort().forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat;
+                option.textContent = cat;
+                if (catSelect) catSelect.appendChild(option);
+            });
+
+            const uniqueCountries = [...new Set(currentDataHistory.map(row => row.country))].filter(Boolean);
+            uniqueCountries.sort().forEach(country => {
+                const option = document.createElement('option');
+                option.value = country;
+                option.textContent = country;
+                if (countrySelect) countrySelect.appendChild(option);
+            });
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('export-table-body');
+            const searchTerm = document.getElementById('table-search') ? document.getElementById('table-search').value.toLowerCase() : '';
+            const filterCat = document.getElementById('table-filter-category') ? document.getElementById('table-filter-category').value : '';
+            const filterCountry = document.getElementById('table-filter-country') ? document.getElementById('table-filter-country').value : '';
+
+            tbody.innerHTML = '';
+            
+            const filteredData = currentDataHistory.filter(row => {
+                const machineText = (row.machine || '').toLowerCase();
+                const dateText = (row.date || '').toLowerCase();
+                const matchesSearch = machineText.includes(searchTerm) || dateText.includes(searchTerm);
+                const matchesCat = filterCat === '' || row.category === filterCat;
+                const matchesCountry = filterCountry === '' || row.country === filterCountry;
+                return matchesSearch && matchesCat && matchesCountry;
+            });
+            
+            // Show only latest 20 rows by default
+            filteredData.slice(0, 20).forEach(row => { 
+                const tr = document.createElement('tr');
+                tr.style.cursor = 'pointer';
+                tr.title = 'Click to view details';
+                tr.onclick = () => {
+                    const params = new URLSearchParams({
+                        date: row.date,
+                        machine: row.machine,
+                        qty: row.qty,
+                        price: row.unitPrice,
+                        total: row.total,
+                        dest: row.dest
+                    });
+                    window.location.href = 'past-order-details.html?' + params.toString();
+                };
+                tr.innerHTML = `
+                    <td>${row.date}</td>
+                    <td style="font-weight: 500;">${row.machine}</td>
+                    <td>${row.qty}</td>
+                    <td style="color: var(--text-muted);">${row.unitPrice}</td>
+                    <td style="color: #10b981; font-weight: 600;">${row.total}</td>
+                    <td>${row.dest}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+            
+            if (filteredData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 24px;">No matching records found.</td></tr>';
+            }
+        }
+
+        if (document.getElementById('table-search')) document.getElementById('table-search').addEventListener('input', renderTable);
+        if (document.getElementById('table-filter-category')) document.getElementById('table-filter-category').addEventListener('change', renderTable);
+        if (document.getElementById('table-filter-country')) document.getElementById('table-filter-country').addEventListener('change', renderTable);
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Load Sidebar dynamically
+            try {
+                const sidebarRes = await fetch('../site-hf/sidebar.html');
+                let sidebarHtml = await sidebarRes.text();
+                sidebarHtml = sidebarHtml.replace(/href="(?!\.\.\/|http)([^"]+)"/g, 'href="../$1"');
+                const sidebarEl = document.querySelector('.sidebar');
+                if (sidebarEl) {
+                    sidebarEl.innerHTML = sidebarHtml;
+                    if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                        sidebarEl.classList.add('collapsed');
+                    }
+                    const toggleBtn = sidebarEl.querySelector('#sidebarToggle');
+                    if (toggleBtn) {
+                        toggleBtn.addEventListener('click', () => {
+                            sidebarEl.classList.toggle('collapsed');
+                            localStorage.setItem('sidebarCollapsed', sidebarEl.classList.contains('collapsed'));
+                        });
+                    }
+                    const activeEl = document.getElementById('nav-market-research');
+                    if (activeEl) activeEl.classList.add('active');
+                }
+            } catch (err) {
+                console.error('Error loading sidebar:', err);
+            }
+
+            // Initialize with first company
+            updateCompanyData('IMA-PG INDIA PRIVATE LIMITED');
+        });
+    </script>
+</body>
+</html>

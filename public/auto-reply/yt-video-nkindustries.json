@@ -1,0 +1,143 @@
+{
+  "Bottle Washing Machine": [
+    { 
+      "name": "Automatic Linear Bottle Washing Machine", 
+      "youtube": "https://www.youtube.com/watch?v=BW8WD1AR2s0",
+      "website": "https://www.nkpharmamachinery.com/products/automatic-linear-bottle-washing-machine.html"
+    },
+    { 
+      "name": "Automatic Rotary Bottle Washing Machine", 
+      "youtube": "https://www.youtube.com/watch?v=ZaOFHsN0UHU",
+      "website": "https://www.nkpharmamachinery.com/products/automatic-linear-bottle-washing-machine.html"
+    },
+    { 
+      "name": "Automatic Linear Airjet Cleaning Machine", 
+      "youtube": "https://www.youtube.com/@KirtiMevadankindustries",
+      "website": "https://www.nkpharmamachinery.com/"
+    }
+  ],
+  "Liquid Filling Machine": [
+    { 
+      "name": "Automatic Volumetric Liquid Filling Machine", 
+      "youtube": "https://www.youtube.com/watch?v=GGEDhTurCag",
+      "website": "https://www.nkpharmamachinery.com/products/automatic-liquid-filling-machine.html"
+    },
+    { 
+      "name": "Automatic Flowmeter Liquid Filling Machine", 
+      "youtube": "https://www.youtube.com/@KirtiMevadankindustries",
+      "website": "https://www.nkpharmamachinery.com/products/automatic-liquid-filling-machine.html"
+    },
+    { 
+      "name": "Automatic Injectable Liquid Filling Machine", 
+      "youtube": "https://www.youtube.com/@KirtiMevadankindustries",
+      "website": "https://www.nkpharmamachinery.com/products/automatic-liquid-filling-machine.html"
+    }
+  ],
+  "Powder Filling Machine": [
+    { 
+      "name": "Automatic Auger Powder Filling Machine", 
+      "youtube": "https://www.youtube.com/watch?v=HV1dr_Nirss",
+      "website": "https://www.nkpharmamachinery.com/products/automatic-auger-type-powder-filling-machine.html"
+    },
+    { 
+      "name": "Automatic Injectable Dry Powder Filling Machine", 
+      "youtube": "https://www.youtube.com/@KirtiMevadankindustries",
+      "website": "https://www.nkpharmamachinery.com/products/automatic-vial-powder-filling-machine.html"
+    }
+  ],
+  "Capping Machine": [
+    { 
+      "name": "Automatic Single Head Screw Capping Machine", 
+      "youtube": "https://www.youtube.com/watch?v=fskGSWojojw",
+      "website": "https://www.nkpharmamachinery.com/products/automatic-single-head-screw-capping-machine.html"
+    },
+    { 
+      "name": "Automatic Multi Head Screw Capping Machine", 
+      "youtube": "https://www.youtube.com/watch?v=fskGSWojojw",
+      "website": "https://www.nkpharmamachinery.com/products/automatic-multi-head-screw-capping-machine.html"
+    },
+    { 
+      "name": "Automatic Vial Capping Machine", 
+      "youtube": "https://www.youtube.com/@KirtiMevadankindustries",
+      "website": "https://www.nkpharmamachinery.com/products/automatic-single-head-screw-capping-machine.html"
+    },
+    {
+      "name": "Automatic Rinsing Filling Capping (RFC) Machine",
+      "youtube": "https://www.youtube.com/watch?v=fskGSWojojw",
+      "website": "https://www.nkpharmamachinery.com/products/automatic-single-head-screw-capping-machine.html"
+    }
+  ],
+  "Sticker Labeling Machine": [
+    { 
+      "name": "Automatic Wrap Around Sticker Labeling Machine", 
+      "youtube": "https://www.youtube.com/watch?v=QD7fXN9OQf8",
+      "website": "https://www.nkpharmamachinery.com/products/automatic-sticker-labeling-machine.html"
+    },
+    { 
+      "name": "Automatic Double Side Sticker Labeling Machine", 
+      "youtube": "https://www.youtube.com/@KirtiMevadankindustries",
+      "website": "https://www.nkpharmamachinery.com/products/automatic-sticker-labeling-machine.html"
+    },
+    { 
+      "name": "Automatic Shrink Sleeve Labeling Machine", 
+      "youtube": "https://www.youtube.com/@KirtiMevadankindustries",
+      "website": "https://www.nkpharmamachinery.com/products/automatic-shrink-sleeve-labeling-machine.html"
+    }
+  ],
+  "Turnkey Lines": [
+    { 
+      "name": "Complete Bottle Liquid Filling Line", 
+      "youtube": "https://youtu.be/_aLrXIGFOB8",
+      "website": "https://www.nkpharmamachinery.com/complete-turnkey-line/automatic-bottle-liquid-filling-capping-line.html"
+    },
+    { 
+      "name": "Complete Injectable Dry Powder Filling Line", 
+      "youtube": "https://www.youtube.com/@KirtiMevadankindustries",
+      "website": "https://www.nkpharmamachinery.com/complete-turnkey-line/automatic-vial-powder-filling-line.html"
+    },
+    { 
+      "name": "Complete Tablet Counting & Filling Line", 
+      "youtube": "https://www.youtube.com/@KirtiMevadankindustries",
+      "website": "https://www.nkpharmamachinery.com/products/automatic-tablet-counting-and-filling-machine.html"
+    }
+  ],
+  "Specialized Equipment": [
+    { 
+      "name": "Automatic Roller Inspection Machine", 
+      "youtube": "https://www.youtube.com/@KirtiMevadankindustries",
+      "website": "https://www.nkpharmamachinery.com/products/automatic-track-and-trace-system.html"
+    },
+    { 
+      "name": "Automatic Cartoning Machine", 
+      "youtube": "https://www.youtube.com/@KirtiMevadankindustries",
+      "website": "https://www.nkpharmamachinery.com/"
+    },
+    { 
+      "name": "Automatic Serialization & Track and Trace System", 
+      "youtube": "https://www.youtube.com/@KirtiMevadankindustries",
+      "website": "https://www.nkpharmamachinery.com/products/automatic-track-and-trace-system.html"
+    }
+  ],
+  "Tablet Counting and Filling Machine": [
+    {
+      "name": "Tablet Counting and Filling Machine",
+      "youtube": "https://www.youtube.com/watch?v=ZaOFHsN0UHU",
+      "website": "https://www.nkpharmamachinery.com/products/automatic-tablet-counting-and-filling-machine.html"
+    },
+    {
+      "name": "Semi Automatic Tablet Counting and Filling Machine",
+      "youtube": "https://www.youtube.com/watch?v=eVQww_08YWw",
+      "website": "https://www.nkpharmamachinery.com/products/automatic-tablet-counting-and-filling-machine.html"
+    },
+    {
+      "name": "Single Head Automatic Tablet Counting and Filling Machine",
+      "youtube": "https://www.youtube.com/watch?v=7m2op_3t5GU",
+      "website": "https://www.nkpharmamachinery.com/products/automatic-tablet-counting-and-filling-machine.html"
+    },
+    {
+      "name": "Double Head Automatic Tablet Counting and Filling Machine",
+      "youtube": "https://www.youtube.com/watch?v=ZaOFHsN0UHU",
+      "website": "https://www.nkpharmamachinery.com/products/automatic-tablet-counting-and-filling-machine.html"
+    }
+  ]
+}

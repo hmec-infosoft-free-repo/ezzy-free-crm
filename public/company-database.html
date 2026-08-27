@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Database - Ezzy Free CRM</title>
+    <!-- External CSS dependencies -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Load configuration/version metadata -->
+    <script src="site-hf/version.js"></script>
+</head>
+<body>
+    <!-- Main Application Wrapper: Ensures flex layout for sidebar + content -->
+    <div class="app-container">
+        <!-- Sidebar Navigation: Dynamically generated on page load -->
+        <aside class="sidebar"><script>if(localStorage.getItem('sidebarCollapsed')==='true')document.querySelector('.sidebar').classList.add('collapsed');</script></aside>
+
+        <!-- Main Workspace Area -->
+        <main class="main-content">
+            <!-- Top Navigation Bar (Search, Profile) -->
+            <header class="top-bar"></header>
+
+            <!-- Page Title & Primary Actions -->
+            <div class="content-header">
+                <div class="header-titles">
+                    <h1>Company Database</h1>
+                    <p>Manage your client companies and industrial partners.</p>
+                </div>
+                <button class="btn btn-primary" id="addLeadBtn">
+                    <i class="fas fa-plus"></i> New Company
+                </button>
+            </div>
+
+            <!-- Tab Navigation Container: Houses sub-navigation (e.g. Company vs Leads) -->
+            <div id="companyNavContainer"></div>
+
+            <!-- Local Search: Filters the company table based on user input -->
+            <div class="local-search-bar" style="display: flex; gap: 10px; align-items: center;">
+                <select id="companyLimitSelect" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-main);">
+                    <option value="500" selected>Latest 500</option>
+                    <option value="1000">Latest 1000</option>
+                    <option value="2500">Latest 2500</option>
+                    <option value="all">All Companies</option>
+                </select>
+                <div style="flex-grow: 1; position: relative;">
+                    <i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%);"></i>
+                    <input type="text" id="companySearchInput" placeholder="Search companies by name, location, email, sub-companies..." style="width: 100%; padding: 10px 10px 10px 40px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-main);">
+                </div>
+            </div>
+
+            <!-- Main Data View: Contains the companies table -->
+            <div id="companiesView" class="view-section">
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Company Name</th>
+                                <th>Location</th>
+                                <th>Contact</th>
+                                <th>Website</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="companiesList">
+                            <!-- Populated dynamically via companies.js -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Hidden Views: Required to prevent JS errors when app.js attempts to toggle these views -->
+            <div id="leadsView" class="view-section hidden"></div>
+            <div id="leadDatabaseView" class="view-section hidden"></div>
+            <div id="dashboardView" class="view-section hidden"></div>
+            <div id="settingsView" class="view-section hidden"></div>
+        </main>
+    </div>
+
+    <!-- Modals Section -->
+    <!-- Company Modal: For adding and editing company records -->
+    <div class="modal-overlay" id="companyModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="companyModalTitle">Add New Company</h2>
+                <button class="close-btn" id="closeCompanyModal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="companyForm">
+                    <input type="hidden" id="companyId">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="compName">Company Name *</label>
+                            <input type="text" id="compName" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="compCountry">Country</label>
+                            <input type="text" id="compCountry" placeholder="e.g. India">
+                        </div>
+                        <div class="form-group">
+                            <label for="compState">State</label>
+                            <input type="text" id="compState" placeholder="e.g. Gujarat">
+                        </div>
+                        <div class="form-group">
+                            <label for="compCity">City</label>
+                            <input type="text" id="compCity" placeholder="e.g. Ahmedabad">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="compLocation">Location</label>
+                            <input type="text" id="compLocation" placeholder="e.g. Ahmedabad, Gujarat, India">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="compEmail">Email ID</label>
+                            <input type="email" id="compEmail">
+                        </div>
+                        <div class="form-group">
+                            <label for="compWhatsapp">WhatsApp No</label>
+                            <input type="tel" id="compWhatsapp">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="compWebsite">Website</label>
+                        <input type="url" id="compWebsite">
+                    </div>
+                    <div class="form-group">
+                        <label for="compAddress">Address</label>
+                        <textarea id="compAddress" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="compSubCompanies">Sub Companies (comma separated)</label>
+                        <input type="text" id="compSubCompanies" placeholder="e.g. Tesla Energy, Tesla Motors">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelCompanyBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Company</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Modals: Prevent routing errors for forms not active on this specific page -->
+    <div id="leadModal" class="hidden"></div>
+    <div id="detailsModal" class="hidden"></div>
+
+    <!-- Application Scripts -->
+    <script src="app.js"></script>
+    <!-- Specific logic for company management -->
+    <script src="companies.js"></script>
+    <script>
+        // Load the navigation HTML block into the container dynamically
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const res = await fetch('site-hf/company-nav.html');
+                let html = await res.text();
+                html = html.replace(/{root}/g, '');
+                const container = document.getElementById('companyNavContainer');
+                if (container) {
+                    container.innerHTML = html;
+                    document.getElementById('tab-company-list').classList.add('active');
+                }
+            } catch (err) {
+                console.error('Error loading company nav:', err);
+            }
+        });
+    </script>
+</body>
+</html>

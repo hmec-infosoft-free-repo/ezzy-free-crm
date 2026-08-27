@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXIM Data Dashboard - Market Research</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .dashboard-container {
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Stats Row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+        }
+        .stat-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            transition: var(--transition);
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+        .stat-icon {
+            font-size: 32px;
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .icon-blue { color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+        .icon-green { color: #10b981; background: rgba(16, 185, 129, 0.1); }
+        .icon-purple { color: #8b5cf6; background: rgba(139, 92, 246, 0.1); }
+        .icon-orange { color: #f59e0b; background: rgba(245, 158, 11, 0.1); }
+
+        .stat-details h4 {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .stat-details .value {
+            margin: 4px 0 0 0;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* Main Content Row */
+        .main-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        /* Table Card */
+        .card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .card-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0;
+        }
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 14px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            background: var(--bg-main);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .btn-sm:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .data-table th, .data-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .data-table th {
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge-export { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+        .badge-import { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+
+        /* Upload Area */
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 32px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: rgba(99, 102, 241, 0.02);
+            margin-top: 16px;
+        }
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+        }
+        .upload-area i {
+            font-size: 32px;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+        .file-list {
+            margin-top: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+        }
+        .file-item i {
+            color: #10b981;
+            font-size: 18px;
+        }
+
+        /* Clickable Row */
+        .clickable-row {
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .clickable-row:hover {
+            background-color: rgba(99, 102, 241, 0.1) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar"><script>if(localStorage.getItem('sidebarCollapsed')==='true')document.querySelector('.sidebar').classList.add('collapsed');</script></aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search EXIM records..." disabled>
+                </div>
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=6366f1&color=fff" alt="Profile">
+                    <span>Admin</span>
+                </div>
+            </header>
+
+            <div class="content-header">
+                <div class="header-titles">
+                    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 8px;">
+                        <a href="index.html" style="color: var(--text-muted); text-decoration: none;"><i class="fas fa-arrow-left"></i> Back to Hub</a>
+                    </div>
+                    <h1><i class="fas fa-chart-line" style="color: var(--primary); margin-right: 12px;"></i> EXIM Data Dashboard</h1>
+                    <p>Track import/export performance, machines sold, and revenue analytics based on local EXIM reports.</p>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <a href="companywise-export.html" class="btn btn-outline" style="text-decoration: none;"><i class="fas fa-building"></i> Company Analysis</a>
+                    <a href="productwise-export.html" class="btn btn-primary" style="text-decoration: none;"><i class="fas fa-box"></i> Product Analysis</a>
+                </div>
+            </div>
+
+            <div class="view-section">
+                <div class="dashboard-container">
+                    <!-- Stats Row -->
+                    <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-icon icon-blue"><i class="fas fa-cogs"></i></div>
+                        <div class="stat-details">
+                            <h4>Total Machines Sold</h4>
+                            <div class="value">1,245</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon icon-green"><i class="fas fa-dollar-sign"></i></div>
+                        <div class="stat-details">
+                            <h4>Total Value (Price)</h4>
+                            <div class="value">$8.4M</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon icon-purple"><i class="fas fa-globe-americas"></i></div>
+                        <div class="stat-details">
+                            <h4>Top Destination</h4>
+                            <div class="value">UAE</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon icon-orange"><i class="fas fa-file-excel"></i></div>
+                        <div class="stat-details">
+                            <h4>Reports Processed</h4>
+                            <div class="value">4 files</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="main-row">
+                    <!-- Recent Transactions Table -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Recent Machine Transactions</h2>
+                            <button class="btn-sm"><i class="fas fa-download"></i> Export CSV</button>
+                        </div>
+                        <div style="overflow-x: auto;">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Type</th>
+                                        <th>Machine Details</th>
+                                        <th>Qty</th>
+                                        <th>Sold Price</th>
+                                        <th>Country</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="clickable-row" onclick="openTransactionDetails('Aug 12, 2026', 'EXPORT', 'Industrial CNC Lathe', 2, '$125,000', 'UAE', 'TechMachinery LLC', 'Abu Dhabi Port')">
+                                        <td>Aug 12, 2026</td>
+                                        <td><span class="badge badge-export">EXPORT</span></td>
+                                        <td>Industrial CNC Lathe</td>
+                                        <td>2</td>
+                                        <td>$125,000</td>
+                                        <td><i class="flag-icon">🇦🇪</i> UAE</td>
+                                    </tr>
+                                    <tr class="clickable-row" onclick="openTransactionDetails('Aug 10, 2026', 'IMPORT', 'Laser Cutting Machine', 1, '$85,000', 'Germany', 'LaserTech GmbH', 'Hamburg Port')">
+                                        <td>Aug 10, 2026</td>
+                                        <td><span class="badge badge-import">IMPORT</span></td>
+                                        <td>Laser Cutting Machine</td>
+                                        <td>1</td>
+                                        <td>$85,000</td>
+                                        <td><i class="flag-icon">🇩🇪</i> Germany</td>
+                                    </tr>
+                                    <tr class="clickable-row" onclick="openTransactionDetails('Aug 08, 2026', 'EXPORT', 'Hydraulic Press', 5, '$210,000', 'USA', 'BuildCorp Inc', 'New York')">
+                                        <td>Aug 08, 2026</td>
+                                        <td><span class="badge badge-export">EXPORT</span></td>
+                                        <td>Hydraulic Press</td>
+                                        <td>5</td>
+                                        <td>$210,000</td>
+                                        <td><i class="flag-icon">🇺🇸</i> USA</td>
+                                    </tr>
+                                    <tr class="clickable-row" onclick="openTransactionDetails('Aug 05, 2026', 'EXPORT', 'Packaging Machine', 3, '$45,000', 'UK', 'Packers Ltd', 'London')">
+                                        <td>Aug 05, 2026</td>
+                                        <td><span class="badge badge-export">EXPORT</span></td>
+                                        <td>Packaging Machine</td>
+                                        <td>3</td>
+                                        <td>$45,000</td>
+                                        <td><i class="flag-icon">🇬🇧</i> UK</td>
+                                    </tr>
+                                    <tr class="clickable-row" onclick="openTransactionDetails('Aug 01, 2026', 'IMPORT', 'Injection Molding', 2, '$190,000', 'Japan', 'Mitsu Heavy Ind.', 'Tokyo Port')">
+                                        <td>Aug 01, 2026</td>
+                                        <td><span class="badge badge-import">IMPORT</span></td>
+                                        <td>Injection Molding</td>
+                                        <td>2</td>
+                                        <td>$190,000</td>
+                                        <td><i class="flag-icon">🇯🇵</i> Japan</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar / Upload Tool -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Manage Data Sources</h2>
+                        </div>
+                        <p style="color: var(--text-muted); font-size: 14px; line-height: 1.5; margin-bottom: 0;">Upload new `.xlsx` reports from your local <code>local-data/ex-im-data</code> directory to update the dashboard.</p>
+                        
+                        <div class="upload-area">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <h4 style="margin: 0 0 8px 0; color: var(--text-main);">Upload EXIM Report</h4>
+                            <p style="margin:0; font-size:12px; color:var(--text-muted);">Supports .xlsx, .xls</p>
+                        </div>
+
+                        <h4 style="margin: 24px 0 12px 0; font-size: 16px;">Recently Synced Files</h4>
+                        <div class="file-list">
+                            <div class="file-item">
+                                <i class="fas fa-file-excel"></i>
+                                <span style="flex:1;">Report_941679_1222...</span>
+                                <span style="font-size:12px; color:var(--text-muted);">50 KB</span>
+                            </div>
+                            <div class="file-item">
+                                <i class="fas fa-file-excel"></i>
+                                <span style="flex:1;">Report_941658_1222...</span>
+                                <span style="font-size:12px; color:var(--text-muted);">188 KB</span>
+                            </div>
+                            <div class="file-item">
+                                <i class="fas fa-file-excel"></i>
+                                <span style="flex:1;">Report_941619_1222...</span>
+                                <span style="font-size:12px; color:var(--text-muted);">22 KB</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function openTransactionDetails(date, type, machine, qty, price, country, company, port) {
+            const params = new URLSearchParams({
+                date, type, machine, qty, price, country, company, port
+            });
+            window.location.href = `transaction-details.html?${params.toString()}`;
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Load Sidebar dynamically
+            try {
+                const sidebarRes = await fetch('../site-hf/sidebar.html');
+                let sidebarHtml = await sidebarRes.text();
+                sidebarHtml = sidebarHtml.replace(/href="(?!\.\.\/|http)([^"]+)"/g, 'href="../$1"');
+                const sidebarEl = document.querySelector('.sidebar');
+                if (sidebarEl) {
+                    sidebarEl.innerHTML = sidebarHtml;
+                    if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                        sidebarEl.classList.add('collapsed');
+                    }
+                    const toggleBtn = sidebarEl.querySelector('#sidebarToggle');
+                    if (toggleBtn) {
+                        toggleBtn.addEventListener('click', () => {
+                            sidebarEl.classList.toggle('collapsed');
+                            localStorage.setItem('sidebarCollapsed', sidebarEl.classList.contains('collapsed'));
+                        });
+                    }
+                    const activeEl = document.getElementById('nav-market-research');
+                    if (activeEl) activeEl.classList.add('active');
+                }
+            } catch (err) {
+                console.error('Error loading sidebar:', err);
+            }
+        });
+    </script>
+</body>
+</html>

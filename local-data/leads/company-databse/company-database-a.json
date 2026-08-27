@@ -1,0 +1,20 @@
+[
+  {
+    "id": "c1010001-0000-4000-8000-000000000001",
+    "name": "Apex Global Solutions",
+    "website": "https://apexsolutions.example.com",
+    "location": "New York, NY, USA",
+    "country": "USA",
+    "state": "New York",
+    "city": "New York",
+    "email": "contact@apexsolutions.example.com",
+    "whatsapp": "+1 202 555 0143",
+    "address": "750 3rd Avenue, Suite 1200, New York, NY 10017",
+    "subCompanies": [
+      "Apex Innovations",
+      "Apex Cloud"
+    ],
+    "createdAt": "2026-01-15T10:00:00.000Z",
+    "crmAddedDate": "2026-01-15"
+  }
+]

@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lead Details - Ezzy Free CRM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="../site-hf/version.js"></script>
+    <style>
+        .details-grid-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 24px;
+            padding: 0 32px 32px;
+            align-items: start;
+        }
+        @media (max-width: 900px) {
+            .details-grid-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Lead Profile Card */
+        .profile-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.7));
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+        .profile-header {
+            text-align: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+        .profile-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            font-size: 32px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 16px rgba(99, 102, 241, 0.2);
+        }
+        .profile-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            word-break: break-word;
+        }
+        .profile-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            background-color: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        .profile-tag.result-tag {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--status-qualified);
+        }
+        .info-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .info-item label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            margin-bottom: 0;
+        }
+        .info-item span, .info-item a {
+            font-size: 14px;
+            color: var(--text-main);
+            word-break: break-word;
+        }
+        .info-item a {
+            color: var(--primary);
+            text-decoration: none;
+            border-bottom: 1px dashed transparent;
+            transition: var(--transition);
+            display: inline-block;
+        }
+        .info-item a:hover {
+            border-color: var(--primary);
+        }
+
+        /* Right panel layout */
+        .right-panel-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+        .detail-section-card {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+        .section-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+        }
+        .section-header-row h3 {
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-header-row h3 i {
+            color: var(--primary);
+        }
+        .count-badge-lg {
+            background-color: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* AI Auto-Reply Banner */
+        .ai-banner {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(236, 72, 153, 0.1));
+            border: 1px dashed var(--primary);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+        @media (max-width: 600px) {
+            .ai-banner {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+        .ai-banner-content h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .ai-banner-content p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Timeline styles */
+        .timeline-full {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 10px;
+        }
+        .timeline-full-item {
+            display: flex;
+            gap: 16px;
+            position: relative;
+        }
+        .timeline-full-item::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 40px;
+            bottom: -20px;
+            width: 2px;
+            background-color: var(--border-color);
+        }
+        .timeline-full-item:last-child::before {
+            display: none;
+        }
+        .timeline-full-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--bg-surface-hover);
+            border: 1.5px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 16px;
+            flex-shrink: 0;
+            z-index: 1;
+        }
+        .timeline-full-content {
+            background-color: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            flex-grow: 1;
+        }
+        .timeline-full-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            padding-bottom: 6px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .timeline-full-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .timeline-full-badges {
+            display: flex;
+            gap: 6px;
+        }
+        .timeline-full-text {
+            font-size: 14px;
+            line-height: 1.5;
+            white-space: pre-line;
+        }
+
+        /* Quality ratings stars */
+        .stars-container {
+            color: #f59e0b;
+        }
+
+        .error-container {
+            text-align: center;
+            padding: 60px 32px;
+            max-width: 500px;
+            margin: 40px auto;
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+        }
+        .error-container i {
+            font-size: 48px;
+            color: #ef4444;
+            margin-bottom: 16px;
+        }
+        
+        /* Interactive stars for editing quality */
+        .interactive-stars {
+            display: inline-flex;
+            gap: 4px;
+            cursor: pointer;
+        }
+        .interactive-stars i {
+            color: #475569;
+            transition: color 0.15s ease, transform 0.15s ease;
+        }
+        .interactive-stars i.active,
+        .interactive-stars i.hovered {
+            color: #fbbf24;
+        }
+        .interactive-stars i:hover {
+            transform: scale(1.25);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-content {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: modalFadeIn 0.3s ease;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .btn-close-modal {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 20px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .btn-close-modal:hover {
+            color: #ef4444;
+        }
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .modal-footer {
+            padding: 20px 24px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar"><script>if(localStorage.getItem('sidebarCollapsed')==='true')document.querySelector('.sidebar').classList.add('collapsed');</script></aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Admin+User&background=6366f1&color=fff" alt="Profile">
+                    <span>Admin</span>
+                </div>
+            </header>
+
+            <div class="view-section" style="overflow-y: auto;">
+                <div class="content-header" style="padding-bottom: 12px; display: flex; flex-direction: column; align-items: flex-start; gap: 16px;">
+                    <a href="index.html" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                    <div class="header-titles" style="width: 100%; display: flex; justify-content: space-between; align-items: flex-end;">
+                        <div>
+                            <h1 id="pageLeadName">Lead Details</h1>
+                            <p>Track follow-ups, requirements, and log new customer touchpoints.</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="openEditLeadModal()">
+                            <i class="fas fa-edit"></i> Edit Lead
+                        </button>
+                    </div>
+                </div>
+
+                <div id="leadsNavContainer"></div>
+
+                <!-- Main Layout Grid -->
+                <div id="mainDetailsGrid" class="details-grid-layout" style="margin-top: 20px;">
+                    <!-- Left Sidebar Column: Lead Profile Card -->
+                    <div class="profile-card">
+                        <div class="profile-header">
+                            <div class="profile-avatar" id="leadAvatar">-</div>
+                            <h2 id="leadNameHeader">Loading...</h2>
+                            <div style="margin-bottom: 12px;">
+                                <span class="profile-tag" id="leadStatusHeader">Status</span>
+                                <span class="profile-tag result-tag" id="leadResultHeader">Result</span>
+                            </div>
+                            <div id="navigationButtonsContainer" style="display: flex; flex-direction: column; gap: 8px; width: 100%;"></div>
+                        </div>
+                        <div class="info-list">
+                            <div class="info-item">
+                                <label>Company</label>
+                                <span id="infoCompany">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Requirement / Product</label>
+                                <span id="infoRequirement">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Inquiry Date</label>
+                                <span id="infoDate">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Lead Source</label>
+                                <span id="infoSource">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Quality Rating</label>
+                                <span id="infoQuality">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Location</label>
+                                <span id="infoLocation">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Contact Phones</label>
+                                <div id="infoPhones" style="display:flex; flex-direction:column; gap:4px;">-</div>
+                            </div>
+                            <div class="info-item">
+                                <label>Contact Emails</label>
+                                <div id="infoEmails" style="display:flex; flex-direction:column; gap:4px;">-</div>
+                            </div>
+                            <div class="info-item">
+                                <label>Tags</label>
+                                <div id="infoTags" style="display:flex; flex-wrap:wrap; gap:4px;">-</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Details, History, and Log Form -->
+                    <div class="right-panel-layout">
+                        <!-- AI Response Generator Quick Link -->
+                        <div class="ai-banner">
+                            <div class="ai-banner-content">
+                                <h4><i class="fas fa-robot"></i> AI Auto-Reply Generator</h4>
+                                <p>Prepare context-aware machinery specifications, YouTube video references, and follow-up emails instantly.</p>
+                            </div>
+                            <a href="#" id="btnAutoReply" class="btn btn-primary" target="_blank">
+                                <i class="fas fa-magic"></i> Generate Reply
+                            </a>
+                        </div>
+
+                        <!-- Full Notes Details -->
+                        <div class="detail-section-card">
+                            <div class="section-header-row">
+                                <h3><i class="fas fa-align-left"></i> Inquiry Notes & Description</h3>
+                            </div>
+                            <div style="font-size: 15px; line-height: 1.6; background-color: var(--bg-main); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 20px; white-space: pre-line;" id="leadNotes">
+                                Loading notes...
+                            </div>
+                        </div>
+
+                        <!-- Followups Log Timeline -->
+                        <div class="detail-section-card">
+                            <div class="section-header-row">
+                                <h3><i class="fas fa-history"></i> Follow-up Interactions History</h3>
+                                <span class="count-badge-lg" id="followUpsCount">0 Logs</span>
+                            </div>
+                            <div class="timeline-full" id="timelineHistory">
+                                <!-- Loaded dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Log New Follow-up Form -->
+                        <div class="detail-section-card">
+                            <div class="section-header-row">
+                                <h3><i class="fas fa-plus-circle"></i> Log New Follow-up Interaction</h3>
+                            </div>
+                            <form id="logFollowupForm">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="formFollowupDate">Date *</label>
+                                        <input type="date" id="formFollowupDate" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="formLeadStatus">Update Lead Status</label>
+                                        <select id="formLeadStatus">
+                                            <option value="New">New</option>
+                                            <option value="Contacted">Contacted</option>
+                                            <option value="Qualified">Qualified</option>
+                                            <option value="Closed">Closed</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="formLeadResult">Update Lead Result</label>
+                                        <select id="formLeadResult">
+                                            <option value="Pending">Pending</option>
+                                            <option value="Won">Won</option>
+                                            <option value="Lost">Lost</option>
+                                            <option value="Abandoned">Abandoned</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="formFollowupComments">Interaction Details / Comments *</label>
+                                    <textarea id="formFollowupComments" rows="4" placeholder="Enter details about the call, email received, proposal sent..." required></textarea>
+                                </div>
+                                <div class="form-actions" style="margin-top: 20px;">
+                                    <button type="submit" class="btn btn-primary" id="btnSubmitFollowup">
+                                        <i class="fas fa-save"></i> Log Interaction & Save
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Edit Lead Modal -->
+            <div class="modal-overlay" id="editLeadModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Edit Lead Details</h3>
+                        <button class="btn-close-modal" onclick="closeEditLeadModal()"><i class="fas fa-times"></i></button>
+                    </div>
+                    <form id="editLeadForm" style="display: flex; flex-direction: column; flex: 1; min-height: 0;">
+                        <div class="modal-body">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="editLeadName">Lead Name</label>
+                                    <input type="text" id="editLeadName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editLeadCompany">Company</label>
+                                    <input type="text" id="editLeadCompany">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="editLeadCountry">Country</label>
+                                    <input type="text" id="editLeadCountry" list="countryList" autocomplete="off" placeholder="Select or type country">
+                                    <datalist id="countryList"></datalist>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editLeadState">State / Region</label>
+                                    <input type="text" id="editLeadState" list="stateList" autocomplete="off" placeholder="Select or type state">
+                                    <datalist id="stateList"></datalist>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="editLeadCity">City</label>
+                                    <input type="text" id="editLeadCity" list="cityList" autocomplete="off" placeholder="Select or type city">
+                                    <datalist id="cityList"></datalist>
+                                </div>
+                                <div class="form-group">
+                                    <label for="editLeadSource">Lead Source</label>
+                                    <input type="text" id="editLeadSource">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="editLeadPhones">Contact Phones (Comma Separated)</label>
+                                    <input type="text" id="editLeadPhones">
+                                </div>
+                                <div class="form-group">
+                                    <label for="editLeadEmails">Contact Emails (Comma Separated)</label>
+                                    <input type="text" id="editLeadEmails">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="editLeadTags">Tags (Comma Separated)</label>
+                                <input type="text" id="editLeadTags">
+                            </div>
+                            <div class="form-group">
+                                <label for="editLeadReq">Requirement</label>
+                                <textarea id="editLeadReq" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" onclick="closeEditLeadModal()">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="btnSubmitEditLead">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Script Block for Details Page Logic -->
+    <script>
+        const API_BASE = '/api';
+        let currentLead = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Update version displays dynamically
+            if (typeof APP_VERSION !== 'undefined') {
+                document.querySelectorAll('.appVersionDisplay').forEach(el => el.textContent = APP_VERSION);
+            }
+
+            // Set default date for form to today
+            document.getElementById('formFollowupDate').value = new Date().toISOString().split('T')[0];
+
+            // Load Sidebar dynamically
+            try {
+                const sidebarRes = await fetch('../site-hf/sidebar.html');
+                let sidebarHtml = await sidebarRes.text();
+                sidebarHtml = sidebarHtml.replace(/href="(?!\.\.\/|http)([^"]+)"/g, 'href="../$1"');
+                const sidebarEl = document.querySelector('.sidebar');
+                if (sidebarEl) {
+                    sidebarEl.innerHTML = sidebarHtml;
+                    if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                        sidebarEl.classList.add('collapsed');
+                    }
+                    const toggleBtn = sidebarEl.querySelector('#sidebarToggle');
+                    if (toggleBtn) {
+                        toggleBtn.addEventListener('click', () => {
+                            sidebarEl.classList.toggle('collapsed');
+                            localStorage.setItem('sidebarCollapsed', sidebarEl.classList.contains('collapsed'));
+                        });
+                    }
+                    const activeEl = document.getElementById('nav-lead-db');
+                    if (activeEl) activeEl.classList.add('active');
+                }
+            } catch (err) {
+                console.error('Error loading sidebar:', err);
+            }
+
+            // Load Navigation
+            try {
+                const navRes = await fetch('../site-hf/leads-nav.html');
+                let navHtml = await navRes.text();
+                navHtml = navHtml.replace(/{root}/g, '../');
+                const navContainer = document.getElementById('leadsNavContainer');
+                if (navContainer) {
+                    navContainer.innerHTML = navHtml;
+                    const detailsTab = document.getElementById('tab-lead-details');
+                    if (detailsTab) {
+                        detailsTab.style.display = 'inline-flex';
+                        detailsTab.classList.add('active');
+                        detailsTab.href = window.location.href;
+                    }
+                }
+            } catch (err) {
+                console.error('Error loading leads nav:', err);
+            }
+
+            // Get ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const leadId = urlParams.get('id');
+
+            if (!leadId) {
+                renderError('No Lead Specified', 'Please provide a valid lead ID parameter in the URL.');
+                return;
+            }
+
+            await loadLeadDetails(leadId);
+
+            // Bind follow-up form submission
+            document.getElementById('logFollowupForm').addEventListener('submit', (e) => handleLogFollowup(e, leadId));
+        });
+
+        async function loadLeadDetails(leadId) {
+            try {
+                const [leadsRes, companiesRes, personsRes] = await Promise.all([
+                    fetch(`${API_BASE}/leads`),
+                    fetch(`${API_BASE}/companies`),
+                    fetch(`${API_BASE}/persons`)
+                ]);
+
+                const leads = await leadsRes.json();
+                const companies = await companiesRes.json();
+                const persons = await personsRes.json();
+
+                currentLead = leads.find(l => l.id === leadId);
+                if (!currentLead) {
+                    renderError('Lead Not Found', `We couldn't find a lead in the database with ID: ${leadId}`);
+                    return;
+                }
+
+                // Map company ID to check company database link
+                let linkedCompany = null;
+                if (currentLead.companyId) {
+                    linkedCompany = companies.find(c => c.id === currentLead.companyId);
+                } else if (currentLead.company) {
+                    linkedCompany = companies.find(c => c.name.toLowerCase() === currentLead.company.toLowerCase());
+                }
+
+                // Find linked person
+                let linkedPerson = persons.find(p => p.leadsId && p.leadsId.includes(leadId));
+                if (!linkedPerson) {
+                    // Try matching by emails or phones
+                    const leadEmails = currentLead.emails || (currentLead.email ? [currentLead.email] : []);
+                    const leadPhones = currentLead.phones || (currentLead.phone ? [currentLead.phone] : []);
+                    linkedPerson = persons.find(p => {
+                        const pEmails = p.emails || (p.email ? [p.email] : []);
+                        const pPhones = p.phones || (p.phone ? [p.phone] : []);
+                        const emailMatch = pEmails.some(pe => leadEmails.some(le => le && pe && pe.toLowerCase() === le.toLowerCase()));
+                        const phoneMatch = pPhones.some(pp => leadPhones.some(lp => lp && pp && pp.replace(/\D/g, '') === lp.replace(/\D/g, '')));
+                        return emailMatch || phoneMatch;
+                    });
+                }
+
+                // Render UI components
+                renderProfileCard(currentLead, linkedCompany, linkedPerson);
+                renderInquiryDetails(currentLead);
+                renderTimeline(currentLead.followUps || []);
+
+                // Prepopulate status/result form selectors
+                document.getElementById('formLeadStatus').value = currentLead.status || 'New';
+                document.getElementById('formLeadResult').value = currentLead.result || 'Pending';
+
+            } catch (error) {
+                console.error('Error loading lead details:', error);
+                renderError('Failed to Fetch Data', 'Please check that the local server is running and try refreshing the page.');
+            }
+        }
+
+        function renderProfileCard(lead, linkedCompany, linkedPerson) {
+            // Avatar
+            const avatar = document.getElementById('leadAvatar');
+            if (lead.name) {
+                const initials = lead.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+                avatar.textContent = initials;
+            } else {
+                avatar.textContent = '?';
+            }
+
+            // Headers
+            document.getElementById('leadNameHeader').textContent = lead.name || 'Unnamed Contact';
+            
+            const statusHeader = document.getElementById('leadStatusHeader');
+            statusHeader.textContent = lead.status || 'New';
+            statusHeader.className = `profile-tag status-badge ${lead.status || 'New'}`;
+
+            const resultHeader = document.getElementById('leadResultHeader');
+            const resultText = lead.result || 'Pending';
+            resultHeader.textContent = resultText;
+            resultHeader.className = `profile-tag result-tag result-badge-dash ${resultText.toLowerCase()}`;
+
+            // Navigation buttons
+            const navContainer = document.getElementById('navigationButtonsContainer');
+            if (navContainer) {
+                navContainer.innerHTML = '';
+                if (linkedPerson) {
+                    navContainer.innerHTML += `
+                        <a href="../view-db-person/person-details.html?id=${linkedPerson.id}" target="_blank" class="btn btn-sm btn-outline" style="width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-color: var(--primary); color: var(--primary);">
+                            <i class="fas fa-user-circle"></i> Go to Person Page
+                        </a>
+                    `;
+                } else {
+                    navContainer.innerHTML += `
+                        <a href="../person-database.html" class="btn btn-sm btn-outline" style="width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; opacity: 0.6;">
+                            <i class="fas fa-user-plus"></i> Go to Person Database
+                        </a>
+                    `;
+                }
+
+                if (linkedCompany) {
+                    navContainer.innerHTML += `
+                        <a href="../view-db-company/company-details.html?id=${linkedCompany.id}" target="_blank" class="btn btn-sm btn-outline" style="width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-color: var(--primary); color: var(--primary);">
+                            <i class="fas fa-building"></i> Go to Company Page
+                        </a>
+                    `;
+                } else {
+                    navContainer.innerHTML += `
+                        <a href="../company-database.html" class="btn btn-sm btn-outline" style="width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; opacity: 0.6;">
+                            <i class="fas fa-plus"></i> Go to Company Database
+                        </a>
+                    `;
+                }
+            }
+
+            // Core Profile Info
+            const infoCompany = document.getElementById('infoCompany');
+            if (linkedCompany) {
+                infoCompany.innerHTML = `<a href="../view-db-company/company-details.html?id=${linkedCompany.id}" target="_blank"><i class="fas fa-building text-primary"></i> ${linkedCompany.name}</a>`;
+            } else if (lead.company) {
+                infoCompany.textContent = lead.company;
+            } else {
+                infoCompany.innerHTML = '<span class="text-muted">Individual / None</span>';
+            }
+
+            document.getElementById('infoRequirement').textContent = lead.requirement || 'Not Specified';
+
+            const dStr = lead.leadDate || lead.createdAt;
+            document.getElementById('infoDate').textContent = dStr && !isNaN(new Date(dStr).getTime()) ? new Date(dStr).toLocaleDateString() : 'Not Specified';
+
+            let sourceText = lead.source || 'Direct';
+            if (lead.sourceTag) sourceText += ` — ${lead.sourceTag}`;
+            document.getElementById('infoSource').textContent = sourceText;
+
+            // Render Quality stars
+            renderQualityStars(lead.quality !== undefined ? lead.quality : (lead.qualityVal || 2));
+
+            document.getElementById('infoLocation').textContent = lead.location || 'Not Specified';
+
+            // Phones
+            const phonesContainer = document.getElementById('infoPhones');
+            const phoneList = lead.phones && lead.phones.length > 0 ? lead.phones : (lead.phone ? [lead.phone] : []);
+            if (phoneList.length > 0) {
+                phonesContainer.innerHTML = phoneList.map(p => `<span><i class="fas fa-phone text-primary" style="font-size:12px; margin-right:6px;"></i> ${p}</span>`).join('');
+            } else {
+                phonesContainer.innerHTML = '<span class="text-muted">None</span>';
+            }
+
+            // Emails
+            const emailsContainer = document.getElementById('infoEmails');
+            const emailList = lead.emails && lead.emails.length > 0 ? lead.emails : (lead.email ? [lead.email] : []);
+            if (emailList.length > 0) {
+                emailsContainer.innerHTML = emailList.map(e => `<span><i class="fas fa-envelope text-primary" style="font-size:12px; margin-right:6px;"></i> ${e}</span>`).join('');
+            } else {
+                emailsContainer.innerHTML = '<span class="text-muted">None</span>';
+            }
+
+            // Tags
+            const tagsContainer = document.getElementById('infoTags');
+            if (lead.tags) {
+                const tagList = (Array.isArray(lead.tags) ? lead.tags : lead.tags.split(',')).map(t => t.trim()).filter(Boolean);
+                tagsContainer.innerHTML = tagList.map(t => `<span class="tag-pill-dash">${t}</span>`).join('');
+            } else {
+                tagsContainer.innerHTML = '<span class="text-muted">No Tags</span>';
+            }
+
+            // Auto reply parameters
+            const firstPhone = phoneList[0] || '';
+            const firstEmail = emailList[0] || '';
+            const btnAutoReply = document.getElementById('btnAutoReply');
+            btnAutoReply.href = `../auto-reply/machine-based-question.html?name=${encodeURIComponent(lead.name || '')}&company=${encodeURIComponent(lead.company || '')}&phone=${encodeURIComponent(firstPhone)}&email=${encodeURIComponent(firstEmail)}&location=${encodeURIComponent(lead.location || '')}&query=${encodeURIComponent(lead.requirement || '')}`;
+        }
+
+        function renderQualityStars(quality) {
+            const starsContainer = document.getElementById('infoQuality');
+            const maxQuality = 10;
+            const currentQuality = Math.max(0, Math.min(maxQuality, parseInt(quality, 10) || 0));
+
+            let starsHtml = `<div class="interactive-stars" id="qualityStarsSelect" title="Click to edit quality (Current: ${currentQuality}/${maxQuality})">`;
+            for (let i = 1; i <= maxQuality; i++) {
+                starsHtml += `<i class="${i <= currentQuality ? 'fas fa-star active' : 'far fa-star'}" data-value="${i}"></i>`;
+            }
+            starsHtml += `</div><span id="qualityValueLabel" style="font-size:12px; color:var(--text-muted); margin-left: 8px;">(${currentQuality}/${maxQuality})</span>`;
+            starsContainer.innerHTML = starsHtml;
+
+            // Bind click and hover events
+            const stars = starsContainer.querySelectorAll('.interactive-stars i');
+            const qualityValueLabel = starsContainer.querySelector('#qualityValueLabel');
+            stars.forEach(star => {
+                star.addEventListener('click', async () => {
+                    const newVal = parseInt(star.getAttribute('data-value'));
+                    await updateLeadQuality(newVal);
+                });
+
+                star.addEventListener('mouseenter', () => {
+                    const val = parseInt(star.getAttribute('data-value'));
+                    if (qualityValueLabel) {
+                        qualityValueLabel.textContent = `(${val}/${maxQuality})`;
+                    }
+                    stars.forEach(s => {
+                        const sVal = parseInt(s.getAttribute('data-value'));
+                        if (sVal <= val) {
+                            s.classList.add('hovered');
+                            s.classList.remove('far');
+                            s.classList.add('fas');
+                        } else {
+                            s.classList.remove('hovered');
+                            if (!s.classList.contains('active')) {
+                                s.classList.remove('fas');
+                                s.classList.add('far');
+                            }
+                        }
+                    });
+                });
+            });
+
+            const interactiveContainer = starsContainer.querySelector('.interactive-stars');
+            if (interactiveContainer) {
+                interactiveContainer.addEventListener('mouseleave', () => {
+                    if (qualityValueLabel) {
+                        qualityValueLabel.textContent = `(${currentQuality}/${maxQuality})`;
+                    }
+                    stars.forEach(s => {
+                        s.classList.remove('hovered');
+                        if (s.classList.contains('active')) {
+                            s.classList.remove('far');
+                            s.classList.add('fas');
+                        } else {
+                            s.classList.remove('fas');
+                            s.classList.add('far');
+                        }
+                    });
+                });
+            }
+        }
+
+        async function updateLeadQuality(newQuality) {
+            if (!currentLead) return;
+            try {
+                const res = await fetch(`${API_BASE}/leads/${currentLead.id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        quality: newQuality,
+                        qualityVal: newQuality
+                    })
+                });
+                if (res.ok) {
+                    currentLead.quality = newQuality;
+                    currentLead.qualityVal = newQuality;
+                    renderQualityStars(newQuality);
+                    showToast(`Quality updated to ${newQuality}/10`);
+                } else {
+                    alert('Failed to update quality.');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Error updating quality.');
+            }
+        }
+
+        function showToast(message) {
+            let toast = document.getElementById('detailsToast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'detailsToast';
+                toast.style.cssText = `
+                    position: fixed;
+                    bottom: 24px;
+                    right: 24px;
+                    background: var(--primary);
+                    color: white;
+                    padding: 12px 24px;
+                    border-radius: var(--radius-md);
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    font-size: 14px;
+                    font-weight: 500;
+                    z-index: 9999;
+                    opacity: 0;
+                    transform: translateY(10px);
+                    transition: opacity 0.3s, transform 0.3s;
+                `;
+                document.body.appendChild(toast);
+            }
+            toast.textContent = message;
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateY(0)';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+            }, 3000);
+        }
+
+        function renderInquiryDetails(lead) {
+            document.getElementById('leadNotes').textContent = lead.notes || lead.requirement || 'No inquiry description provided.';
+        }
+
+        function renderTimeline(followUps) {
+            const container = document.getElementById('timelineHistory');
+            const countBadge = document.getElementById('followUpsCount');
+            countBadge.textContent = `${followUps.length} Log${followUps.length === 1 ? '' : 's'}`;
+
+            if (followUps.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: var(--text-muted);">
+                        <i class="fas fa-history" style="font-size: 24px; margin-bottom: 8px; display:block;"></i>
+                        No follow-up interactions logged for this lead yet.
+                    </div>
+                `;
+                return;
+            }
+
+            // Chronological order: latest interaction first
+            const sorted = [...followUps].sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+
+            container.innerHTML = sorted.map(f => {
+                const fDate = f.date ? new Date(f.date).toLocaleDateString() : 'Unknown Date';
+                const statusBadge = f.status ? `<span class="profile-tag status-badge ${f.status}" style="font-size: 10px; padding: 2px 6px;">${f.status}</span>` : '';
+                const resultBadge = f.result ? `<span class="profile-tag result-tag result-badge-dash ${f.result.toLowerCase()}" style="font-size: 10px; padding: 2px 6px;">${f.result}</span>` : '';
+                
+                return `
+                    <div class="timeline-full-item">
+                        <div class="timeline-full-icon">
+                            <i class="fas fa-comment-dots"></i>
+                        </div>
+                        <div class="timeline-full-content">
+                            <div class="timeline-full-header">
+                                <div class="timeline-full-meta">
+                                    <i class="fas fa-calendar-alt" style="margin-right: 6px;"></i><strong>${fDate}</strong>
+                                </div>
+                                <div class="timeline-full-badges">
+                                    ${statusBadge}
+                                    ${resultBadge}
+                                </div>
+                            </div>
+                            <div class="timeline-full-text">${f.notes || f.comment || 'Interaction logged.'}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function handleLogFollowup(e, leadId) {
+            e.preventDefault();
+
+            const date = document.getElementById('formFollowupDate').value;
+            const status = document.getElementById('formLeadStatus').value;
+            const result = document.getElementById('formLeadResult').value;
+            const comments = document.getElementById('formFollowupComments').value.trim();
+
+            if (!comments) return;
+
+            const btn = document.getElementById('btnSubmitFollowup');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+            try {
+                // 1. Post new followup log
+                const followupRes = await fetch(`${API_BASE}/leads/${leadId}/followups`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        date: new Date(date).toISOString(),
+                        status: status,
+                        result: result,
+                        notes: comments
+                    })
+                });
+
+                if (!followupRes.ok) {
+                    throw new Error('Failed to save follow-up');
+                }
+
+                // 2. Put / update lead status and result fields on main lead object
+                const updateLeadRes = await fetch(`${API_BASE}/leads/${leadId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        status: status,
+                        result: result
+                    })
+                });
+
+                if (!updateLeadRes.ok) {
+                    throw new Error('Failed to update lead status');
+                }
+
+                // Reset comments text area
+                document.getElementById('formFollowupComments').value = '';
+
+                // Reload the details
+                await loadLeadDetails(leadId);
+
+                alert('Follow-up logged successfully!');
+
+            } catch (err) {
+                console.error(err);
+                alert('Error saving follow-up interaction. Please try again.');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-save"></i> Log Interaction & Save';
+            }
+        }
+
+        function renderError(title, msg) {
+            const container = document.getElementById('mainDetailsGrid');
+            if (container) {
+                container.outerHTML = `
+                    <div class="error-container">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <h2>${title}</h2>
+                        <p style="margin-top: 10px; color: var(--text-muted); line-height: 1.5;">${msg}</p>
+                        <a href="index.html" class="btn btn-primary" style="margin-top: 24px; display: inline-flex;">
+                            <i class="fas fa-arrow-left"></i> Back to Dashboard
+                        </a>
+                    </div>
+                `;
+            }
+        }
+
+        // Edit Modal Logic
+        function openEditLeadModal() {
+            if (!currentLead) return;
+            document.getElementById('editLeadName').value = currentLead.name || '';
+            document.getElementById('editLeadCompany').value = currentLead.company || '';
+            
+            // Parse Location fields
+            let locCity = currentLead.city || '';
+            let locState = currentLead.state || '';
+            let locCountry = currentLead.country || '';
+
+            if (!locCity && !locState && !locCountry && currentLead.location) {
+                const parts = currentLead.location.split(',').map(s=>s.trim());
+                if (parts.length === 3) {
+                    locCity = parts[0]; locState = parts[1]; locCountry = parts[2];
+                } else if (parts.length === 2) {
+                    locState = parts[0]; locCountry = parts[1];
+                } else {
+                    locCountry = parts[0];
+                }
+            }
+
+            document.getElementById('editLeadCountry').value = locCountry;
+            document.getElementById('editLeadState').value = locState;
+            document.getElementById('editLeadCity').value = locCity;
+
+            if (locCountry) {
+                fetchStates(locCountry).then(() => {
+                    document.getElementById('editLeadState').value = locState;
+                    if (locState) {
+                        fetchCities(locCountry, locState).then(() => {
+                            document.getElementById('editLeadCity').value = locCity;
+                        });
+                    }
+                });
+            }
+
+            document.getElementById('editLeadSource').value = currentLead.source || '';
+            
+            const phones = currentLead.phones || (currentLead.phone ? [currentLead.phone] : []);
+            document.getElementById('editLeadPhones').value = phones.join(', ');
+            
+            const emails = currentLead.emails || (currentLead.email ? [currentLead.email] : []);
+            document.getElementById('editLeadEmails').value = emails.join(', ');
+            
+            const tags = currentLead.tags ? (Array.isArray(currentLead.tags) ? currentLead.tags.join(', ') : currentLead.tags) : '';
+            document.getElementById('editLeadTags').value = tags;
+            
+            document.getElementById('editLeadReq').value = currentLead.requirement || '';
+            
+            document.getElementById('editLeadModal').classList.add('active');
+        }
+
+        function closeEditLeadModal() {
+            document.getElementById('editLeadModal').classList.remove('active');
+        }
+
+        document.getElementById('editLeadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentLead) return;
+            
+            const btnSubmit = document.getElementById('btnSubmitEditLead');
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+            const phonesRaw = document.getElementById('editLeadPhones').value.split(',').map(p => p.trim()).filter(Boolean);
+            const emailsRaw = document.getElementById('editLeadEmails').value.split(',').map(e => e.trim()).filter(Boolean);
+            const tagsRaw = document.getElementById('editLeadTags').value.split(',').map(t => t.trim()).filter(Boolean);
+
+            const country = document.getElementById('editLeadCountry').value.trim();
+            const state = document.getElementById('editLeadState').value.trim();
+            const city = document.getElementById('editLeadCity').value.trim();
+            
+            const locParts = [];
+            if (city) locParts.push(city);
+            if (state) locParts.push(state);
+            if (country) locParts.push(country);
+            const locationStr = locParts.join(', ');
+
+            const updatedData = {
+                name: document.getElementById('editLeadName').value.trim(),
+                company: document.getElementById('editLeadCompany').value.trim(),
+                country: country,
+                state: state,
+                city: city,
+                location: locationStr,
+                source: document.getElementById('editLeadSource').value.trim(),
+                phones: phonesRaw,
+                phone: phonesRaw[0] || '',
+                emails: emailsRaw,
+                email: emailsRaw[0] || '',
+                tags: tagsRaw,
+                requirement: document.getElementById('editLeadReq').value.trim()
+            };
+
+            try {
+                const res = await fetch(`${API_BASE}/leads/${currentLead.id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedData)
+                });
+                
+                if (res.ok) {
+                    const savedLead = await res.json();
+                    currentLead = { ...currentLead, ...savedLead };
+                    
+                    // We must refetch the company and person manually to update linking, but we can just reload the page for simplicity
+                    showToast('Lead details updated successfully!');
+                    closeEditLeadModal();
+                    await loadLeadDetails(currentLead.id);
+                } else {
+                    alert('Failed to update lead.');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('An error occurred while saving.');
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = 'Save Changes';
+            }
+        });
+
+        // Dynamic Location API Logic
+        let countriesDataCache = [];
+        
+        async function fetchCountries() {
+            try {
+                const res = await fetch('https://countriesnow.space/api/v0.1/countries');
+                const data = await res.json();
+                countriesDataCache = data.data; 
+                const dl = document.getElementById('countryList');
+                dl.innerHTML = '';
+                countriesDataCache.forEach(c => {
+                    const opt = document.createElement('option');
+                    opt.value = c.country;
+                    dl.appendChild(opt);
+                });
+            } catch (err) {
+                console.error('Error fetching countries:', err);
+            }
+        }
+
+        async function fetchStates(country) {
+            const dl = document.getElementById('stateList');
+            dl.innerHTML = '';
+            document.getElementById('editLeadState').value = '';
+            document.getElementById('editLeadCity').value = '';
+            document.getElementById('cityList').innerHTML = '';
+            
+            try {
+                const res = await fetch('https://countriesnow.space/api/v0.1/countries/states', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({country: country})
+                });
+                const data = await res.json();
+                if (data && data.data && data.data.states) {
+                    data.data.states.forEach(s => {
+                        const opt = document.createElement('option');
+                        opt.value = s.name;
+                        dl.appendChild(opt);
+                    });
+                }
+            } catch (err) {
+                console.error('Error fetching states:', err);
+            }
+        }
+
+        async function fetchCities(country, state) {
+            const dl = document.getElementById('cityList');
+            dl.innerHTML = '';
+            document.getElementById('editLeadCity').value = '';
+            try {
+                const res = await fetch('https://countriesnow.space/api/v0.1/countries/state/cities', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({country: country, state: state})
+                });
+                const data = await res.json();
+                if (data && data.data) {
+                    data.data.forEach(c => {
+                        const opt = document.createElement('option');
+                        opt.value = c;
+                        dl.appendChild(opt);
+                    });
+                }
+            } catch (err) {
+                console.error('Error fetching cities:', err);
+            }
+        }
+
+        document.getElementById('editLeadCountry').addEventListener('change', (e) => {
+            if(e.target.value) fetchStates(e.target.value);
+        });
+
+        document.getElementById('editLeadState').addEventListener('change', (e) => {
+            const country = document.getElementById('editLeadCountry').value;
+            if(country && e.target.value) fetchCities(country, e.target.value);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchCountries();
+        });
+
+    </script>
+</body>
+</html>

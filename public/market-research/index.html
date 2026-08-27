@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Research Hub - Ezzy Free CRM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .hub-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 32px;
+        }
+        .hub-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            text-align: left;
+            transition: var(--transition);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            text-decoration: none !important;
+            color: var(--text-main) !important;
+            position: relative;
+            overflow: hidden;
+        }
+        .hub-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+            background: rgba(99, 102, 241, 0.05);
+        }
+        .hub-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary);
+            opacity: 0;
+            transition: var(--transition);
+        }
+        .hub-card:hover::after {
+            opacity: 1;
+        }
+        .hub-icon {
+            font-size: 32px;
+            color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hub-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0;
+        }
+        .hub-card p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin: 0;
+            line-height: 1.6;
+        }
+        .hub-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            align-self: flex-start;
+        }
+        .status-active {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+        .status-coming {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+        .hub-footer {
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .go-btn {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar"><script>if(localStorage.getItem('sidebarCollapsed')==='true')document.querySelector('.sidebar').classList.add('collapsed');</script></aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search market research tools..." disabled>
+                </div>
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=6366f1&color=fff" alt="Profile">
+                    <span>Admin</span>
+                </div>
+            </header>
+
+            <div class="content-header">
+                <div class="header-titles">
+                    <h1><i class="fas fa-search-dollar" style="color: var(--primary); margin-right: 12px;"></i> Market Research Hub</h1>
+                    <p>Discover insights, analyze competitors, and track industry trends to grow your business.</p>
+                </div>
+            </div>
+
+            <div class="view-section">
+                <div class="hub-grid">
+                    <!-- Competitor Analysis Tool -->
+                    <a href="competitor-analysis.html" class="hub-card">
+                        <div class="hub-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="hub-status status-active">
+                            <i class="fas fa-check-circle"></i> Live
+                        </div>
+                        <h3>Competitor Analysis</h3>
+                        <p>Track competitor pricing, features, and market presence to identify key advantages.</p>
+                        <div class="hub-footer">
+                            <span class="go-btn">Open Tool <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </a>
+
+                    <!-- Keyword Research Tool -->
+                    <div class="hub-card" style="opacity: 0.7; cursor: default;">
+                        <div class="hub-icon" style="color: #f59e0b; background: rgba(245, 158, 11, 0.1);">
+                            <i class="fas fa-keyboard"></i>
+                        </div>
+                        <div class="hub-status status-coming">
+                            <i class="fas fa-hourglass-half"></i> In Development
+                        </div>
+                        <h3>Keyword Research</h3>
+                        <p>Discover high-value keywords and phrases your target audience is searching for.</p>
+                        <div class="hub-footer">
+                            <span style="font-size: 12px; color: var(--text-muted);">Coming Soon</span>
+                        </div>
+                    </div>
+
+                    <!-- Industry Trends -->
+                    <div class="hub-card" style="opacity: 0.7; cursor: default;">
+                        <div class="hub-icon" style="color: #8b5cf6; background: rgba(139, 92, 246, 0.1);">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="hub-status status-coming">
+                            <i class="fas fa-hourglass-half"></i> Planning
+                        </div>
+                        <h3>Industry Trends</h3>
+                        <p>Monitor global and local market trends to stay ahead of the curve and adapt your strategy.</p>
+                        <div class="hub-footer">
+                            <span style="font-size: 12px; color: var(--text-muted);">Coming Soon</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Load Sidebar dynamically
+            try {
+                const sidebarRes = await fetch('../site-hf/sidebar.html');
+                let sidebarHtml = await sidebarRes.text();
+                sidebarHtml = sidebarHtml.replace(/href="(?!\.\.\/|http)([^"]+)"/g, 'href="../$1"');
+                const sidebarEl = document.querySelector('.sidebar');
+                if (sidebarEl) {
+                    sidebarEl.innerHTML = sidebarHtml;
+                    if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                        sidebarEl.classList.add('collapsed');
+                    }
+                    const toggleBtn = sidebarEl.querySelector('#sidebarToggle');
+                    if (toggleBtn) {
+                        toggleBtn.addEventListener('click', () => {
+                            sidebarEl.classList.toggle('collapsed');
+                            localStorage.setItem('sidebarCollapsed', sidebarEl.classList.contains('collapsed'));
+                        });
+                    }
+                    const activeEl = document.getElementById('nav-market-research');
+                    if (activeEl) activeEl.classList.add('active');
+                }
+            } catch (err) {
+                console.error('Error loading sidebar:', err);
+            }
+        });
+    </script>
+</body>
+</html>

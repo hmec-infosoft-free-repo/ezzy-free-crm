@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product-Wise Export Analysis - Market Research</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .page-container {
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .product-header {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .product-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .product-logo {
+            width: 64px;
+            height: 64px;
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+        .product-details h2 {
+            margin: 0 0 4px 0;
+            font-size: 24px;
+            color: var(--text-main);
+        }
+        .product-details p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .product-select-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .product-select-wrap label {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        .product-select-wrap select {
+            width: 250px;
+        }
+
+        /* Stats Row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+        }
+        .stat-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .stat-icon {
+            font-size: 28px;
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .icon-blue { color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+        .icon-green { color: #10b981; background: rgba(16, 185, 129, 0.1); }
+        .icon-purple { color: #8b5cf6; background: rgba(139, 92, 246, 0.1); }
+        .icon-orange { color: #f59e0b; background: rgba(245, 158, 11, 0.1); }
+
+        .stat-details h4 {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        .stat-details .value {
+            margin: 4px 0 0 0;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* Table Card */
+        .card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .card-header h3 {
+            font-size: 18px;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar"><script>if(localStorage.getItem('sidebarCollapsed')==='true')document.querySelector('.sidebar').classList.add('collapsed');</script></aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search products..." disabled>
+                </div>
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=6366f1&color=fff" alt="Profile">
+                    <span>Admin</span>
+                </div>
+            </header>
+
+            <div class="content-header">
+                <div class="header-titles">
+                    <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 8px;">
+                        <a href="import-export.html" style="color: var(--text-muted); text-decoration: none;"><i class="fas fa-arrow-left"></i> Back to EXIM Dashboard</a>
+                    </div>
+                    <h1><i class="fas fa-box" style="color: #10b981; margin-right: 12px;"></i> Product-Wise Export Analysis</h1>
+                    <p>Track export volumes, average prices, and demand across different machine types.</p>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <a href="companywise-export.html" class="btn btn-outline" style="text-decoration: none;"><i class="fas fa-building"></i> Company Analysis</a>
+                </div>
+            </div>
+
+            <div class="view-section">
+                <div class="page-container">
+                    
+                    <!-- Product Selector & Header -->
+                    <div class="product-header">
+                        <div class="product-info">
+                            <div class="product-logo"><i class="fas fa-cogs"></i></div>
+                            <div class="product-details">
+                                <h2 id="active-product-name">Industrial CNC Lathe</h2>
+                                <p>
+                                    <span><i class="fas fa-industry"></i> Category: Heavy Machinery</span>
+                                    <span>|</span>
+                                    <span><i class="fas fa-chart-line"></i> High Demand</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="product-select-wrap">
+                            <label>Analyze Product:</label>
+                            <select onchange="updateProductData(this.value)">
+                                <option value="AUTOMATIC CARTONING MACHINE IC150">AUTOMATIC CARTONING MACHINE IC150</option>
+                                <option value="EPI-3000 FB SERVO BLISTER PACKING MACHINE">EPI-3000 FB SERVO BLISTER PACKING MACHINE</option>
+                                <option value="TRACK AND TRACE INSPECTION SYSTEM">TRACK AND TRACE INSPECTION SYSTEM</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Statistics -->
+                    <div class="stats-row">
+                        <div class="stat-card">
+                            <div class="stat-icon icon-blue"><i class="fas fa-boxes"></i></div>
+                            <div class="stat-details">
+                                <h4>Total Units Exported</h4>
+                                <div class="value" id="stat-total-units">485</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon icon-green"><i class="fas fa-tag"></i></div>
+                            <div class="stat-details">
+                                <h4>Avg Global Price</h4>
+                                <div class="value" id="stat-avg-price">$62,500</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon icon-orange"><i class="fas fa-building"></i></div>
+                            <div class="stat-details">
+                                <h4>Top Exporter</h4>
+                                <div class="value" style="font-size: 16px; margin-top:8px;" id="stat-top-exporter">TechMachinery LLC</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon icon-purple"><i class="fas fa-globe-americas"></i></div>
+                            <div class="stat-details">
+                                <h4>Top Destination</h4>
+                                <div class="value" style="font-size: 16px; margin-top:8px;" id="stat-top-destination">UAE</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Export List Table -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Global Export History</h3>
+                            <button class="btn btn-primary"><i class="fas fa-download"></i> Export Data</button>
+                        </div>
+                        <div style="overflow-x: auto;">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Exporter Company</th>
+                                        <th>Qty</th>
+                                        <th>Unit Price</th>
+                                        <th>Total Value</th>
+                                        <th>Destination</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="export-table-body">
+                                    <!-- Dynamic rows will go here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Mock Database
+        const productData = {
+            'AUTOMATIC CARTONING MACHINE IC150': {
+                category: 'Machinery and Mechanical Appliances',
+                totalUnits: 2047,
+                avgPrice: '$2,500',
+                topExporter: 'IMA-PG INDIA PRIVATE LIMITED',
+                topDestination: 'BELARUS',
+                history: [
+                    { date: 'Aug 12, 2026', company: 'IMA-PG INDIA PRIVATE LIMITED', qty: 6, unitPrice: '$379.28', total: '$2,275.71', dest: '🇧🇾 Belarus (Minsk)' },
+                    { date: 'Aug 10, 2026', company: 'IMA-PG INDIA PRIVATE LIMITED', qty: 1, unitPrice: '$3,410.93', total: '$3,410.93', dest: '🇧🇾 Belarus (Minsk)' },
+                    { date: 'Aug 08, 2026', company: 'IMA-PG INDIA PRIVATE LIMITED', qty: 1, unitPrice: '$4,060.00', total: '$4,060.00', dest: '🇵🇪 Peru (Lima)' },
+                ]
+            },
+            'EPI-3000 FB SERVO BLISTER PACKING MACHINE': {
+                category: 'Machinery and Mechanical Appliances',
+                totalUnits: 561,
+                avgPrice: '$1,500',
+                topExporter: 'ELMACH PACKAGES INDIA PRIVATE LIMITED',
+                topDestination: 'NIGERIA',
+                history: [
+                    { date: 'Aug 15, 2026', company: 'ELMACH PACKAGES INDIA PRIVATE LIMITED', qty: 3, unitPrice: '$1,856.07', total: '$5,568.23', dest: '🇳🇬 Nigeria' },
+                    { date: 'Aug 12, 2026', company: 'ELMACH PACKAGES INDIA PRIVATE LIMITED', qty: 3, unitPrice: '$1,328.98', total: '$3,986.94', dest: '🇳🇬 Nigeria' },
+                    { date: 'Aug 10, 2026', company: 'ELMACH PACKAGES INDIA PRIVATE LIMITED', qty: 3, unitPrice: '$1,132.42', total: '$3,397.26', dest: '🇳🇬 Nigeria' },
+                    { date: 'Aug 08, 2026', company: 'ELMACH PACKAGES INDIA PRIVATE LIMITED', qty: 1, unitPrice: '$1,999.83', total: '$1,999.83', dest: '🇳🇬 Nigeria' },
+                ]
+            },
+            'TRACK AND TRACE INSPECTION SYSTEM': {
+                category: 'Engineering / Machinery',
+                totalUnits: 852,
+                avgPrice: '$1,500',
+                topExporter: 'ACG INSPECTION SYSTEMS PRIVATE LIMITED',
+                topDestination: 'USA',
+                history: [
+                    { date: 'Aug 05, 2026', company: 'ACG INSPECTION SYSTEMS PRIVATE LIMITED', qty: 1, unitPrice: '$1,850.00', total: '$1,850.00', dest: '🇺🇸 USA (New York)' },
+                    { date: 'Aug 01, 2026', company: 'ACG INSPECTION SYSTEMS PRIVATE LIMITED', qty: 1, unitPrice: '$1,325.00', total: '$1,325.00', dest: '🇺🇸 USA (Newark)' },
+                ]
+            }
+        };
+
+        function updateProductData(productName) {
+            const data = productData[productName];
+            if (!data) return;
+
+            document.getElementById('active-product-name').textContent = productName;
+            document.getElementById('stat-total-units').textContent = data.totalUnits;
+            document.getElementById('stat-avg-price').textContent = data.avgPrice;
+            document.getElementById('stat-top-exporter').textContent = data.topExporter;
+            document.getElementById('stat-top-destination').textContent = data.topDestination;
+
+            const tbody = document.getElementById('export-table-body');
+            tbody.innerHTML = '';
+            
+            data.history.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.date}</td>
+                    <td style="font-weight: 500;"><i class="fas fa-building" style="color: var(--text-muted); margin-right: 8px;"></i>${row.company}</td>
+                    <td>${row.qty}</td>
+                    <td style="color: var(--text-muted);">${row.unitPrice}</td>
+                    <td style="color: #10b981; font-weight: 600;">${row.total}</td>
+                    <td>${row.dest}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Load Sidebar dynamically
+            try {
+                const sidebarRes = await fetch('../site-hf/sidebar.html');
+                let sidebarHtml = await sidebarRes.text();
+                sidebarHtml = sidebarHtml.replace(/href="(?!\.\.\/|http)([^"]+)"/g, 'href="../$1"');
+                const sidebarEl = document.querySelector('.sidebar');
+                if (sidebarEl) {
+                    sidebarEl.innerHTML = sidebarHtml;
+                    if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                        sidebarEl.classList.add('collapsed');
+                    }
+                    const toggleBtn = sidebarEl.querySelector('#sidebarToggle');
+                    if (toggleBtn) {
+                        toggleBtn.addEventListener('click', () => {
+                            sidebarEl.classList.toggle('collapsed');
+                            localStorage.setItem('sidebarCollapsed', sidebarEl.classList.contains('collapsed'));
+                        });
+                    }
+                    const activeEl = document.getElementById('nav-market-research');
+                    if (activeEl) activeEl.classList.add('active');
+                }
+            } catch (err) {
+                console.error('Error loading sidebar:', err);
+            }
+
+            // Initialize with first product
+            updateProductData('AUTOMATIC CARTONING MACHINE IC150');
+        });
+    </script>
+</body>
+</html>

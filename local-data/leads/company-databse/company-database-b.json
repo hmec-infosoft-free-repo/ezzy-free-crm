@@ -1,0 +1,19 @@
+[
+  {
+    "id": "c1010001-0000-4000-8000-000000000002",
+    "name": "BluePeak Enterprises",
+    "website": "https://bluepeak.example.com",
+    "location": "London, UK",
+    "country": "UK",
+    "state": "Greater London",
+    "city": "London",
+    "email": "hello@bluepeak.example.com",
+    "whatsapp": "+44 20 7946 0912",
+    "address": "100 Bishopsgate, London EC2N 4AG, United Kingdom",
+    "subCompanies": [
+      "BluePeak Logistics"
+    ],
+    "createdAt": "2026-02-10T11:30:00.000Z",
+    "crmAddedDate": "2026-02-10"
+  }
+]

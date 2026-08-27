@@ -1,0 +1,131 @@
+[
+  {
+    "id": "l1010001-0000-4000-8000-000000000001",
+    "name": "Alex Morgan",
+    "company": "Apex Global Solutions",
+    "companyId": "c1010001-0000-4000-8000-000000000001",
+    "email": "alex.morgan@apexsolutions.example.com",
+    "phone": "+1 202 555 0143",
+    "location": "New York, NY, USA",
+    "country": "USA",
+    "state": "New York",
+    "city": "New York",
+    "requirement": "High-speed automated packaging line & conveyor integration",
+    "status": "Qualified",
+    "source": "Website Inquiry",
+    "tags": "Packaging, Automation, High Priority",
+    "value": "45000",
+    "leadDate": "2026-03-15",
+    "createdAt": "2026-03-15T10:00:00.000Z",
+    "notes": "Client looking to expand factory line by Q3 2026.",
+    "followUps": [
+      {
+        "id": "f1010001-0000-4000-8000-000000000001",
+        "date": "2026-03-18T14:00:00.000Z",
+        "type": "Call",
+        "summary": "Discussed technical specs with engineering team.",
+        "nextAction": "Send formal proposal and timeline"
+      }
+    ]
+  },
+  {
+    "id": "l1010001-0000-4000-8000-000000000002",
+    "name": "Benjamin Carter",
+    "company": "BluePeak Enterprises",
+    "companyId": "c1010001-0000-4000-8000-000000000002",
+    "email": "b.carter@bluepeak.example.com",
+    "phone": "+44 20 7946 0912",
+    "location": "London, UK",
+    "country": "UK",
+    "state": "Greater London",
+    "city": "London",
+    "requirement": "Rotary capping machine with automatic bottle feeder",
+    "status": "In Progress",
+    "source": "Referral",
+    "tags": "Capping, Rotary, Pharmaceutical",
+    "value": "32000",
+    "leadDate": "2026-04-02",
+    "createdAt": "2026-04-02T11:00:00.000Z",
+    "notes": "Shared video demo and machine dimension drawings.",
+    "followUps": [
+      {
+        "id": "f1010001-0000-4000-8000-000000000002",
+        "date": "2026-04-05T09:30:00.000Z",
+        "type": "Email",
+        "summary": "Provided quote breakdown.",
+        "nextAction": "Follow up on contract approval"
+      }
+    ]
+  },
+  {
+    "id": "l1010001-0000-4000-8000-000000000003",
+    "name": "Clara Schumann",
+    "company": "CyberTech Automation",
+    "companyId": "c1010001-0000-4000-8000-000000000003",
+    "email": "clara.s@cybertech-auto.example.com",
+    "phone": "+49 30 123456",
+    "location": "Berlin, Germany",
+    "country": "Germany",
+    "state": "Berlin",
+    "city": "Berlin",
+    "requirement": "Custom liquid filling system with stainless steel contact parts",
+    "status": "Won",
+    "source": "Direct",
+    "tags": "Liquid Filling, Stainless Steel, Completed",
+    "value": "58000",
+    "leadDate": "2026-05-10",
+    "createdAt": "2026-05-10T08:45:00.000Z",
+    "notes": "Order finalized and advance payment received.",
+    "followUps": [
+      {
+        "id": "f1010001-0000-4000-8000-000000000003",
+        "date": "2026-05-12T16:00:00.000Z",
+        "type": "Meeting",
+        "summary": "Finalized production dispatch date.",
+        "nextAction": "Track delivery"
+      }
+    ]
+  },
+  {
+    "id": "l1010001-0000-4000-8000-000000000004",
+    "name": "David Miller",
+    "company": "Delta Logistics",
+    "companyId": "",
+    "email": "d.miller@deltalog.example.com",
+    "phone": "+1 312 555 0199",
+    "location": "Chicago, IL, USA",
+    "country": "USA",
+    "state": "Illinois",
+    "city": "Chicago",
+    "requirement": "Sticker labeling machine for cylindrical containers",
+    "status": "Contacted",
+    "source": "LinkedIn",
+    "tags": "Labeling, Sticker",
+    "value": "18500",
+    "leadDate": "2026-06-18",
+    "createdAt": "2026-06-18T14:15:00.000Z",
+    "notes": "Introductory email sent with catalog.",
+    "followUps": []
+  },
+  {
+    "id": "l1010001-0000-4000-8000-000000000005",
+    "name": "Elena Rostova",
+    "company": "EuroPharma Tech",
+    "companyId": "",
+    "email": "elena.r@europharma.example.com",
+    "phone": "+33 1 42 68 55 00",
+    "location": "Paris, France",
+    "country": "France",
+    "state": "Île-de-France",
+    "city": "Paris",
+    "requirement": "Semi-automatic powder auger filling unit",
+    "status": "New",
+    "source": "Trade Show",
+    "tags": "Powder Filling, Semi-Auto",
+    "value": "22000",
+    "leadDate": "2026-07-22",
+    "createdAt": "2026-07-22T10:00:00.000Z",
+    "notes": "Met at packaging summit. Requested pricing.",
+    "followUps": []
+  }
+]

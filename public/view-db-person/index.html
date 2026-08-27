@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Person Insights Dashboard - Ezzy Free CRM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="../site-hf/version.js"></script>
+    <style>
+        /* Stats Dashboard styling */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            padding: 0 32px 24px;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.7));
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            background-color: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+        }
+        .stat-icon.green {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--status-qualified);
+        }
+        .stat-icon.blue {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: var(--status-new);
+        }
+        .stat-icon.pink {
+            background-color: rgba(236, 72, 153, 0.1);
+            color: var(--accent);
+        }
+        .stat-info h3 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .stat-info p {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        /* Filter Panel Styling */
+        .filter-panel {
+            background-color: rgba(30, 41, 59, 0.3);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin: 0 32px 24px;
+            display: grid;
+            grid-template-columns: 2fr repeat(5, 1fr);
+            gap: 16px;
+            align-items: end;
+        }
+        @media (max-width: 1024px) {
+            .filter-panel {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (max-width: 600px) {
+            .filter-panel {
+                grid-template-columns: 1fr;
+            }
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .filter-group label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+        }
+        .filter-group input, .filter-group select {
+            background-color: var(--bg-main);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            outline: none;
+            font-size: 14px;
+            transition: var(--transition);
+            width: 100%;
+        }
+        .filter-group input:focus, .filter-group select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+
+        /* Interactive badge and table rows */
+        .lead-count-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .lead-count-badge.has-leads {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--status-qualified);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        .lead-count-badge.no-leads {
+            background-color: rgba(148, 163, 184, 0.1);
+            color: var(--text-muted);
+            border: 1px solid rgba(148, 163, 184, 0.15);
+        }
+
+        /* Collapsible Person Details Row */
+        .details-row {
+            background-color: rgba(15, 23, 42, 0.4);
+        }
+        .details-row.hidden {
+            display: none;
+        }
+        .details-container {
+            padding: 24px 32px;
+            border-left: 4px solid var(--primary);
+            animation: slideDown 0.25s ease-out;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .expanded-details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        @media (max-width: 768px) {
+            .expanded-details-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .details-card {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+        }
+        .details-card h4 {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .details-card h4 i {
+            color: var(--primary);
+        }
+
+        .details-info-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .details-info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .details-info-item label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+        .details-info-item span {
+            font-size: 14px;
+            color: var(--text-main);
+        }
+
+        .btn-toggle-detail {
+            transition: transform 0.2s ease;
+            color: var(--text-muted);
+            font-size: 14px;
+            padding: 4px;
+        }
+        .btn-toggle-detail.active {
+            transform: rotate(90deg);
+            color: var(--primary);
+        }
+
+        .no-results-container {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+        .no-results-container i {
+            font-size: 40px;
+            margin-bottom: 12px;
+            color: var(--border-color);
+        }
+
+        .view-section {
+            display: block;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar"><script>if(localStorage.getItem('sidebarCollapsed')==='true')document.querySelector('.sidebar').classList.add('collapsed');</script></aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Admin+User&background=6366f1&color=fff" alt="Profile">
+                    <span>Admin</span>
+                </div>
+            </header>
+
+            <div id="personDashboardView" class="view-section">
+                <div class="content-header" style="flex-direction: column; align-items: stretch; gap: 15px; border-bottom: none; padding-bottom: 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <div class="header-titles">
+                            <h1>Person Insights Dashboard</h1>
+                            <p>Analyze key business contacts, their company associations, and connected leads.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Person Sub-Navigation -->
+                <div id="personNavContainer" style="margin-top: 10px;"></div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid" style="margin-top: 20px;">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="statTotalPersons">0</h3>
+                            <p>Total Contacts</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="statUniqueCompanies">0</h3>
+                            <p>Associated Companies</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="statPersonsWithLeads">0</h3>
+                            <p>Active Leads Connections</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon pink">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="statAvgContacts">0.0</h3>
+                            <p>Avg. Contacts / Company</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filters Panel -->
+                <div class="filter-panel">
+                    <div class="filter-group">
+                        <label for="personLimitSelect">Load Limit</label>
+                        <select id="personLimitSelect">
+                            <option value="500" selected>Latest 500</option>
+                            <option value="1000">Latest 1000</option>
+                            <option value="2500">Latest 2500</option>
+                            <option value="all">All People</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="searchQuery">Search Query</label>
+                        <input type="text" id="searchQuery" placeholder="Search by name, ID, phone, email, location...">
+                    </div>
+                    <div class="filter-group">
+                        <label for="filterCompany">Company</label>
+                        <select id="filterCompany">
+                            <option value="All">All Companies</option>
+                        </select>
+                    </div>
+                     <div class="filter-group">
+                        <label for="filterCountry">Country</label>
+                        <select id="filterCountry">
+                            <option value="All">All Countries</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filterState">State</label>
+                        <select id="filterState">
+                            <option value="All">All States</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filterLeadAssoc">Leads</label>
+                        <select id="filterLeadAssoc">
+                            <option value="All">All Contacts</option>
+                            <option value="with-leads">With Associated Leads</option>
+                            <option value="no-leads">Without Leads</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="sortBy">Sort By</label>
+                        <select id="sortBy">
+                            <option value="date-desc" selected>CRM Added Date (Latest First)</option>
+                            <option value="date-asc">CRM Added Date (Oldest First)</option>
+                            <option value="name-asc">Name (A-Z)</option>
+                            <option value="name-desc">Name (Z-A)</option>
+                            <option value="company-asc">Company (A-Z)</option>
+                            <option value="leads-desc">Leads Count (High-Low)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Person Table View -->
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px; text-align: center;"></th>
+                                <th>Contact Person</th>
+                                <th>Associated Company</th>
+                                <th>Contact Channels</th>
+                                <th>Leads Connection</th>
+                                <th style="text-align: right; padding-right: 24px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="personDashboardList">
+                            <!-- Injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Footer -->
+                <footer style="text-align: center; padding: 24px 32px; color: var(--text-muted); font-size: 13px; margin-top: auto; border-top: 1px solid var(--border-color);">
+                    Ezzy Free CRM &copy; 2026 | Version <span class="appVersionDisplay">1.0.20</span>
+                </footer>
+            </div>
+        </main>
+    </div>
+
+    <!-- Script Block for Dashboard Logic -->
+    <script src="../js/location-utils.js"></script>
+    <script>
+        const API_BASE = '/api';
+        let persons = [];
+        let companies = [];
+
+        // Track currently expanded contact IDs
+        const expandedPersonIds = new Set();
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Update version displays dynamically
+            if (typeof APP_VERSION !== 'undefined') {
+                document.querySelectorAll('.appVersionDisplay').forEach(el => el.textContent = APP_VERSION);
+            }
+
+            // Load Sidebar dynamically
+            try {
+                const sidebarRes = await fetch('../site-hf/sidebar.html');
+                let sidebarHtml = await sidebarRes.text();
+                sidebarHtml = sidebarHtml.replace(/href="(?!\.\.\/|http)([^"]+)"/g, 'href="../$1"');
+                const sidebarEl = document.querySelector('.sidebar');
+                if (sidebarEl) {
+                    sidebarEl.innerHTML = sidebarHtml;
+                    if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                        sidebarEl.classList.add('collapsed');
+                    }
+                    const toggleBtn = sidebarEl.querySelector('#sidebarToggle');
+                    if (toggleBtn) {
+                        toggleBtn.addEventListener('click', () => {
+                            sidebarEl.classList.toggle('collapsed');
+                            localStorage.setItem('sidebarCollapsed', sidebarEl.classList.contains('collapsed'));
+                        });
+                    }
+                    const activeEl = document.getElementById('nav-persons');
+                    if (activeEl) activeEl.classList.add('active');
+                }
+            } catch (err) {
+                console.error('Error loading sidebar:', err);
+            }
+
+            // Load Sub-Navigation
+            try {
+                const navRes = await fetch('../site-hf/person-nav.html');
+                let navHtml = await navRes.text();
+                navHtml = navHtml.replace(/{root}/g, '../');
+                const navContainer = document.getElementById('personNavContainer');
+                if (navContainer) {
+                    navContainer.innerHTML = navHtml;
+                    document.getElementById('tab-person-dashboard').classList.add('active');
+                }
+            } catch (err) {
+                console.error('Error loading person nav:', err);
+            }
+
+            // Bind listeners for filters and search
+            document.getElementById('searchQuery').addEventListener('input', applyFiltersAndRender);
+            document.getElementById('filterCompany').addEventListener('change', applyFiltersAndRender);
+            document.getElementById('filterCountry').addEventListener('change', () => {
+                populateStateDropdown(document.getElementById('filterCountry').value);
+                applyFiltersAndRender();
+            });
+            document.getElementById('filterState').addEventListener('change', applyFiltersAndRender);
+            document.getElementById('filterLeadAssoc').addEventListener('change', applyFiltersAndRender);
+            document.getElementById('sortBy').addEventListener('change', applyFiltersAndRender);
+
+            // Bind Person Limit Select
+            const limitSelect = document.getElementById('personLimitSelect');
+            if (limitSelect) {
+                const savedLimit = localStorage.getItem('personLimit') || '500';
+                limitSelect.value = savedLimit;
+                limitSelect.addEventListener('change', async (e) => {
+                    const newLimit = e.target.value;
+                    localStorage.setItem('personLimit', newLimit);
+                    await loadDashboardData();
+                });
+            }
+
+            // Fetch Initial Data
+            await loadDashboardData();
+        });
+
+        async function loadDashboardData() {
+            try {
+                const limit = localStorage.getItem('personLimit') || '500';
+                // Fetch datasets
+                const [personsRes, companiesRes] = await Promise.all([
+                    fetch(`${API_BASE}/persons?limit=${limit}`),
+                    fetch(`${API_BASE}/companies`)
+                ]);
+
+                persons = await personsRes.json();
+                companies = await companiesRes.json();
+
+                // Populate filter dropdowns
+                populateFilterDropdowns();
+
+                // Calculate and Render Metrics
+                calculateAndRenderStats();
+
+                // Initial render
+                applyFiltersAndRender();
+
+            } catch (error) {
+                console.error('Error fetching dashboard datasets:', error);
+                document.getElementById('personDashboardList').innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 40px; color: #ef4444;">
+                            <i class="fas fa-exclamation-triangle" style="margin-right: 8px;"></i> Failed to load database. Please ensure backend is running.
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        function populateFilterDropdowns() {
+            const companySelect = document.getElementById('filterCompany');
+            const countrySelect = document.getElementById('filterCountry');
+            const currentCountry = countrySelect.value;
+
+            // Unique Companies
+            companySelect.innerHTML = '<option value="All">All Companies</option>';
+            const companyList = [...new Set(persons.map(p => p.companyName).filter(Boolean))].sort();
+            companyList.forEach(comp => {
+                const opt = document.createElement('option');
+                opt.value = comp;
+                opt.textContent = comp;
+                companySelect.appendChild(opt);
+            });
+
+            // Unique Countries
+            countrySelect.innerHTML = '<option value="All">All Countries</option>';
+            const countriesSet = new Set();
+            persons.forEach(person => {
+                const { country, state } = parseLocationDetails(
+                    person.country || person.companyCountry, 
+                    person.state || person.companyState, 
+                    person.location || person.companyLocation
+                );
+                person.derivedCountry = country;
+                person.derivedState = state;
+                if (country && country !== 'Others') countriesSet.add(country);
+            });
+
+            const sortedCountries = [...countriesSet].sort();
+            sortedCountries.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c;
+                opt.textContent = c;
+                countrySelect.appendChild(opt);
+            });
+
+            if ([...countriesSet].includes(currentCountry)) {
+                countrySelect.value = currentCountry;
+            } else {
+                countrySelect.value = 'All';
+            }
+
+            populateStateDropdown(countrySelect.value);
+        }
+
+        function populateStateDropdown(selectedCountry = 'All') {
+            const stateSelect = document.getElementById('filterState');
+            const currentState = stateSelect.value;
+            stateSelect.innerHTML = '<option value="All">All States</option>';
+
+            const statesSet = new Set();
+            persons.forEach(person => {
+                const { country, state } = person.derivedCountry !== undefined 
+                    ? person 
+                    : parseLocationDetails(
+                        person.country || person.companyCountry, 
+                        person.state || person.companyState, 
+                        person.location || person.companyLocation
+                    );
+
+                if (state && state !== 'Others' && (selectedCountry === 'All' || country === selectedCountry)) {
+                    statesSet.add(state);
+                }
+            });
+
+            const sortedStates = [...statesSet].sort();
+            sortedStates.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s;
+                opt.textContent = s;
+                stateSelect.appendChild(opt);
+            });
+
+            if ([...statesSet].includes(currentState)) {
+                stateSelect.value = currentState;
+            } else {
+                stateSelect.value = 'All';
+            }
+        }
+
+        function calculateAndRenderStats(filteredPersons) {
+            const activePersons = filteredPersons || persons;
+            const totalPersons = activePersons.length;
+
+            const companyNames = activePersons.map(p => (p.companyName || '').toLowerCase().trim()).filter(Boolean);
+            const uniqueCompaniesCount = [...new Set(companyNames)].length;
+
+            const personsWithLeads = activePersons.filter(p => p.leadsId && p.leadsId.length > 0).length;
+            const avgContacts = uniqueCompaniesCount > 0 ? (totalPersons / uniqueCompaniesCount).toFixed(1) : '0.0';
+
+            document.getElementById('statTotalPersons').textContent = totalPersons;
+            document.getElementById('statUniqueCompanies').textContent = uniqueCompaniesCount;
+            document.getElementById('statPersonsWithLeads').textContent = personsWithLeads;
+            document.getElementById('statAvgContacts').textContent = avgContacts;
+        }
+
+        function applyFiltersAndRender() {
+            const query = document.getElementById('searchQuery').value.toLowerCase().trim();
+            const selectedCompany = document.getElementById('filterCompany').value;
+            const selectedCountry = document.getElementById('filterCountry').value;
+            const selectedState = document.getElementById('filterState').value;
+            const selectedLeads = document.getElementById('filterLeadAssoc').value;
+            const sortOrder = document.getElementById('sortBy').value;
+
+            // Filter Persons
+            let result = persons.filter(person => {
+                // 1. Search Query
+                const emailList = (person.emails || (person.email ? [person.email] : [])).join(' ').toLowerCase();
+                const phoneList = (person.phones || (person.phone ? [person.phone] : [])).join(' ').toLowerCase();
+                const leadsList = (person.leadsId || []).join(' ').toLowerCase();
+
+                const nameMatch = (person.name || '').toLowerCase().includes(query);
+                const idMatch = (person.customId || '').toLowerCase().includes(query);
+                const compMatch = (person.companyName || '').toLowerCase().includes(query);
+                const locMatch = (person.location || person.companyLocation || '').toLowerCase().includes(query);
+
+                const matchesSearch = !query || nameMatch || idMatch || compMatch || locMatch || emailList.includes(query) || phoneList.includes(query) || leadsList.includes(query);
+
+                // 2. Company dropdown filter
+                const matchesCompany = selectedCompany === 'All' || person.companyName === selectedCompany;
+
+                // 3. Country & State Filters
+                const { country, state } = person.derivedCountry !== undefined 
+                    ? { country: person.derivedCountry, state: person.derivedState }
+                    : parseLocationDetails(
+                        person.country || person.companyCountry, 
+                        person.state || person.companyState, 
+                        person.location || person.companyLocation
+                    );
+
+                const matchesCountry = selectedCountry === 'All' || country === selectedCountry;
+                const matchesState = selectedState === 'All' || state === selectedState;
+
+                // 4. Leads association filter
+                let matchesLeads = true;
+                if (selectedLeads === 'with-leads') {
+                    matchesLeads = person.leadsId && person.leadsId.length > 0;
+                } else if (selectedLeads === 'no-leads') {
+                    matchesLeads = !person.leadsId || person.leadsId.length === 0;
+                }
+
+                return matchesSearch && matchesCompany && matchesCountry && matchesState && matchesLeads;
+            });
+
+            // Sort Persons
+            if (sortOrder === 'date-desc') {
+                result.sort((a, b) => new Date(b.crmAddedDate || b.createdAt || 0) - new Date(a.crmAddedDate || a.createdAt || 0));
+            } else if (sortOrder === 'date-asc') {
+                result.sort((a, b) => new Date(a.crmAddedDate || a.createdAt || 0) - new Date(b.crmAddedDate || b.createdAt || 0));
+            } else if (sortOrder === 'name-asc') {
+                result.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+            } else if (sortOrder === 'name-desc') {
+                result.sort((a, b) => (b.name || '').localeCompare(a.name || ''));
+            } else if (sortOrder === 'company-asc') {
+                result.sort((a, b) => (a.companyName || '').localeCompare(b.companyName || ''));
+            } else if (sortOrder === 'leads-desc') {
+                result.sort((a, b) => (b.leadsId || []).length - (a.leadsId || []).length);
+            }
+
+            // Calculate and Render Metrics for filtered dataset
+            calculateAndRenderStats(result);
+
+            renderPersonDashboardTable(result);
+        }
+
+        function renderPersonDashboardTable(filteredData) {
+            const list = document.getElementById('personDashboardList');
+            if (!list) return;
+
+            if (filteredData.length === 0) {
+                list.innerHTML = `
+                    <tr>
+                        <td colspan="6">
+                            <div class="no-results-container">
+                                <i class="fas fa-users-slash"></i>
+                                <h3>No matching contact persons found</h3>
+                                <p>Try clearing your search query or adjusting filters.</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            list.innerHTML = '';
+            filteredData.forEach(p => {
+                const isExpanded = expandedPersonIds.has(p.id);
+
+                // Lead connection count styling
+                const leadsList = p.leadsId || [];
+                const leadsCount = leadsList.length;
+
+                // Contact info formatting
+                const emailList = p.emails || (p.email ? [p.email] : []);
+                const phoneList = p.phones || (p.phone ? [p.phone] : []);
+
+                const phoneHtml = phoneList.map(ph => `<div><i class="fas fa-phone text-muted" style="font-size:11px; margin-right:4px;"></i> ${ph}</div>`).join('');
+                const emailHtml = emailList.map(em => `<div><i class="fas fa-envelope text-muted" style="font-size:11px; margin-right:4px;"></i> ${em}</div>`).join('');
+
+                const trMain = document.createElement('tr');
+                trMain.id = `person-row-${p.id}`;
+                trMain.style.cursor = 'pointer';
+                trMain.innerHTML = `
+                    <td style="text-align: center;">
+                        <i class="fas fa-chevron-right btn-toggle-detail ${isExpanded ? 'active' : ''}" onclick="togglePersonDetails('${p.id}', event)"></i>
+                    </td>
+                    <td>
+                        <a href="person-details.html?id=${p.id}" target="_blank" style="color: var(--text-main); font-weight: 600; text-decoration: none;" class="person-name-link" onclick="event.stopPropagation();">
+                            ${p.name || 'Unnamed Contact'}
+                        </a><br>
+                        <small class="text-muted">${p.customId || 'No ID'}</small>
+                    </td>
+                    <td>
+                        <strong>${p.companyName || '<span class="text-muted">None</span>'}</strong><br>
+                        <small class="text-muted">${p.location || p.companyLocation || ''}</small>
+                    </td>
+                    <td>
+                        <div class="contact-info-small">
+                            ${phoneHtml}
+                            ${emailHtml}
+                        </div>
+                    </td>
+                    <td>
+                        <span class="lead-count-badge ${leadsCount > 0 ? 'has-leads' : 'no-leads'}" onclick="togglePersonDetails('${p.id}', event)">
+                            <i class="fas fa-link"></i> ${leadsCount} Lead${leadsCount === 1 ? '' : 's'}
+                        </span>
+                    </td>
+                    <td style="text-align: right; padding-right: 24px; white-space: nowrap;">
+                        <a href="person-details.html?id=${p.id}" target="_blank" class="btn btn-secondary btn-sm" title="View Profile" onclick="event.stopPropagation();" style="margin-right: 6px;">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="../person-database.html?search=${encodeURIComponent(p.name)}" class="btn btn-secondary btn-sm" title="Edit Contact" onclick="event.stopPropagation();">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                    </td>
+                `;
+
+                // Collapsible detail row HTML
+                const trDetail = document.createElement('tr');
+                trDetail.id = `detail-row-${p.id}`;
+                trDetail.className = `details-row ${isExpanded ? '' : 'hidden'}`;
+
+                // Associated leads items
+                let leadsListHtml = '';
+                if (leadsList.length > 0) {
+                    leadsListHtml = `
+                        <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;">
+                            ${leadsList.map(lId => `
+                                <a href="../lead-database.html?search=${encodeURIComponent(lId)}" class="btn btn-primary-light btn-sm" style="text-decoration:none;">
+                                    <i class="fas fa-external-link-alt" style="font-size:10px; margin-right:4px;"></i> ${lId}
+                                </a>
+                            `).join('')}
+                        </div>
+                    `;
+                } else {
+                    leadsListHtml = '<span class="text-muted" style="font-size:13px;">No active leads associated with this contact person.</span>';
+                }
+
+                trDetail.innerHTML = `
+                    <td colspan="6">
+                        <div class="details-container">
+                            <div class="expanded-details-grid">
+                                <!-- Contact Details Card -->
+                                <div class="details-card">
+                                    <h4><i class="fas fa-address-book"></i> Profile Information</h4>
+                                    <div class="details-info-list">
+                                        <div class="details-info-item">
+                                            <label>Full Name</label>
+                                            <span>${p.name}</span>
+                                        </div>
+                                        <div class="details-info-item">
+                                            <label>Company Association</label>
+                                            <span>${p.companyName || 'None'} ${(p.location || p.companyLocation) ? ` — ${p.location || p.companyLocation}` : ''}</span>
+                                        </div>
+                                        ${p.companyWebsite ? `
+                                        <div class="details-info-item">
+                                            <label>Website</label>
+                                            <span><a href="${p.companyWebsite.startsWith('http') ? p.companyWebsite : 'https://'+p.companyWebsite}" target="_blank" style="color:var(--primary); text-decoration:none;">${p.companyWebsite}</a></span>
+                                        </div>` : ''}
+                                    </div>
+                                </div>
+
+                                <!-- Leads Card -->
+                                <div class="details-card">
+                                    <h4><i class="fas fa-link"></i> Associated Leads / Inquiries (${leadsCount})</h4>
+                                    <div style="margin-top:4px;">
+                                        ${leadsListHtml}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                `;
+
+                // Add row toggle handler on clicking main td's (except action/website links)
+                trMain.addEventListener('click', (e) => {
+                    if (e.target.tagName.toLowerCase() !== 'a' && !e.target.closest('a') && !e.target.closest('.btn')) {
+                        togglePersonDetails(p.id, e);
+                    }
+                });
+
+                list.appendChild(trMain);
+                list.appendChild(trDetail);
+            });
+        }
+
+        window.togglePersonDetails = (personId, event) => {
+            if (event) {
+                event.stopPropagation();
+            }
+            const detailRow = document.getElementById(`detail-row-${personId}`);
+            const mainRow = document.getElementById(`person-row-${personId}`);
+            if (!detailRow || !mainRow) return;
+
+            const chevron = mainRow.querySelector('.btn-toggle-detail');
+
+            if (expandedPersonIds.has(personId)) {
+                expandedPersonIds.delete(personId);
+                detailRow.classList.add('hidden');
+                if (chevron) chevron.classList.remove('active');
+            } else {
+                expandedPersonIds.add(personId);
+                detailRow.classList.remove('hidden');
+                if (chevron) chevron.classList.add('active');
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Model - Ezzy Free CRM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="../../site-hf/version.js"></script>
+    <style>
+        .form-container {
+            background-color: rgba(30, 41, 59, 0.3);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 32px;
+            margin: 0 32px 24px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            background-color: var(--bg-main);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            outline: none;
+            font-size: 14px;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 16px;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+        }
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            border: none;
+        }
+        .btn-cancel {
+            background-color: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+        }
+        .btn-cancel:hover {
+            background-color: rgba(255,255,255,0.05);
+            color: white;
+        }
+        .btn-save {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar"><script>if(localStorage.getItem('sidebarCollapsed')==='true')document.querySelector('.sidebar').classList.add('collapsed');</script></aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Admin+User&background=6366f1&color=fff" alt="Profile">
+                    <span>Admin</span>
+                </div>
+            </header>
+
+            <div class="view-section">
+                <div class="content-header">
+                    <div class="header-titles">
+                        <h1>Add New Machine Model</h1>
+                        <p>Enter details to add a new HMEC machine to the database.</p>
+                    </div>
+                </div>
+
+                <div class="form-container">
+                    <form id="addModelForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="modelName">Model Name *</label>
+                                <input type="text" id="modelName" required placeholder="e.g. HCF-120">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="machineType">Machine Type *</label>
+                                <select id="machineType" required>
+                                    <option value="" disabled selected>Select a type...</option>
+                                    <option value="Capping">Capping Machine</option>
+                                    <option value="Filling">Filling Machine</option>
+                                    <option value="Labeling">Labeling Machine</option>
+                                    <option value="Washing">Washing Machine</option>
+                                    <option value="Counting">Counting Line</option>
+                                    <option value="Turnkey">Turnkey Line</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productionCapacity">Production Capacity</label>
+                                <input type="text" id="productionCapacity" placeholder="e.g. 120 bottles/min">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="powerRequirement">Power Requirement</label>
+                                <input type="text" id="powerRequirement" placeholder="e.g. 3 Phase, 440V, 50Hz">
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="keyFeatures">Key Features</label>
+                                <textarea id="keyFeatures" placeholder="List key features..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <a href="index.html" class="btn btn-cancel">Cancel</a>
+                            <button type="submit" class="btn btn-save"><i class="fas fa-save"></i> Save Model</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Footer -->
+                <footer style="text-align: center; padding: 24px 32px; color: var(--text-muted); font-size: 13px; margin-top: auto; border-top: 1px solid var(--border-color);">
+                    Ezzy Free CRM &copy; 2026 | Version <span class="appVersionDisplay"></span>
+                </footer>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (typeof APP_VERSION !== 'undefined') {
+                document.querySelectorAll('.appVersionDisplay').forEach(el => el.textContent = APP_VERSION);
+            }
+
+            try {
+                const sidebarRes = await fetch('../../site-hf/sidebar.html');
+                let sidebarHtml = await sidebarRes.text();
+                sidebarHtml = sidebarHtml.replace(/href="(?!\.\.\/|http)([^"]+)"/g, 'href="../../$1"');
+                const sidebarEl = document.querySelector('.sidebar');
+                if (sidebarEl) {
+                    sidebarEl.innerHTML = sidebarHtml;
+                    if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                        sidebarEl.classList.add('collapsed');
+                    }
+                    const toggleBtn = sidebarEl.querySelector('#sidebarToggle');
+                    if (toggleBtn) {
+                        toggleBtn.addEventListener('click', () => {
+                            sidebarEl.classList.toggle('collapsed');
+                            localStorage.setItem('sidebarCollapsed', sidebarEl.classList.contains('collapsed'));
+                        });
+                    }
+                }
+            } catch (err) {
+                console.error('Error loading sidebar:', err);
+            }
+
+            document.getElementById('addModelForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('Model added successfully (Mock)');
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+</body>
+</html>

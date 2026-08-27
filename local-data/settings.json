@@ -1,0 +1,7 @@
+{
+  "appName": "Ezzy Free CRM",
+  "version": "1.0.0",
+  "port": 7900,
+  "currency": "USD",
+  "defaultStatus": "New"
+}

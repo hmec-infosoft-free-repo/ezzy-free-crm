@@ -1,0 +1,26 @@
+[
+  {
+    "id": "p1010001-0000-4000-8000-000000000003",
+    "name": "Clara Schumann",
+    "customId": "P-C0001",
+    "phones": [
+      "+49 30 123456"
+    ],
+    "emails": [
+      "clara.s@cybertech-auto.example.com"
+    ],
+    "companyName": "CyberTech Automation",
+    "companyId": "c1010001-0000-4000-8000-000000000003",
+    "companyWebsite": "https://cybertech-auto.example.com",
+    "location": "Berlin, Germany",
+    "country": "Germany",
+    "state": "Berlin",
+    "city": "Berlin",
+    "leadsId": [
+      "l1010001-0000-4000-8000-000000000003"
+    ],
+    "designation": "Managing Director",
+    "createdAt": "2026-03-01T09:20:00.000Z",
+    "exCompanies": []
+  }
+]

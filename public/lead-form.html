@@ -1,0 +1,260 @@
+<!-- ============================================================
+     Lead Form Template (lead-form.html)
+     ============================================================
+     This file contains all lead-related modals:
+     1. Add/Edit Lead Modal (with Smart Fill)
+     2. Lead Details / Follow-up Modal
+     
+     It is loaded dynamically by app.js into any page that needs
+     lead functionality (leads-board.html, lead-database.html).
+     This avoids duplicating modal HTML across multiple pages.
+     ============================================================ -->
+
+<!-- Add/Edit Lead Modal -->
+<div class="modal-overlay" id="leadModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 id="modalTitle">Add New Lead</h2>
+            <div class="modal-header-actions">
+                <button type="button" class="btn btn-sm btn-outline" id="togglePromptBtn"><i class="fas fa-magic"></i> Smart Fill</button>
+                <button class="close-btn" id="closeLeadModal"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <!-- Smart Fill: Paste raw text to auto-extract lead info -->
+            <div id="promptContainer" class="prompt-parser-container hidden">
+                <p class="text-muted small mb-2">Paste lead details (email, chat, etc.) to automatically extract information.</p>
+                <textarea id="smartPromptInput" class="form-control" rows="4" placeholder="Example: John Doe from Google (john@google.com). Phone: +1 234 5678. Website: google.com"></textarea>
+                <div class="mt-2 text-right">
+                    <button type="button" class="btn btn-sm btn-primary" id="extractPromptBtn">Extract & Fill Fields</button>
+                </div>
+                <div class="divider mt-3 mb-3"></div>
+            </div>
+            <form id="leadForm">
+                <input type="hidden" id="leadId">
+                <!-- Row 1: Name + Date -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="leadName">Full Name *</label>
+                        <input type="text" id="leadName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="leadDate">Lead Date</label>
+                        <input type="date" id="leadDate">
+                    </div>
+                </div>
+                <!-- Row 2: Emails (Dynamic) -->
+                <div class="form-group">
+                    <label>Email IDs</label>
+                    <div id="emailContainer">
+                        <div class="input-group mb-2">
+                            <input type="email" class="lead-email-input" placeholder="Email 1">
+                            <button type="button" class="btn-icon add-field-btn" onclick="addField('emailContainer', 'email')"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Row 3: Phones (Dynamic) -->
+                <div class="form-group">
+                    <label>Mobile Numbers</label>
+                    <div id="phoneContainer">
+                        <div class="input-group mb-2">
+                            <input type="tel" class="lead-phone-input" placeholder="Mobile 1">
+                            <button type="button" class="btn-icon add-field-btn" onclick="addField('phoneContainer', 'phone')"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Row 4: Company Info -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="leadCompany">Company Name</label>
+                        <input type="text" id="leadCompany">
+                    </div>
+                    <div class="form-group">
+                        <label for="leadCompanyId">Company ID (Optional)</label>
+                        <input type="text" id="leadCompanyId" placeholder="e.g. COMP-001">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="leadCountry">Country</label>
+                        <input type="text" id="leadCountry" placeholder="e.g. India">
+                    </div>
+                    <div class="form-group">
+                        <label for="leadState">State</label>
+                        <input type="text" id="leadState" placeholder="e.g. Gujarat">
+                    </div>
+                    <div class="form-group">
+                        <label for="leadCity">City</label>
+                        <input type="text" id="leadCity" placeholder="e.g. Ahmedabad">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="leadLocation">Location</label>
+                        <input type="text" id="leadLocation" placeholder="e.g. Ahmedabad, Gujarat, India">
+                    </div>
+                    <div class="form-group">
+                        <label for="leadWebsite">Company Website</label>
+                        <input type="url" id="leadWebsite">
+                    </div>
+                </div>
+                <!-- Row 5: Status + Result -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="leadStatus">Lead Status</label>
+                        <select id="leadStatus">
+                            <option value="New">New</option>
+                            <option value="Contacted">Contacted</option>
+                            <option value="Qualified">Qualified</option>
+                            <option value="Closed">Closed</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="leadResult">Lead Result</label>
+                        <select id="leadResult">
+                            <option value="Pending">Pending</option>
+                            <option value="Won">Won</option>
+                            <option value="Lost">Lost</option>
+                            <option value="Abandoned">Abandoned</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- Row 6: Lead Source + Source Tag -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="leadSource">Lead Source</label>
+                        <select id="leadSource">
+                            <option value="Direct">Direct</option>
+                            <option value="Website">Website</option>
+                            <option value="Call">Call</option>
+                            <option value="WhatsApp">WhatsApp</option>
+                            <option value="Email">Email</option>
+                            <option value="Other OEM">Other OEM</option>
+                            <option value="YouTube">YouTube</option>
+                            <option value="Exhibition">Exhibition</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="sourceTagGroup">
+                        <label for="leadSourceTag">Source Tag (Optional)</label>
+                        <input type="text" id="leadSourceTag" placeholder="e.g. PMEC 2024, LinkedIn Ad">
+                    </div>
+                </div>
+                <!-- Requirement -->
+                <div class="form-group">
+                    <label for="leadRequirement">Requirement</label>
+                    <textarea id="leadRequirement" rows="2"></textarea>
+                </div>
+                <!-- Row 6: Tags + Quality -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="leadTags">Requirement Tags</label>
+                        <input type="text" id="leadTags" placeholder="e.g. software, offshore">
+                    </div>
+                    <div class="form-group">
+                        <label for="leadQuality">Lead Quality (1-9)</label>
+                        <input type="number" id="leadQuality" min="1" max="9" value="2">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelLeadBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Lead</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Lead Details / Follow-up Modal -->
+<div class="modal-overlay" id="detailsModal">
+    <div class="modal modal-large">
+        <div class="modal-header">
+            <h2 id="detailsTitle">Lead Details</h2>
+            <div class="modal-header-actions">
+                <button class="btn btn-sm btn-outline" id="detEditBtn"><i class="fas fa-edit"></i> Edit</button>
+                <button class="close-btn" id="closeDetailsModal"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+        <div class="modal-body details-grid">
+            <div class="details-sidebar">
+                <div class="detail-card">
+                    <h3 id="detName">Name</h3>
+                    <p id="detCompany" class="text-muted">Company</p>
+                    <div class="status-badge mt-2" id="detStatusBadge">Status</div>
+                </div>
+                <div class="detail-card mt-3">
+                    <h4>Contact Info</h4>
+                    <p><i class="fas fa-envelope text-primary"></i> <span id="detEmail"></span></p>
+                    <p><i class="fas fa-phone text-primary"></i> <span id="detPhone"></span></p>
+                    <p><i class="fas fa-globe text-primary"></i> <span id="detWebsite"></span></p>
+                </div>
+                <div class="detail-card mt-3">
+                    <h4>Requirement</h4>
+                    <p id="detRequirement" class="notes-text">No requirements specified.</p>
+                    <div id="detTags" class="tags-container mt-2"></div>
+                </div>
+                <div class="detail-card mt-3">
+                    <h4>Lead Quality</h4>
+                    <div id="detQuality" class="quality-rating">
+                        <span class="rating-value">0</span><span class="rating-max">/9</span>
+                        <div class="rating-stars" id="detQualityStars"></div>
+                    </div>
+                </div>
+                <div class="detail-card mt-3">
+                    <h4>Result</h4>
+                    <div id="detResultBadge" class="status-badge">Pending</div>
+                </div>
+                <div class="detail-card mt-3">
+                    <h4>Lead Source</h4>
+                    <p id="detSource" class="text-muted">Direct</p>
+                </div>
+            </div>
+            
+            <div class="details-main">
+                <div class="quick-actions-bar">
+                    <button class="btn-quick" data-action="WhatsApped"><i class="fab fa-whatsapp"></i> WhatsApped</button>
+                    <button class="btn-quick" data-action="Sent Email"><i class="fas fa-envelope"></i> Sent Email</button>
+                    <button class="btn-quick" data-action="Called"><i class="fas fa-phone"></i> Called</button>
+                    <button class="btn-quick" data-action="Meeting"><i class="fas fa-handshake"></i> Meeting</button>
+                    <button class="btn-quick btn-primary-light" id="btn-auto-reply" style="background: var(--primary-light); color: var(--primary); font-weight: 600;"><i class="fas fa-robot"></i> Auto Reply</button>
+                </div>
+
+                <div class="followup-header mt-4">
+                    <h3>Follow-up Timeline</h3>
+                    <button class="btn btn-sm btn-outline" id="addFollowUpBtn">
+                        <i class="fas fa-plus"></i> Add Custom Note
+                    </button>
+                </div>
+                
+                <div id="followupFormContainer" class="followup-form hidden">
+                    <form id="followUpForm">
+                        <input type="hidden" id="fuLeadId">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Method</label>
+                                <select id="fuMethod">
+                                    <option value="Email">Email</option>
+                                    <option value="Call">Phone Call</option>
+                                    <option value="Meeting">Meeting</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Summary</label>
+                            <textarea id="fuSummary" rows="2" required></textarea>
+                        </div>
+                        <div class="form-actions-sm">
+                            <button type="button" class="btn btn-sm btn-secondary" id="cancelFuBtn">Cancel</button>
+                            <button type="submit" class="btn btn-sm btn-primary">Save Note</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="timeline" id="followUpTimeline">
+                    <!-- Timeline items will be injected here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

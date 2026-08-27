@@ -1,0 +1,26 @@
+[
+  {
+    "id": "p1010001-0000-4000-8000-000000000002",
+    "name": "Benjamin Carter",
+    "customId": "P-B0001",
+    "phones": [
+      "+44 20 7946 0912"
+    ],
+    "emails": [
+      "b.carter@bluepeak.example.com"
+    ],
+    "companyName": "BluePeak Enterprises",
+    "companyId": "c1010001-0000-4000-8000-000000000002",
+    "companyWebsite": "https://bluepeak.example.com",
+    "location": "London, UK",
+    "country": "UK",
+    "state": "Greater London",
+    "city": "London",
+    "leadsId": [
+      "l1010001-0000-4000-8000-000000000002"
+    ],
+    "designation": "Operations Director",
+    "createdAt": "2026-02-10T11:35:00.000Z",
+    "exCompanies": []
+  }
+]

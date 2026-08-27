@@ -1,0 +1,17 @@
+[
+  {
+    "id": "c1010001-0000-4000-8000-000000000003",
+    "name": "CyberTech Automation",
+    "website": "https://cybertech-auto.example.com",
+    "location": "Berlin, Germany",
+    "country": "Germany",
+    "state": "Berlin",
+    "city": "Berlin",
+    "email": "info@cybertech-auto.example.com",
+    "whatsapp": "+49 30 123456",
+    "address": "Friedrichstraße 43, 10117 Berlin, Germany",
+    "subCompanies": [],
+    "createdAt": "2026-03-01T09:15:00.000Z",
+    "crmAddedDate": "2026-03-01"
+  }
+]

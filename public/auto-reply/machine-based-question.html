@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machine Based Question - Ezzy Free CRM</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .view-section {
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .tool-container {
+            padding: 32px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .question-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            box-shadow: var(--shadow-glass);
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            min-height: 800px;
+        }
+        .quick-section {
+            margin-bottom: 24px;
+            padding: 20px;
+            background: rgba(255,255,255,0.02);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+        }
+        .quick-group {
+            margin-bottom: 15px;
+        }
+        .quick-group label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .quick-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .btn-quick {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 13px;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-quick:hover {
+            background: var(--primary-light);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        .btn-quick.line {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        #searchSuggestions {
+            min-height: 38px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .tag-pill {
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .tag-pill:hover, .tag-pill.active {
+            background: var(--primary-light);
+            border-color: var(--primary);
+            color: white;
+        }
+        .ai-input-area {
+            display: flex;
+            flex-direction: column;
+        }
+        .search-bar {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .search-bar i {
+            position: absolute;
+            left: 15px;
+            color: var(--text-muted);
+        }
+        .response-area {
+            background: rgba(0,0,0,0.2);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            border: 1px solid var(--border-color);
+        }
+        .ai-badge {
+            background: var(--primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body class="dark-theme">
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar"><script>if(localStorage.getItem('sidebarCollapsed')==='true')document.querySelector('.sidebar').classList.add('collapsed');</script>
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <h2>Ezzy Free CRM</h2>
+            </div>
+            <nav class="nav-menu">
+                <a href="../index.html" class="nav-item"><i class="fas fa-chart-pie"></i> Dashboard</a>
+                <a href="../leads-board.html" class="nav-item"><i class="fas fa-columns"></i> Kanban Board</a>
+                <a href="../lead-database.html" class="nav-item"><i class="fas fa-database"></i> Lead Database</a>
+                <a href="../company-database.html" class="nav-item"><i class="fas fa-building"></i> Company Database</a>
+                <a href="../person-database.html" class="nav-item"><i class="fas fa-user-friends"></i> Person Database</a>
+                <a href="index.html" class="nav-item"><i class="fas fa-reply-all"></i> Auto Reply</a>
+                <a href="../settings.html" class="nav-item"><i class="fas fa-cog"></i> Settings</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="search-bar">
+                    <!-- Left empty for consistency -->
+                </div>
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Admin+User&background=6366f1&color=fff" alt="Admin Profile">
+                    <span>Admin</span>
+                </div>
+            </header>
+
+            <div class="view-section">
+                <div class="tool-container">
+                    <div class="tool-header">
+                        <div class="header-titles">
+                            <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Hub</a>
+                            <h1 style="margin-top: 12px;">Machine Based Question</h1>
+                            <p>Generate precise answers to customer technical queries about machines.</p>
+                        </div>
+                    </div>
+
+                    <div class="question-card">
+                        <!-- Quick Reply Buttons -->
+                        <div class="quick-section">
+                            <div class="quick-group">
+                                <label><i class="fas fa-layer-group"></i> Complete Lines</label>
+                                <div class="quick-buttons">
+                                    <button class="btn-quick line" onclick="selectQuick('liquid-line')">Liquid Filling Line</button>
+                                    <button class="btn-quick line" onclick="selectQuick('auger-line')">Auger Powder Line</button>
+                                    <button class="btn-quick line" onclick="selectQuick('injectable-line')">Injectable Powder Line</button>
+                                    <button class="btn-quick line" onclick="selectQuick('tablet-line')">Tablet Counting Line</button>
+                                </div>
+                            </div>
+                            <div class="quick-group">
+                                <label><i class="fas fa-microchip"></i> Machine Categories</label>
+                                <div class="quick-buttons">
+                                    <button class="btn-quick" onclick="selectQuick('washing')">Washing Machine</button>
+                                    <button class="btn-quick" onclick="selectQuick('filling')">Liquid Filling Machine</button>
+                                    <button class="btn-quick" onclick="selectQuick('auger')">Powder Filling Machine</button>
+                                    <button class="btn-quick" onclick="selectQuick('injectable')">Injectable Dry Powder Filling</button>
+                                    <button class="btn-quick" onclick="selectQuick('capping')">Capping Machine</button>
+                                    <button class="btn-quick" onclick="selectQuick('labeling')">Sticker Labeling Machine</button>
+                                    <button class="btn-quick" onclick="selectQuick('counting')">Tablet Counting and Filling Machine</button>
+                                    <button class="btn-quick" onclick="selectQuick('track-trace')">Track and Trace Machine</button>
+                                    <button class="btn-quick" onclick="selectQuick('process')">Process / Tank</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Client Details Section -->
+                        <div class="quick-section" style="background: rgba(99, 102, 241, 0.05); border-color: var(--primary); border-style: dashed;">
+                            <label style="color: var(--primary); font-weight: 600; margin-bottom: 15px; display: block;"><i class="fas fa-user-tag"></i> Client Details (Optional)</label>
+                            <div class="form-row" style="margin-bottom: 12px;">
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <input type="text" id="clientName" placeholder="Client Name" style="background: var(--bg-main);">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <input type="text" id="clientCompany" placeholder="Company Name" style="background: var(--bg-main);">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0; display: flex; align-items: center; gap: 12px; padding-left: 10px; border-left: 1px solid var(--border-color);">
+                                    <label style="margin-bottom: 0; font-size: 11px; text-transform: uppercase;">Salutation:</label>
+                                    <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 13px;">
+                                        <input type="radio" name="salutation" value="Sir" checked style="width: auto;"> Sir
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 13px;">
+                                        <input type="radio" name="salutation" value="Madam" style="width: auto;"> Madam
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <input type="tel" id="clientPhone" placeholder="Mobile / WhatsApp" style="background: var(--bg-main);">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <input type="email" id="clientEmail" placeholder="Email Address" style="background: var(--bg-main);">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <input type="text" id="clientLocation" placeholder="Location" style="background: var(--bg-main);">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ai-input-area">
+                            <label for="machineSearch">Search Specific Machine Type</label>
+                            <div class="search-bar" style="width: 100%; margin-bottom: 0;">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="machineSearch" placeholder="e.g. Single Head Screw Capping, Flowmeter Filling..." style="padding-left: 45px;">
+                            </div>
+                            <div id="searchSuggestions" class="tags-container mt-2"></div>
+                        </div>
+
+                        <!-- Manual Generate Button -->
+                        <div class="generate-btn-container" style="margin: 10px 0;">
+                            <button class="btn btn-primary" onclick="generateResponse()" style="width: 100%; justify-content: center; padding: 16px; font-weight: 700; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);">
+                                <i class="fas fa-magic"></i> GENERATE RESPONSE
+                            </button>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 15px;">
+                            <label>Sending Company</label>
+                            <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 15px;">
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                    <input type="radio" name="sendingCompany" value="N.K. INDUSTRIES" checked style="width: auto;"> N.K. INDUSTRIES
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                    <input type="radio" name="sendingCompany" value="HMEC MACHINES" style="width: auto;"> HMEC MACHINES
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Response Options</label>
+                            <div style="display: flex; gap: 20px; align-items: center;">
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                    <input type="radio" name="commMode" value="mail" checked style="width: auto;"> <i class="fas fa-envelope text-primary"></i> Mail
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                    <input type="radio" name="commMode" value="whatsapp" style="width: auto;"> <i class="fab fa-whatsapp" style="color: #25d366;"></i> WhatsApp
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                    <input type="radio" name="commMode" value="ai-prompt" style="width: auto;"> <i class="fas fa-robot" style="color: #a855f7;"></i> AI Prompt
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin-left: 20px; padding: 4px 12px; background: rgba(255,255,255,0.05); border-radius: 4px; border: 1px solid var(--border-color);">
+                                    <input type="checkbox" id="useExactName" style="width: auto;"> <span style="font-size: 13px;">Use Exact Name (First Letter)</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="response-area">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <h4><span class="ai-badge">AI</span> Generated Response</h4>
+                                <button class="btn-text" onclick="copyResponse()"><i class="fas fa-copy"></i> Copy</button>
+                            </div>
+                            <textarea id="responseOutput" readonly style="width: 100%; min-height: 400px; background: transparent; border: none; color: var(--text-main); font-family: inherit; font-size: 14px; resize: none;"></textarea>
+                        </div>
+
+                        <div style="display: flex; justify-content: flex-end; gap: 12px;">
+                            <button class="btn btn-secondary" onclick="copyResponse()"><i class="fas fa-copy"></i> Copy to Clipboard</button>
+                            <button class="btn btn-outline" onclick="sendWhatsApp()"><i class="fab fa-whatsapp"></i> Send via WhatsApp</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // DATA STRUCTURE: Central database of machines, turnkey lines, and general templates.
+        // Each object defines questions, links, and whether it's a multi-machine 'line'.
+        const machineTemplates = [
+            // Lines
+            { id: "liquid-line", name: "Complete Automatic Bottle Liquid Filling Line", isLine: true, sections: ["washing", "filling", "capping", "labeling"], productLink: "https://www.nkpharmamachinery.com/complete-turnkey-line/automatic-bottle-liquid-filling-capping-line.html", youtube: "https://youtu.be/_aLrXIGFOB8" },
+            { id: "auger-line", name: "Complete Bottle Auger Powder Filling Line", isLine: true, sections: ["washing", "auger", "capping", "labeling"], productLink: "https://www.nkpharmamachinery.com/complete-turnkey-line/automatic-bottle-powder-filling-capping-line.html", youtube: "https://www.youtube.com/playlist?list=PLYA4yc9ta77GlWVowHHLjGkQkPrAyspIO" },
+            { id: "injectable-line", name: "Complete Automatic Injectable Dry Powder Filling Line (Vial Line)", isLine: true, sections: ["vial-washing", "injectable-filling", "injectable", "vial-capping", "roller-inspection", "wrap-labeling", "track-trace", "cartoning"], productLink: "https://www.nkpharmamachinery.com/complete-turnkey-line/automatic-vial-powder-filling-line.html", youtube: "https://www.youtube.com/@KirtiMevadankindustries" },
+            { id: "tablet-line", name: "Complete Bottle Tablet Counting & Filling Line", isLine: true, sections: ["unscrambler", "cleaning", "counting", "capping", "induction", "labeling"], productLink: "https://www.nkpharmamachinery.com/products/automatic-tablet-counting-and-filling-machine.html", youtube: "https://www.youtube.com/@KirtiMevadankindustries" },
+            
+            // Washing
+            { id: "washing", name: "Bottle Washing Machine", questions: ["Type of washing? (Linear/Rotary)", "Manual or Automatic loading?", "Number of washing cycles?"], productLink: "https://www.nkpharmamachinery.com/products/automatic-linear-bottle-washing-machine.html", youtube: "https://www.youtube.com/watch?v=BW8WD1AR2s0" },
+            { id: "linear-washing", name: "Automatic Linear Bottle Washing Machine", questions: ["Manual or Automatic loading?", "Number of washing cycles?"], productLink: "https://www.nkpharmamachinery.com/products/automatic-linear-bottle-washing-machine.html", youtube: "https://www.youtube.com/watch?v=BW8WD1AR2s0" },
+            
+            // Filling
+            { id: "filling", name: "Liquid Filling Machine", questions: ["Type of filling? (Volumetric/Flowmeter/Servo)", "Number of heads?", "Fill volume?"], productLink: "https://www.nkpharmamachinery.com/products/automatic-liquid-filling-machine.html", youtube: "https://www.youtube.com/watch?v=GGEDhTurCag" },
+            { id: "volumetric-filling", name: "Automatic Volumetric Liquid Filling Machine", questions: ["Number of heads?", "Fill volume?"], productLink: "https://www.nkpharmamachinery.com/products/automatic-liquid-filling-machine.html", youtube: "https://www.youtube.com/watch?v=GGEDhTurCag" },
+            { id: "flowmeter-filling", name: "Automatic Flowmeter Liquid Filling Machine", questions: ["Number of heads?", "Fill volume?"], productLink: "https://www.nkpharmamachinery.com/products/automatic-liquid-filling-machine.html" },
+            
+            // Powder
+            { id: "auger", name: "Powder Filling Machine", questions: ["Type of powder filling? (Auger/Vacuum)", "Weight range?", "Accuracy required?"], productLink: "https://www.nkpharmamachinery.com/products/automatic-auger-type-powder-filling-machine.html", youtube: "https://www.youtube.com/watch?v=HV1dr_Nirss" },
+            { id: "auger-filling", name: "Automatic Auger Powder Filling Machine", questions: ["Weight range?", "Accuracy required?"], productLink: "https://www.nkpharmamachinery.com/products/automatic-auger-type-powder-filling-machine.html", youtube: "https://www.youtube.com/watch?v=HV1dr_Nirss" },
+            { id: "injectable", name: "Injectable Dry Powder Filling Machine", questions: ["Single or Double Head?", "Speed requirements?", "Vial size?"], productLink: "https://www.nkpharmamachinery.com/products/automatic-vial-powder-filling-machine.html" },
+            
+            // Capping
+            { id: "capping", name: "Capping Machine", questions: ["Type of capping? (Screw/ROPP/CRC)", "Single or Multi head?", "Torque control required?"], productLink: "https://www.nkpharmamachinery.com/products/automatic-single-head-screw-capping-machine.html", youtube: "https://www.youtube.com/watch?v=fskGSWojojw" },
+            { id: "screw-capping", name: "Automatic Single Head Screw Capping Machine", questions: ["Torque control required?", "Cap photos/dimensions?"], productLink: "https://www.nkpharmamachinery.com/products/automatic-single-head-screw-capping-machine.html", youtube: "https://www.youtube.com/watch?v=fskGSWojojw" },
+            { id: "rfc", name: "Automatic Rinsing Filling Capping (RFC) Machine", questions: ["Type of capping? (Screw/ROPP/CRC)", "Single or Multi head?", "Torque control required?"], productLink: "https://www.nkpharmamachinery.com/products/automatic-single-head-screw-capping-machine.html", youtube: "https://www.youtube.com/watch?v=fskGSWojojw" },
+            
+            // Labeling
+            { id: "labeling", name: "Sticker Labeling Machine", questions: ["Placement? (Wrap/Single/Double side)", "Speed?", "Batch coding required?"], productLink: "https://www.nkpharmamachinery.com/products/automatic-sticker-labeling-machine.html", youtube: "https://www.youtube.com/watch?v=QD7fXN9OQf8" },
+            { id: "wrap-labeling", name: "Automatic Wrap Around Sticker Labeling Machine", questions: ["Speed?", "Batch coding required?"], productLink: "https://www.nkpharmamachinery.com/products/automatic-sticker-labeling-machine.html", youtube: "https://www.youtube.com/watch?v=QD7fXN9OQf8" },
+            
+            // Counting
+            { id: "counting", name: "Tablet Counting and Filling Machine", questions: ["Tablet/Capsule count?", "Dust extraction needed?", "Desiccant insertion?"], productLink: "https://www.nkpharmamachinery.com/products/automatic-tablet-counting-and-filling-machine.html", youtube: "https://www.youtube.com/watch?v=ZaOFHsN0UHU" },
+            { id: "semi-automatic-tablet-counting", name: "Semi Automatic Tablet Counting and Filling Machine", questions: ["Tablet/Capsule count?", "Dust extraction needed?", "Desiccant insertion?"], productLink: "https://www.nkpharmamachinery.com/products/automatic-tablet-counting-and-filling-machine.html", youtube: "https://www.youtube.com/watch?v=eVQww_08YWw" },
+            { id: "single-head-tablet-counting", name: "Single Head Automatic Tablet Counting and Filling Machine", questions: ["Tablet/Capsule count?", "Dust extraction needed?", "Desiccant insertion?"], productLink: "https://www.nkpharmamachinery.com/products/automatic-tablet-counting-and-filling-machine.html", youtube: "https://www.youtube.com/watch?v=7m2op_3t5GU" },
+            { id: "double-head-tablet-counting", name: "Double Head Automatic Tablet Counting and Filling Machine", questions: ["Tablet/Capsule count?", "Dust extraction needed?", "Desiccant insertion?"], productLink: "https://www.nkpharmamachinery.com/products/automatic-tablet-counting-and-filling-machine.html", youtube: "https://www.youtube.com/watch?v=ZaOFHsN0UHU" },
+            
+            { id: "shrink-sleeve", name: "Automatic Shrink Sleeve Labeling Machine", questions: ["Sleeve material?", "Heat tunnel type (Steam/Electric)?", "Speed range?"], productLink: "https://www.nkpharmamachinery.com/products/automatic-shrink-sleeve-labeling-machine.html" },
+            
+            // Track & Trace
+            { id: "track-trace", name: "Track and Trace Machine", questions: ["Serialization required?", "2D Barcode system?", "Inspection requirements?"], productLink: "https://www.nkpharmamachinery.com/products/automatic-track-and-trace-system.html" },
+            
+            // Process Equipment / Storage Tanks
+            { id: "process", name: "Process Equipment / Storage Tank", questions: ["Required capacity (e.g. 250 Ltr, 500 Ltr, 1000 Ltr, etc.)?", "Processing speed / flow rate (LPH - Liters Per Hour)?", "Specific features (e.g. Agitator, Jacketed, Outlet Valve, Heating, etc.)?"], productLink: "https://www.nkpharmamachinery.com/" },
+            
+            // New Specialized Machines for Injectable Line
+            { id: "vial-washing", name: "Automatic Linear/Rotary Vial Washing Machine", questions: ["Manual or Automatic loading?", "Number of washing cycles?", "Vial size (2ml - 100ml)?"], productLink: "https://www.nkpharmamachinery.com/products/automatic-linear-bottle-washing-machine.html" },
+            { id: "injectable-filling", name: "Automatic Injectable Liquid Filling Machine", questions: ["Fill volume?", "Number of heads?", "Nitrogen purging required?"], productLink: "https://www.nkpharmamachinery.com/products/automatic-liquid-filling-machine.html" },
+            { id: "vial-capping", name: "Automatic Vial Capping Machine", questions: ["Cap size?", "Speed requirements?", "Vibratory feeder required?"], productLink: "https://www.nkpharmamachinery.com/products/automatic-single-head-screw-capping-machine.html" },
+            { id: "roller-inspection", name: "Automatic Roller Inspection Machine", questions: ["Number of rollers?", "Speed range?", "Lighting system required?"], productLink: "https://www.nkpharmamachinery.com/products/automatic-track-and-trace-system.html" },
+            { id: "cartoning", name: "Automatic Cartoning Machine", questions: ["Carton size?", "Leaflet insertion required?", "Speed (Cartons Per Minute)?"], productLink: "https://www.nkpharmamachinery.com/" },
+            
+            // Missing Sections for Tablet Line
+            { id: "unscrambler", name: "Automatic Bottle Unscrambler Machine", questions: ["Bottle size range?", "Speed required?", "Hopper capacity?"], productLink: "https://www.nkpharmamachinery.com/" },
+            { id: "cleaning", name: "Automatic Airjet Cleaning Machine", questions: ["Bottle material?", "Dust extraction needed?", "Number of nozzles?"], productLink: "https://www.nkpharmamachinery.com/" },
+            { id: "induction", name: "Automatic Induction Foil Sealing Machine", questions: ["Foil material?", "Cap size?", "Water-cooled or Air-cooled?"], productLink: "https://www.nkpharmamachinery.com/" },
+            
+            // General Introduction Template with special 'isIntro' flag
+            { 
+                id: "intro", 
+                name: "Introduction - N.K. Industries 2026", 
+                isIntro: true,
+                keywords: ["intro", "introduction", "company", "about"],
+                whatsappText: `Greetings, This is Harshal here from N.K. INDUSTRIES.
+
+I would like to take this opportunity to introduce ourself as one the leading pharma packaging machinery manufacturers in India, Since 1978.
+https://youtu.be/byuBmusRCbE?si=jLGANDA25muAOmlj
+
+We manufacturers a wide range of machinery like
+- Bottle washing machines,
+- Liquid filling machine,
+- Powder filling machine,
+- Tablet counting and filling line,
+- Capping machine,
+- Sticker labelling machine,
+- And etc,
+
+You can find more about us and our product from our website:
+https://www.nkpharmamachinery.com/
+https://www.nkcapingmachine.com/
+
+Our youtube channel:
+https://www.youtube.com/@KirtiMevadankindustries`,
+                questions: ["What is your target product range?", "Are you looking for a single machine or complete line?", "Preferred timeline for delivery?"], 
+                productLink: "https://www.nkpharmamachinery.com/", 
+                youtube: "https://youtu.be/byuBmusRCbE?si=jLGANDA25muAOmlj" 
+            }
+        ];
+
+        const searchInput = document.getElementById('machineSearch');
+        const suggestionsDiv = document.getElementById('searchSuggestions');
+        const outputTextarea = document.getElementById('responseOutput');
+        const commModeRadios = document.querySelectorAll('input[name="commMode"]');
+
+        let selectedTemplate = null;
+        let selectedDisplayName = "";
+        let nkiResources = [];
+        let hmecResources = [];
+
+        // INITIALIZATION: Setup event listeners and fetch external product links/videos
+        async function init() {
+            renderSuggestions("");
+            searchInput.addEventListener('input', (e) => {
+                const val = e.target.value.toLowerCase();
+                renderSuggestions(val);
+                autoSelectFirstMatch(val);
+                if (selectedTemplate) generateResponse(); // Live update name
+            });
+            commModeRadios.forEach(radio => radio.addEventListener('change', generateResponse));
+            document.getElementById('useExactName').addEventListener('change', generateResponse);
+            
+            ['clientName', 'clientCompany', 'clientPhone', 'clientEmail', 'clientLocation'].forEach(id => {
+                document.getElementById(id).addEventListener('input', generateResponse);
+            });
+            document.querySelectorAll('input[name="salutation"]').forEach(radio => {
+                radio.addEventListener('change', generateResponse);
+            });
+            document.querySelectorAll('input[name="sendingCompany"]').forEach(radio => {
+                radio.addEventListener('change', generateResponse);
+            });
+            
+            // Load resources from external JSON file
+            await fetchResources();
+
+            // Check for URL parameters (Lead Integration)
+            const urlParams = new URLSearchParams(window.location.search);
+            const leadName = urlParams.get('name');
+            const leadQuery = urlParams.get('query');
+            const leadPhone = urlParams.get('phone');
+            const leadEmail = urlParams.get('email');
+            const leadCompany = urlParams.get('company');
+            const leadLocation = urlParams.get('location');
+
+            if (leadName) document.getElementById('clientName').value = leadName;
+            if (leadPhone) document.getElementById('clientPhone').value = leadPhone;
+            if (leadEmail) document.getElementById('clientEmail').value = leadEmail;
+            if (leadCompany) document.getElementById('clientCompany').value = leadCompany;
+            if (leadLocation) document.getElementById('clientLocation').value = leadLocation;
+
+            if (leadQuery) {
+                searchInput.value = leadQuery;
+                renderSuggestions(leadQuery.toLowerCase());
+                autoSelectFirstMatch(leadQuery.toLowerCase());
+            }
+            if (selectedTemplate) generateResponse();
+        }
+        // DYNAMIC RESOURCES: Fetches website and YouTube links from both company resource jsons
+        async function fetchResources() {
+            try {
+                const resp = await fetch('yt-video-nkindustries.json');
+                const data = await resp.json();
+                for (const cat in data) {
+                    nkiResources.push(...data[cat]);
+                }
+            } catch (e) {
+                console.warn("Could not load yt-video-nkindustries.json", e);
+            }
+
+            try {
+                const resp = await fetch('yt-video-hmec-machines.json');
+                const data = await resp.json();
+                for (const cat in data) {
+                    hmecResources.push(...data[cat]);
+                }
+            } catch (e) {
+                console.warn("Could not load yt-video-hmec-machines.json", e);
+            }
+        }
+
+        // HELPER: Resolve product specific resources based on active company
+        function resolveResources(template, company) {
+            const resources = company === "HMEC MACHINES" ? hmecResources : nkiResources;
+            const res = resources.find(r => 
+                r.name.toLowerCase().includes(template.name.toLowerCase()) || 
+                template.name.toLowerCase().includes(r.name.toLowerCase())
+            );
+
+            let productLink = template.productLink;
+            let youtubeLink = template.youtube;
+
+            if (res) {
+                if (res.youtube && res.youtube !== "#") youtubeLink = res.youtube;
+                if (res.website && res.website !== "#") productLink = res.website;
+            } else if (company === "HMEC MACHINES") {
+                productLink = "https://www.hmec-machines.com/";
+                youtubeLink = "https://www.youtube.com/@hmecmachines";
+            }
+
+            return { productLink, youtube: youtubeLink };
+        }
+
+        function selectQuick(id) {
+            const template = machineTemplates.find(t => t.id === id);
+            if (template) {
+                selectedTemplate = template;
+                selectedDisplayName = template.name; // Keep button name
+                searchInput.value = "";
+                generateResponse();
+            }
+        }
+
+        function renderSuggestions(filter) {
+            suggestionsDiv.innerHTML = "";
+            const filtered = filter ? 
+                machineTemplates.filter(t => 
+                    t.name.toLowerCase().includes(filter) || 
+                    (t.keywords && t.keywords.some(k => k.includes(filter)))
+                ) : [];
+
+            filtered.forEach(t => {
+                const pill = document.createElement('span');
+                pill.className = t.isLine ? 'tag-pill primary' : 'tag-pill';
+                pill.style.cursor = 'pointer';
+                pill.innerHTML = t.name;
+                pill.onclick = () => {
+                    selectedTemplate = t;
+                    selectedDisplayName = t.name; // User searched specific
+                    searchInput.value = t.name;
+                    generateResponse();
+                };
+                suggestionsDiv.appendChild(pill);
+            });
+        }
+
+        // SEARCH LOGIC: Intelligent matching to find the 'Nearest Category'.
+        // e.g., "6 Head Liquid Filling" will match the "Liquid Filling Machine" template.
+        function autoSelectFirstMatch(val) {
+            if (val.length < 3) return;
+            
+            // Priority 1: Check if search query contains a specific template name
+            const sortedTemplates = [...machineTemplates].sort((a, b) => b.name.length - a.name.length);
+            let match = sortedTemplates.find(t => val.includes(t.name.toLowerCase()));
+            
+            // Priority 2: Check if template name contains the search query
+            if (!match) {
+                match = sortedTemplates.find(t => t.name.toLowerCase().includes(val));
+            }
+
+            // Priority 3: Hardcoded Keyword fallbacks for core categories
+            if (!match) {
+                if (val.includes("liquid filling")) match = machineTemplates.find(t => t.id === "filling");
+                else if (val.includes("powder filling")) match = machineTemplates.find(t => t.id === "auger");
+                else if (val.includes("capping")) match = machineTemplates.find(t => t.id === "capping");
+                else if (val.includes("labeling")) match = machineTemplates.find(t => t.id === "labeling");
+                else if (val.includes("washing")) match = machineTemplates.find(t => t.id === "washing");
+                else if (val.includes("rfc") || val.includes("rinsing")) match = machineTemplates.find(t => t.id === "rfc");
+                else if (val.includes("tank") || val.includes("storage") || val.includes("process")) match = machineTemplates.find(t => t.id === "process");
+                else if (val.includes("intro") || val.includes("company")) match = machineTemplates.find(t => t.id === "intro");
+            }
+
+            if (match) {
+                selectedTemplate = match;
+                selectedDisplayName = match.name;
+                generateResponse();
+            }
+        }
+
+        // CORE ENGINE: Generates the final message based on selected machine and mode (Mail/WA).
+        function generateResponse() {
+            const mode = document.querySelector('input[name="commMode"]:checked').value;
+            const searchVal = searchInput.value.trim();
+            const myCompany = document.querySelector('input[name="sendingCompany"]:checked').value;
+            const cName = document.getElementById('clientName').value.trim();
+            const cCompany = document.getElementById('clientCompany').value.trim();
+            const cLocation = document.getElementById('clientLocation').value.trim();
+
+            if (!selectedTemplate && mode !== "ai-prompt") {
+                outputTextarea.value = "Please select a machine above...";
+                return;
+            }
+
+            if (!selectedTemplate && mode === "ai-prompt") {
+                let text = `Act as my expert B2B technical sales assistant.\n\n`;
+                text += `Context:\n- My Name: Harshal Mevada\n- My Company: ${myCompany}\n`;
+                if (cName || cCompany) text += `- Client: ${cName || "Unknown"} from ${cCompany || "Unknown Company"}\n`;
+                if (cLocation) text += `- Client Location: ${cLocation}\n`;
+                text += `- Inquiry: Interested in ${searchVal || "Pharma Packaging Machinery"}\n\n`;
+                
+                text += `Task:\nBased on the client's inquiry, draft a short, highly professional response to the client. Include 3-4 highly relevant, to-the-point technical questions to get the most critical details first to prepare a quotation. Suggest any additional questions based on your knowledge of this type of machinery.\n\n`;
+                text += `Please also provide reference machine video links and website page links in your response.\n`;
+                if (myCompany === "N.K. INDUSTRIES") {
+                    text += `Use reference links from these websites:\n- www.nkpharmamachinery.com\n- www.nkcapingmachine.com\n- www.nkpharma.com\n\n`;
+                } else {
+                    text += `Find reference website pages, blogs, and youtube video links from:\n- www.hmec-machines.com\n- www.hmecmachines.com\n- www.hmecmachines.co.in\n- www.hmecmachines.in\n\n`;
+                }
+                text += `At the end of the message, keep this exact signature:\nBest Regards,\nHarshal Mevada\nMy LinkedIn - https://www.linkedin.com/in/harshal-mevada/`;
+
+                outputTextarea.value = text;
+                return;
+            }
+
+            const salutation = document.querySelector('input[name="salutation"]:checked').value;
+
+            let text = "";
+            
+            const useExact = document.getElementById('useExactName').checked;
+            
+            // NAME LOGIC: Use exact search query if checkbox is checked, otherwise use Category Name.
+            let nameToUse = "";
+            if (useExact && searchVal) {
+                nameToUse = searchVal;
+            } else {
+                nameToUse = selectedTemplate.name;
+            }
+
+            // Standardize to Sentence Case (First letter capital)
+            if (nameToUse) {
+                nameToUse = nameToUse.charAt(0).toUpperCase() + nameToUse.slice(1).toLowerCase();
+            }
+
+            const lowerName = nameToUse.toLowerCase();
+            // TERM REPLACEMENT LOGIC: Auto-detect if it's a Vial/Injectable line and swap 'Bottle' -> 'Vial'.
+            const isVial = lowerName.includes("vial") || lowerName.includes("injectable");
+            
+            const fixTerm = (str) => {
+                if (!isVial) return str;
+                return str.replace(/bottle/gi, "Vial").replace(/container/gi, "Vial");
+            };
+
+            // CASE 1: Company Introduction (Intro 2026)
+            if (selectedTemplate.isIntro) {
+                if (mode === "mail") {
+                    if (cName) text += `Dear ${cName} ${salutation},\n\nGreetings from ${myCompany}.\n\n`;
+                    else text += `Greetings from ${myCompany}.\n\n`;
+                    text += "I would like to take this opportunity to introduce ourselves as one of the leading pharmaceutical packaging machinery manufacturers in India since 1978.\n\n";
+                    text += "Product Showcase Video: https://youtu.be/byuBmusRCbE?si=jLGANDA25muAOmlj\n\n";
+                    text += "We manufacture a wide range of machinery like:\n";
+                    text += "- Bottle washing machines\n";
+                    text += "- Liquid filling machine\n";
+                    text += "- Powder filling machine\n";
+                    text += "- Tablet counting and filling line\n";
+                    text += "- Capping machine\n";
+                    text += "- Sticker labelling machine\n";
+                    text += "- And etc.\n\n";
+                    text += "To understand your requirements better, please let us know:\n";
+                    selectedTemplate.questions.forEach((q, i) => text += `${i + 1}. ${q}\n`);
+                    text += "\nYou can find more about us and our products from our websites:\n";
+                    text += "https://www.nkpharmamachinery.com/\n";
+                    text += "https://www.nkcapingmachine.com/\n\n";
+                    text += "YouTube Channel: https://www.youtube.com/@KirtiMevadankindustries\n\n";
+                    text += "Best Regards,\nHarshal Mevada\nwww.harshalmevada.com\nLinkedIn - https://www.linkedin.com/in/harshal-mevada/";
+                } else if (mode === "whatsapp") {
+                    let waText = selectedTemplate.whatsappText.replace(/N\.K\. INDUSTRIES/g, myCompany);
+                    text += waText;
+                } else if (mode === "ai-prompt") {
+                    text += `Act as my expert B2B technical sales assistant.\n\n`;
+                    text += `Context:\n- My Name: Harshal Mevada\n- My Company: ${myCompany}\n`;
+                    if (cName || cCompany) text += `- Client: ${cName || "Unknown"} from ${cCompany || "Unknown Company"}\n`;
+                    text += `- Inquiry: General Introduction / Catalog Request\n\n`;
+                    text += `Task:\nBased on this context, draft a short, highly professional follow-up message to send to the client. The goal is to start a conversation to understand their exact target product range, timeline, and whether they need a single machine or a complete line.\n\nAsk 3-4 to-the-point questions. Do not make it too long. Suggest any additional questions if you feel they are critical for a pharma packaging machinery requirement.\n\n`;
+                    text += `Please also provide reference machine video links and website page links in your response.\n`;
+                    if (myCompany === "N.K. INDUSTRIES") {
+                        text += `Use reference links from these websites:\n- www.nkpharmamachinery.com\n- www.nkcapingmachine.com\n- www.nkpharma.com\n\n`;
+                    } else {
+                        text += `Find reference website pages, blogs, and youtube video links from:\n- www.hmec-machines.com\n- www.hmecmachines.com\n- www.hmecmachines.co.in\n- www.hmecmachines.in\n\n`;
+                    }
+                    text += `At the end of the message, keep this exact signature:\nBest Regards,\nHarshal Mevada\nMy LinkedIn - https://www.linkedin.com/in/harshal-mevada/`;
+                }
+                outputTextarea.value = text;
+                return;
+            }
+
+            if (selectedTemplate.isLine) {
+                if (mode === "mail") {
+                    if (cName) text += `Dear ${cName} ${salutation},\n\nGreetings from ${myCompany}.\n\n`;
+                    else text += `Greetings from ${myCompany}.\n\n`;
+                    
+                    let lineContext = `Thanks for sharing these inquiries for the ${nameToUse}`;
+                    if (cCompany) lineContext += ` for ${cCompany}`;
+                    if (cLocation) lineContext += ` (${cLocation})`;
+                    text += `${lineContext}. This is Harshal Mevada here from ${myCompany}.\n\n`;
+                    text += "To provide an accurate technical proposal and quotation, we need details as follows:\n\n";
+                    text += `1. ${fixTerm("Bottle")}/Cap photos and dimensions?\n2. Production speed (BPM)?\n3. Specific automation features?\n\n`;
+                    selectedTemplate.sections.forEach((id, index) => {
+                        const t = machineTemplates.find(m => m.id === id);
+                        if (t) {
+                            text += `[${t.name}]\n`;
+                            t.questions.forEach(q => text += `- ${fixTerm(q)}\n`);
+                            const resLinks = resolveResources(t, myCompany);
+                            if (resLinks.productLink) text += `Product specific website link - ${resLinks.productLink}\n`;
+                            text += "\n";
+                        }
+                    });
+                    const ytChannel = myCompany === "HMEC MACHINES" ? "https://www.youtube.com/@hmecmachines" : "https://www.youtube.com/@KirtiMevadankindustries";
+                    text += `YouTube Channel: ${ytChannel}\n\nBest Regards,\nHarshal Mevada\nwww.harshalmevada.com\nLinkedIn - https://www.linkedin.com/in/harshal-mevada/`;
+                } else if (mode === "whatsapp") {
+                    if (cName) text += `*Dear ${cName} ${salutation}, Greetings from ${myCompany}!*\n\n`;
+                    else text += `*Greetings from ${myCompany}!*\n\n`;
+                    
+                    let lineContext = `Thanks for sharing these inquiries for the *${nameToUse}*`;
+                    if (cCompany) lineContext += ` for *${cCompany}*`;
+                    if (cLocation) lineContext += ` (${cLocation})`;
+                    text += `${lineContext}.\n\n`;
+                    
+                    text += `• ${fixTerm("Bottle")} photos & speed?\n`;
+                    selectedTemplate.sections.forEach(id => {
+                        const t = machineTemplates.find(m => m.id === id);
+                        if (t) {
+                            text += `\n*${t.name}*\n`;
+                            t.questions.forEach(q => text += `• ${fixTerm(q)}\n`);
+                            const resLinks = resolveResources(t, myCompany);
+                            if (resLinks.productLink) text += `Product specific website link - ${resLinks.productLink}\n`;
+                        }
+                    });
+                    const ytChannel = myCompany === "HMEC MACHINES" ? "https://www.youtube.com/@hmecmachines" : "https://www.youtube.com/@KirtiMevadankindustries";
+                    text += `\nYouTube: ${ytChannel}`;
+                } else if (mode === "ai-prompt") {
+                    text += `Act as my expert B2B technical sales assistant.\n\n`;
+                    text += `Context:\n- My Name: Harshal Mevada\n- My Company: ${myCompany}\n`;
+                    if (cName || cCompany) text += `- Client: ${cName || "Unknown"} from ${cCompany || "Unknown Company"}\n`;
+                    if (cLocation) text += `- Client Location: ${cLocation}\n`;
+                    text += `- Inquiry: Interested in ${nameToUse} (Complete Line)\n\n`;
+                    
+                    text += `Standard Technical Questions for this line:\n`;
+                    text += `- ${fixTerm("Bottle")}/Cap photos and dimensions?\n- Production speed (BPM)?\n- Specific automation features?\n`;
+                    selectedTemplate.sections.forEach(id => {
+                        const t = machineTemplates.find(m => m.id === id);
+                        if (t) {
+                            text += `\n[${t.name}]:\n`;
+                            t.questions.forEach(q => text += `- ${fixTerm(q)}\n`);
+                        }
+                    });
+                    
+                    text += `\nTask:\nBased on the client's inquiry and the standard technical questions provided above, draft a professional response to the client. Include 3-4 highly relevant, to-the-point questions from the list above to get the most critical details first to prepare a quotation. If the client requirement demands more specific details, feel free to ask additional questions based on your knowledge of pharma packaging lines.\n\n`;
+                    text += `Please also provide reference machine video links and website page links in your response.\n`;
+                    if (myCompany === "N.K. INDUSTRIES") {
+                        text += `Use reference links from these websites:\n- www.nkpharmamachinery.com\n- www.nkcapingmachine.com\n- www.nkpharma.com\n\n`;
+                    } else {
+                        text += `Find reference website pages, blogs, and youtube video links from:\n- www.hmec-machines.com\n- www.hmecmachines.com\n- www.hmecmachines.co.in\n- www.hmecmachines.in\n\n`;
+                    }
+                    text += `At the end of the message, keep this exact signature:\nBest Regards,\nHarshal Mevada\nMy LinkedIn - https://www.linkedin.com/in/harshal-mevada/`;
+                }
+            } else {
+                if (mode === "mail") {
+                    if (cName) text += `Dear ${cName} ${salutation},\n\nGreetings from ${myCompany}.\n\n`;
+                    else text += `Greetings from ${myCompany}.\n\n`;
+                    
+                    let machineContext = `Thanks for sharing these inquiries for the ${nameToUse}`;
+                    if (cCompany) machineContext += ` for ${cCompany}`;
+                    if (cLocation) machineContext += ` (${cLocation})`;
+                    text += `${machineContext}. This is Harshal Mevada from ${myCompany}.\n\n`;
+                    
+                    text += `In order to provide an accurate quotation, we need the following details:\n\n`;
+                    text += `1. ${fixTerm("Bottle/Container")} photos and dimensions?\n`;
+                    text += "2. Required production speed?\n";
+                    
+                    // Filter logic: Hide redundant questions
+                    const hasHeadSpec = lowerName.includes("head");
+                    
+                    const filteredQuestions = selectedTemplate.questions.filter(q => {
+                        const lq = q.toLowerCase();
+                        
+                        // Hide "Type of" if specific type is in name
+                        if (lq.includes("type of") && (lowerName.includes("screw") || lowerName.includes("ropp") || lowerName.includes("linear") || lowerName.includes("volumetric") || lowerName.includes("auger"))) return false;
+                        
+                        // Hide head count questions if already specified in name
+                        if (hasHeadSpec && lq.includes("head")) return false;
+                        
+                        return true;
+                    });
+                    
+                    filteredQuestions.forEach((q, i) => text += `${i + 3}. ${fixTerm(q)}\n`);
+                    text += "\nProduct Specific Details:\n\n";
+                    const resLinks = resolveResources(selectedTemplate, myCompany);
+                    if (resLinks.productLink) text += `Product specific website link - ${resLinks.productLink}\n\n`;
+                    if (resLinks.youtube) text += `Product specific youtube video link - ${resLinks.youtube}\n\n`;
+                    text += "Looking forward positively.\n\nBest Regards,\nHarshal Mevada\nwww.harshalmevada.com\nLinkedIn - https://www.linkedin.com/in/harshal-mevada/";
+                } else if (mode === "whatsapp") {
+                    if (cName) text += `*Dear ${cName} ${salutation}, Greetings from ${myCompany}!*\n\n`;
+                    else text += `*Greetings from ${myCompany}!*\n\n`;
+                    
+                    let machineContext = `Thanks for sharing these inquiries for *${nameToUse}*`;
+                    if (cCompany) machineContext += ` for *${cCompany}*`;
+                    if (cLocation) machineContext += ` (${cLocation})`;
+                    text += `${machineContext}.\n\n`;
+                    
+                    text += `Kindly share:\n✅ ${fixTerm("Bottle")} photos & dimensions?\n✅ Speed required?\n`;
+                    
+                    const hasHeadSpec = lowerName.includes("head");
+ 
+                    const filteredQuestions = selectedTemplate.questions.filter(q => {
+                        const lq = q.toLowerCase();
+                        if (lq.includes("type of") && (lowerName.includes("screw") || lowerName.includes("ropp") || lowerName.includes("linear") || lowerName.includes("volumetric") || lowerName.includes("auger"))) return false;
+                        if (hasHeadSpec && lq.includes("head")) return false;
+                        return true;
+                    });
+                    filteredQuestions.forEach(q => text += `✅ ${fixTerm(q)}\n`);
+                    text += "\n*Product Specific Details:*\n\n";
+                    const resLinks = resolveResources(selectedTemplate, myCompany);
+                    if (resLinks.productLink) text += `Product specific website link - ${resLinks.productLink}\n\n`;
+                    if (resLinks.youtube) text += `Product specific youtube video link - ${resLinks.youtube}\n\n`;
+                    text += "Looking forward positively.";
+                } else if (mode === "ai-prompt") {
+                    text += `Act as my expert B2B technical sales assistant.\n\n`;
+                    text += `Context:\n- My Name: Harshal Mevada\n- My Company: ${myCompany}\n`;
+                    if (cName || cCompany) text += `- Client: ${cName || "Unknown"} from ${cCompany || "Unknown Company"}\n`;
+                    if (cLocation) text += `- Client Location: ${cLocation}\n`;
+                    text += `- Inquiry: Interested in ${nameToUse}\n\n`;
+                    
+                    text += `Standard Technical Questions for this machine:\n`;
+                    text += `- ${fixTerm("Bottle/Container")} photos and dimensions?\n- Required production speed?\n`;
+                    
+                    const hasHeadSpec = lowerName.includes("head");
+                    const filteredQuestions = selectedTemplate.questions.filter(q => {
+                        const lq = q.toLowerCase();
+                        if (lq.includes("type of") && (lowerName.includes("screw") || lowerName.includes("ropp") || lowerName.includes("linear") || lowerName.includes("volumetric") || lowerName.includes("auger"))) return false;
+                        if (hasHeadSpec && lq.includes("head")) return false;
+                        return true;
+                    });
+                    
+                    filteredQuestions.forEach(q => text += `- ${fixTerm(q)}\n`);
+                    
+                    text += `\nTask:\nBased on the client's inquiry and the standard technical questions provided above, draft a professional response to the client. Include 3-4 highly relevant, to-the-point questions from the list above to get the most critical details first to prepare a quotation. If the client requirement demands more specific details, feel free to ask additional questions based on your knowledge of this machinery.\n\n`;
+                    text += `Please also provide reference machine video links and website page links in your response.\n`;
+                    if (myCompany === "N.K. INDUSTRIES") {
+                        text += `Use reference links from these websites:\n- www.nkpharmamachinery.com\n- www.nkcapingmachine.com\n- www.nkpharma.com\n\n`;
+                    } else {
+                        text += `Find reference website pages, blogs, and youtube video links from:\n- www.hmec-machines.com\n- www.hmecmachines.com\n- www.hmecmachines.co.in\n- www.hmecmachines.in\n\n`;
+                    }
+                    text += `At the end of the message, keep this exact signature:\nBest Regards,\nHarshal Mevada\nMy LinkedIn - https://www.linkedin.com/in/harshal-mevada/`;
+                }
+            }
+            outputTextarea.value = text;
+        }
+
+        function copyResponse() {
+            outputTextarea.select();
+            document.execCommand('copy');
+            alert('Response copied to clipboard!');
+        }
+
+        function sendWhatsApp() {
+            if (!outputTextarea.value) return;
+            const text = encodeURIComponent(outputTextarea.value);
+            const phone = document.getElementById('clientPhone').value.trim();
+            const cleanPhone = phone.replace(/\D/g, ''); // Remove non-numeric characters
+            window.open(`https://wa.me/${cleanPhone}?text=${text}`, '_blank');
+        }
+
+        init();
+    </script>
+</body>
+</html>

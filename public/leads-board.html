@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban Board - Ezzy Free CRM</title>
+    <!-- External Stylesheets -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Versioning Script -->
+    <script src="site-hf/version.js"></script>
+</head>
+<body>
+    <!-- Application Container: Provides full viewport height and Flexbox structure -->
+    <div class="app-container">
+        <!-- Sidebar Navigation: Dynamically populated by JavaScript (app.js) -->
+        <aside class="sidebar"><script>if(localStorage.getItem('sidebarCollapsed')==='true')document.querySelector('.sidebar').classList.add('collapsed');</script></aside>
+
+        <!-- Main Content Area: Holds the Kanban board and page controls -->
+        <main class="main-content">
+            <!-- Top Bar: Contains search functionality and user account profile -->
+            <header class="top-bar"></header>
+
+            <!-- Page Header: Contains the page title and top-level filters/actions -->
+            <div class="content-header">
+                <div class="header-titles">
+                    <h1>Lead Management</h1>
+                    <p>Track, manage, and follow up with your potential clients.</p>
+                </div>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <select id="leadLimitSelect" class="form-control" style="width: auto;" title="Load Limit">
+                        <option value="500" selected>Latest 500</option>
+                        <option value="250">Latest 250</option>
+                        <option value="1000">Latest 1000</option>
+                        <option value="2500">Latest 2500</option>
+                        <option value="all">All Leads</option>
+                    </select>
+                    <select id="boardFilterSelect" class="form-control" style="width: auto;">
+                        <option value="active">Active Pipeline</option>
+                        <option value="all">All Leads</option>
+                    </select>
+                    <button class="btn btn-primary" id="addLeadBtn">
+                        <i class="fas fa-plus"></i> New Lead
+                    </button>
+                </div>
+            </div>
+
+            <!-- Leads Board / Kanban List View: The main working area for drag-and-drop or column layout -->
+            <div id="leadsView" class="view-section">
+                <!-- Leads Container: A horizontally scrolling flex container for the status columns -->
+                <div class="leads-container">
+                    
+                    <!-- Kanban Column: New Leads -->
+                    <div class="status-column" data-status="New">
+                        <div class="column-header">
+                            <span class="status-dot status-new"></span>
+                            <h3>New Leads</h3>
+                            <span class="count" id="count-new">0</span>
+                        </div>
+                        <div class="leads-list" id="list-new"></div>
+                    </div>
+                    <div class="status-column" data-status="Contacted">
+                        <div class="column-header">
+                            <span class="status-dot status-contacted"></span>
+                            <h3>Contacted</h3>
+                            <span class="count" id="count-contacted">0</span>
+                        </div>
+                        <div class="leads-list" id="list-contacted"></div>
+                    </div>
+                    <div class="status-column" data-status="Qualified">
+                        <div class="column-header">
+                            <span class="status-dot status-qualified"></span>
+                            <h3>Qualified</h3>
+                            <span class="count" id="count-qualified">0</span>
+                        </div>
+                        <!-- Individual lead cards are injected here -->
+                        <div class="leads-list" id="list-qualified"></div>
+                    </div>
+                    
+                    <!-- Kanban Column: Closed Deals -->
+                    <div class="status-column" data-status="Closed">
+                        <div class="column-header">
+                            <span class="status-dot status-closed"></span>
+                            <h3>Closed</h3>
+                            <span class="count" id="count-closed">0</span>
+                        </div>
+                        <!-- Individual lead cards are injected here -->
+                        <div class="leads-list" id="list-closed"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hidden Views: These must exist for app.js to correctly toggle active views without throwing null errors -->
+            <div id="leadDatabaseView" class="view-section hidden"></div>
+            <div id="companiesView" class="view-section hidden"></div>
+            <div id="dashboardView" class="view-section hidden"></div>
+            <div id="settingsView" class="view-section hidden"></div>
+        </main>
+    </div>
+
+    <!-- Modals Container: Dynamically loads lead-form.html when needed -->
+    <div id="leadFormContainer"></div>
+
+    <!-- Core CRM application logic -->
+    <script src="app.js"></script>
+</body>
+</html>

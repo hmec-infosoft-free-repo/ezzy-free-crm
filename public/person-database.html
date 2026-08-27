@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Person Database - Ezzy Free CRM</title>
+    <!-- External CSS dependencies -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Versioning configuration -->
+    <script src="site-hf/version.js"></script>
+</head>
+<body>
+    <!-- Application Layout Container -->
+    <div class="app-container">
+        <!-- Sidebar Navigation: Populated dynamically via JS -->
+        <aside class="sidebar"><script>if(localStorage.getItem('sidebarCollapsed')==='true')document.querySelector('.sidebar').classList.add('collapsed');</script></aside>
+
+        <!-- Main Workspace Area -->
+        <main class="main-content">
+            <!-- Top Action Bar (Search, Settings, Profile) -->
+            <header class="top-bar"></header>
+
+            <!-- Page Title and Primary Actions -->
+            <div class="content-header">
+                <div class="header-titles">
+                    <h1>Person Database</h1>
+                    <p>Manage individual contacts and their associated companies/leads.</p>
+                </div>
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <button class="btn btn-primary" id="addPersonBtn">
+                        <i class="fas fa-plus"></i> New Person
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab Navigation Container: Contains nav links specific to this database group -->
+            <div id="personNavContainer"></div>
+
+            <!-- Local Data Search: Filters table rows based on person-specific fields -->
+            <div class="local-search-bar" style="display: flex; gap: 10px; align-items: center;">
+                <select id="personLimitSelect" style="padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-main);">
+                    <option value="500" selected>Latest 500</option>
+                    <option value="1000">Latest 1000</option>
+                    <option value="2500">Latest 2500</option>
+                    <option value="all">All People</option>
+                </select>
+                <div style="flex-grow: 1; position: relative;">
+                    <i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%);"></i>
+                    <input type="text" id="personSearchInput" placeholder="Search contacts by name, UID, company, phone, email, tags..." style="width: 100%; padding: 10px 10px 10px 40px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-main);">
+                </div>
+            </div>
+
+            <!-- Main Data View: Contains the table of individuals -->
+            <div id="personDatabaseView" class="view-section">
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Person Name</th>
+                                <th>Company</th>
+                                <th>Contact Info</th>
+                                <th>Leads</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="personDatabaseList">
+                            <!-- Rows injected by persons.js from local storage -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Hidden View Elements: To support routing capabilities in app.js -->
+            <div id="leadsView" class="view-section hidden"></div>
+            <div id="leadDatabaseView" class="view-section hidden"></div>
+            <div id="companiesView" class="view-section hidden"></div>
+            <div id="dashboardView" class="view-section hidden"></div>
+            <div id="settingsView" class="view-section hidden"></div>
+        </main>
+    </div>
+
+    <!-- Modals Section -->
+    <!-- Person Modal: Form to Add or Edit an individual person -->
+    <div class="modal-overlay" id="personModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="personModalTitle">Add New Person</h2>
+                <button class="close-btn" id="closePersonModal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="personForm">
+                    <input type="hidden" id="personIdInternal">
+                    <div class="form-group">
+                        <label for="personName">Person Name *</label>
+                        <input type="text" id="personName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="personCustomId">Person ID</label>
+                        <input type="text" id="personCustomId" placeholder="e.g. PER-001">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Mobile Numbers</label>
+                        <div id="personPhoneContainer">
+                            <div class="input-group mb-2">
+                                <input type="tel" class="person-phone-input" placeholder="Mobile 1">
+                                <button type="button" class="btn-icon add-field-btn" onclick="addField('personPhoneContainer', 'person-phone')"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email IDs</label>
+                        <div id="personEmailContainer">
+                            <div class="input-group mb-2">
+                                <input type="email" class="person-email-input" placeholder="Email 1">
+                                <button type="button" class="btn-icon add-field-btn" onclick="addField('personEmailContainer', 'person-email')"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="divider mt-3 mb-3"></div>
+                    <h4 class="mb-2">Company Association</h4>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="personCompanyName">Company Name</label>
+                            <input type="text" id="personCompanyName">
+                        </div>
+                        <div class="form-group">
+                            <label for="personCompanyId">Company ID</label>
+                            <input type="text" id="personCompanyId">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="personCountry">Country</label>
+                            <input type="text" id="personCountry" placeholder="e.g. India">
+                        </div>
+                        <div class="form-group">
+                            <label for="personState">State</label>
+                            <input type="text" id="personState" placeholder="e.g. Gujarat">
+                        </div>
+                        <div class="form-group">
+                            <label for="personCity">City</label>
+                            <input type="text" id="personCity" placeholder="e.g. Ahmedabad">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="personLocation">Location</label>
+                            <input type="text" id="personLocation" placeholder="e.g. Ahmedabad, Gujarat, India">
+                        </div>
+                        <div class="form-group">
+                            <label for="personCompanyWebsite">Company Website</label>
+                            <input type="url" id="personCompanyWebsite">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="personLeadsId">Associated Lead IDs (Comma separated)</label>
+                        <input type="text" id="personLeadsId" placeholder="e.g. LEAD-001, LEAD-002">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelPersonBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Person</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="persons.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const res = await fetch('site-hf/person-nav.html');
+                let html = await res.text();
+                html = html.replace(/{root}/g, '');
+                const container = document.getElementById('personNavContainer');
+                if (container) {
+                    container.innerHTML = html;
+                    document.getElementById('tab-person-list').classList.add('active');
+                }
+            } catch (err) {
+                console.error('Error loading person nav:', err);
+            }
+        });
+    </script>
+</body>
+</html>

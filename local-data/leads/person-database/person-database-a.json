@@ -1,0 +1,33 @@
+[
+  {
+    "id": "p1010001-0000-4000-8000-000000000001",
+    "name": "Alex Morgan",
+    "customId": "P-A0001",
+    "phones": [
+      "+1 202 555 0143"
+    ],
+    "emails": [
+      "alex.morgan@apexsolutions.example.com"
+    ],
+    "companyName": "Apex Global Solutions",
+    "companyId": "c1010001-0000-4000-8000-000000000001",
+    "companyWebsite": "https://apexsolutions.example.com",
+    "location": "New York, NY, USA",
+    "country": "USA",
+    "state": "New York",
+    "city": "New York",
+    "leadsId": [
+      "l1010001-0000-4000-8000-000000000001"
+    ],
+    "designation": "VP of Procurement",
+    "createdAt": "2026-01-15T10:05:00.000Z",
+    "exCompanies": [
+      {
+        "companyName": "PrimeTech Dynamics",
+        "role": "Senior Buyer",
+        "location": "Boston, USA",
+        "years": "2020 - 2025"
+      }
+    ]
+  }
+]

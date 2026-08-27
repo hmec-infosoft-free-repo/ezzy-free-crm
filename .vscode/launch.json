@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "msedge",
+            "request": "launch",
+            "name": "Launch Microsoft Edge (Ezzy Free CRM - Port 7900)",
+            "url": "http://localhost:7900",
+            "webRoot": "${workspaceFolder}/public",
+            "preLaunchTask": "Start Ezzy Free CRM Server"
+        }
+    ]
+}

@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Details - Ezzy Free CRM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="../site-hf/version.js"></script>
+    <style>
+        .details-grid-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 24px;
+            padding: 0 32px 32px;
+            align-items: start;
+        }
+        @media (max-width: 900px) {
+            .details-grid-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Company Profile Card */
+        .profile-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.7));
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+        .profile-header {
+            text-align: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+        .profile-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            font-size: 32px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 16px rgba(99, 102, 241, 0.2);
+        }
+        .profile-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            word-break: break-word;
+        }
+        .profile-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            background-color: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .info-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .info-item label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            margin-bottom: 0;
+        }
+        .info-item span, .info-item a {
+            font-size: 14px;
+            color: var(--text-main);
+            word-break: break-word;
+        }
+        .info-item a {
+            color: var(--primary);
+            text-decoration: none;
+            border-bottom: 1px dashed transparent;
+            transition: var(--transition);
+            display: inline-block;
+        }
+        .info-item a:hover {
+            border-color: var(--primary);
+        }
+
+        /* Right panel grid elements */
+        .right-panel-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+        .detail-section-card {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+        .section-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+        }
+        .section-header-row h3 {
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-header-row h3 i {
+            color: var(--primary);
+        }
+        .count-badge-lg {
+            background-color: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* Lead Cards List */
+        .leads-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 16px;
+        }
+        .lead-detail-card {
+            background-color: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            transition: var(--transition);
+            position: relative;
+        }
+        .lead-detail-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        .lead-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            gap: 8px;
+        }
+        .lead-card-header h4 {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .lead-card-req {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.4;
+            margin-bottom: 16px;
+        }
+        .lead-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 10px;
+            color: var(--text-muted);
+        }
+
+        /* Person Cards List */
+        .persons-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--bg-main);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        .persons-table th {
+            text-align: left;
+            padding: 12px 16px;
+            background-color: rgba(30, 41, 59, 0.8);
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .persons-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 14px;
+        }
+        .persons-table tr:last-child td {
+            border-bottom: none;
+        }
+        .persons-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .quick-stat-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .quick-stat-card {
+            background-color: rgba(30, 41, 59, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .quick-stat-card i {
+            font-size: 20px;
+            color: var(--primary);
+            background-color: rgba(99, 102, 241, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .quick-stat-info h4 {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .quick-stat-info p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .sub-companies-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 4px;
+        }
+        .empty-section-message {
+            text-align: center;
+            padding: 32px;
+            color: var(--text-muted);
+            font-style: italic;
+            font-size: 14px;
+            border: 1px dashed var(--border-color);
+            border-radius: var(--radius-sm);
+            background-color: rgba(30, 41, 59, 0.15);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-content {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: modalFadeIn 0.3s ease;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .btn-close-modal {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 20px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .btn-close-modal:hover {
+            color: #ef4444;
+        }
+        .modal-body {
+            padding: 24px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .modal-footer {
+            padding: 20px 24px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar"><script>if(localStorage.getItem('sidebarCollapsed')==='true')document.querySelector('.sidebar').classList.add('collapsed');</script></aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Admin+User&background=6366f1&color=fff" alt="Admin Profile">
+                    <span>Admin</span>
+                </div>
+            </header>
+
+            <div class="view-section" style="overflow-y: auto;">
+                <div class="content-header" style="padding-bottom: 12px; display: flex; flex-direction: column; align-items: flex-start; gap: 16px;">
+                    <a href="index.html" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                    <div class="header-titles" style="width: 100%; display: flex; justify-content: space-between; align-items: flex-end;">
+                        <div>
+                            <h1 id="pageCompanyName">Company Details</h1>
+                            <p id="pageCompanySubtitle">Detailed insights, contact person directory, and lead inquiry logs.</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="openEditCompanyModal()">
+                            <i class="fas fa-edit"></i> Edit Company
+                        </button>
+                    </div>
+                </div>
+
+                <div id="companyNavContainer"></div>
+
+                <!-- Main Layout Grid -->
+                <div class="details-grid-layout">
+                    <!-- Left Sidebar Column: Company Core Info -->
+                    <div class="profile-card">
+                        <div class="profile-header">
+                            <div class="profile-avatar" id="companyAvatar">-</div>
+                            <h2 id="companyNameHeader">Loading Name...</h2>
+                            <span class="profile-tag" id="companyIndustryHeader">Industry</span>
+                        </div>
+                        <div class="info-list">
+                            <div class="info-item">
+                                <label>Location</label>
+                                <span id="infoLocation">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Website</label>
+                                <span id="infoWebsite">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Email Address</label>
+                                <span id="infoEmail">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>WhatsApp Contact</label>
+                                <span id="infoWhatsapp">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Registered Address</label>
+                                <span id="infoAddress">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Sub-Companies</label>
+                                <div class="sub-companies-container" id="infoSubCompanies">
+                                    <span class="text-muted">None registered</span>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <label>CRM Added Date</label>
+                                <span id="infoCrmAddedDate">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Stats and Lists -->
+                    <div class="right-panel-layout">
+                        <!-- Quick Stats Overview Row -->
+                        <div class="quick-stat-cards">
+                            <div class="quick-stat-card">
+                                <i class="fas fa-link"></i>
+                                <div class="quick-stat-info">
+                                    <h4 id="statLeadsCount">0</h4>
+                                    <p>Shared Leads Inquiries</p>
+                                </div>
+                            </div>
+                            <div class="quick-stat-card">
+                                <i class="fas fa-user-tie"></i>
+                                <div class="quick-stat-info">
+                                    <h4 id="statPersonsCount">0</h4>
+                                    <p>Associated Personnel</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Associated Leads Section -->
+                        <div class="detail-section-card">
+                            <div class="section-header-row">
+                                <h3><i class="fas fa-list-check"></i> Shared Leads Inquiries</h3>
+                                <span class="count-badge-lg" id="leadsBadge">0 Leads</span>
+                            </div>
+                            <div id="leadsListContainer" class="leads-grid">
+                                <!-- Dynamic Leads Cards go here -->
+                            </div>
+                        </div>
+
+                        <!-- Associated Persons Section -->
+                        <div class="detail-section-card">
+                            <div class="section-header-row">
+                                <h3><i class="fas fa-address-book"></i> Associated Personnel Directory</h3>
+                                <span class="count-badge-lg" id="personsBadge">0 Personnel</span>
+                            </div>
+                            <div id="personsTableContainer">
+                                <table class="persons-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Contact Person</th>
+                                            <th>Contact ID</th>
+                                            <th>Contact Details</th>
+                                            <th>Associated Lead UIDs</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="personsTableBody">
+                                        <!-- Dynamic Person rows go here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <footer style="text-align: center; padding: 24px 32px; color: var(--text-muted); font-size: 13px; margin-top: auto; border-top: 1px solid var(--border-color);">
+                    Ezzy Free CRM &copy; 2026 | Version <span class="appVersionDisplay">1.0.20</span>
+                </footer>
+            </div>
+            
+            <!-- Edit Company Modal -->
+            <div class="modal-overlay" id="editCompanyModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Edit Company Details</h3>
+                        <button class="btn-close-modal" onclick="closeEditCompanyModal()"><i class="fas fa-times"></i></button>
+                    </div>
+                    <form id="editCompanyForm">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="editCompName">Company Name *</label>
+                                <input type="text" id="editCompName" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="editCompIndustry">Industry</label>
+                                    <input type="text" id="editCompIndustry">
+                                </div>
+                                <div class="form-group">
+                                    <label for="editCompLocation">Location (City, State, Country)</label>
+                                    <input type="text" id="editCompLocation">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="editCompWebsite">Website</label>
+                                <input type="text" id="editCompWebsite">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="editCompEmail">Email Address</label>
+                                    <input type="email" id="editCompEmail">
+                                </div>
+                                <div class="form-group">
+                                    <label for="editCompWhatsapp">WhatsApp / Phone</label>
+                                    <input type="text" id="editCompWhatsapp">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="editCompAddress">Registered Address</label>
+                                <textarea id="editCompAddress" rows="2"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" onclick="closeEditCompanyModal()">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="btnSubmitEditComp">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Script Block for Company Details Logic -->
+    <script>
+        const API_BASE = '/api';
+        let currentCompany = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Update version displays dynamically
+            if (typeof APP_VERSION !== 'undefined') {
+                document.querySelectorAll('.appVersionDisplay').forEach(el => el.textContent = APP_VERSION);
+            }
+
+            // Load Sidebar dynamically
+            try {
+                const sidebarRes = await fetch('../site-hf/sidebar.html');
+                let sidebarHtml = await sidebarRes.text();
+                sidebarHtml = sidebarHtml.replace(/href="(?!\.\.\/|http)([^"]+)"/g, 'href="../$1"');
+                const sidebarEl = document.querySelector('.sidebar');
+                if (sidebarEl) {
+                    sidebarEl.innerHTML = sidebarHtml;
+                    if (localStorage.getItem('sidebarCollapsed') === 'true') {
+                        sidebarEl.classList.add('collapsed');
+                    }
+                    const toggleBtn = sidebarEl.querySelector('#sidebarToggle');
+                    if (toggleBtn) {
+                        toggleBtn.addEventListener('click', () => {
+                            sidebarEl.classList.toggle('collapsed');
+                            localStorage.setItem('sidebarCollapsed', sidebarEl.classList.contains('collapsed'));
+                        });
+                    }
+                    const activeEl = document.getElementById('nav-companies');
+                    if (activeEl) activeEl.classList.add('active');
+                }
+            } catch (err) {
+                console.error('Error loading sidebar:', err);
+            }
+
+            // Load Company Tab Navigation
+            try {
+                const navRes = await fetch('../site-hf/company-nav.html');
+                let navHtml = await navRes.text();
+                navHtml = navHtml.replace(/{root}/g, '../');
+                const navContainer = document.getElementById('companyNavContainer');
+                if (navContainer) {
+                    navContainer.innerHTML = navHtml;
+                    const detailsTab = document.getElementById('tab-company-details');
+                    if (detailsTab) {
+                        detailsTab.style.display = 'inline-flex';
+                        detailsTab.classList.add('active');
+                        detailsTab.href = window.location.href;
+                    }
+                }
+            } catch (err) {
+                console.error('Error loading company nav:', err);
+            }
+
+            // Get ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const companyId = urlParams.get('id');
+
+            if (!companyId) {
+                renderError('No Company Specified', 'Please provide a valid company ID in the URL.');
+                return;
+            }
+
+            await loadCompanyDetails(companyId);
+        });
+
+        async function loadCompanyDetails(companyId) {
+            try {
+                // Fetch datasets
+                const [companiesRes, leadsRes, personsRes] = await Promise.all([
+                    fetch(`${API_BASE}/companies`),
+                    fetch(`${API_BASE}/leads`),
+                    fetch(`${API_BASE}/persons`)
+                ]);
+
+                const companies = await companiesRes.json();
+                const leads = await leadsRes.json();
+                const persons = await personsRes.json();
+
+                // Find matching company
+                currentCompany = companies.find(c => c.id === companyId);
+                if (!currentCompany) {
+                    renderError('Company Not Found', `We couldn't find a registered company with ID: ${companyId}`);
+                    return;
+                }
+
+                // Filter associated data
+                const companyLeads = leads.filter(l => 
+                    l.companyId === companyId || 
+                    (l.company && l.company.toLowerCase() === currentCompany.name.toLowerCase())
+                );
+                const companyPersons = persons.filter(p => 
+                    p.companyId === companyId || 
+                    (p.companyName && p.companyName.toLowerCase() === currentCompany.name.toLowerCase())
+                );
+
+                // Populate Core Information
+                renderCoreProfile(currentCompany);
+
+                // Populate Stats Indicators
+                document.getElementById('statLeadsCount').textContent = companyLeads.length;
+                document.getElementById('statPersonsCount').textContent = companyPersons.length;
+                document.getElementById('leadsBadge').textContent = `${companyLeads.length} Lead${companyLeads.length === 1 ? '' : 's'}`;
+                document.getElementById('personsBadge').textContent = `${companyPersons.length} Person${companyPersons.length === 1 ? 'nel' : 'nel'}`;
+
+                // Render Sub-sections
+                renderLeadsList(companyLeads);
+                renderPersonsTable(companyPersons);
+
+            } catch (error) {
+                console.error('Error fetching company details datasets:', error);
+                renderError('Connection Error', 'An error occurred while loading the data from the server. Make sure server is running.');
+            }
+        }
+
+        function renderCoreProfile(company) {
+            // Document Title
+            document.title = `${company.name} Details - Ezzy Free CRM`;
+
+            // Avatar initial
+            const firstLetter = (company.name || 'C').charAt(0).toUpperCase();
+            document.getElementById('companyAvatar').textContent = firstLetter;
+
+            // Headers
+            document.getElementById('companyNameHeader').textContent = company.name;
+            document.getElementById('companyIndustryHeader').textContent = company.industry || 'No Industry Specified';
+            document.getElementById('pageCompanyName').textContent = company.name;
+
+            // Details Lists
+            document.getElementById('infoLocation').textContent = company.location || 'Not specified';
+            
+            const webEl = document.getElementById('infoWebsite');
+            if (company.website) {
+                webEl.innerHTML = `<a href="${company.website.startsWith('http') ? company.website : 'https://' + company.website}" target="_blank">${company.website}</a>`;
+            } else {
+                webEl.textContent = 'Not specified';
+            }
+
+            document.getElementById('infoEmail').textContent = company.email || 'Not specified';
+            
+            const whatsappEl = document.getElementById('infoWhatsapp');
+            if (company.whatsapp) {
+                whatsappEl.innerHTML = `<a href="https://wa.me/${company.whatsapp.replace(/[^0-9]/g, '')}" target="_blank">${company.whatsapp}</a>`;
+            } else {
+                whatsappEl.textContent = 'Not specified';
+            }
+
+            document.getElementById('infoAddress').textContent = company.address || 'Not specified';
+
+            // CRM Added Date
+            document.getElementById('infoCrmAddedDate').textContent = company.crmAddedDate || (company.createdAt ? company.createdAt.split('T')[0] : 'Not specified');
+
+            // Sub-companies rendering
+            const subCompsEl = document.getElementById('infoSubCompanies');
+            if (Array.isArray(company.subCompanies) && company.subCompanies.length > 0) {
+                subCompsEl.innerHTML = company.subCompanies.map(sc => `<span class="sub-company-tag">${sc}</span>`).join('');
+            } else {
+                subCompsEl.innerHTML = '<span class="text-muted">None registered</span>';
+            }
+        }
+
+        function renderLeadsList(leads) {
+            const container = document.getElementById('leadsListContainer');
+            if (leads.length === 0) {
+                container.outerHTML = `<div class="empty-section-message"><i class="fas fa-folder-open" style="font-size: 24px; margin-bottom: 8px; display:block; color:var(--text-muted);"></i>No lead inquiries have been registered under this company yet.</div>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            leads.forEach(lead => {
+                const dStr = lead.leadDate || lead.createdAt;
+                const dateStr = dStr && !isNaN(new Date(dStr).getTime()) ? new Date(dStr).toLocaleDateString() : 'Unknown Date';
+                
+                const card = document.createElement('div');
+                card.className = 'lead-detail-card';
+                card.innerHTML = `
+                    <div class="lead-card-header">
+                        <h4>${lead.name || 'Unnamed Lead'}</h4>
+                        <span class="status-badge ${lead.status || 'New'}">${lead.status || 'New'}</span>
+                    </div>
+                    <p class="lead-card-req" title="${lead.requirement || 'No details specified.'}">
+                        ${lead.requirement || '<span class="text-muted">No requirement description available.</span>'}
+                    </p>
+                    <div class="lead-card-footer" style="margin-bottom: 12px;">
+                        <span><i class="fas fa-calendar-alt"></i> ${dateStr}</span>
+                        <span><i class="fas fa-tag"></i> ${lead.source || 'Direct'}</span>
+                    </div>
+                    <div style="margin-top: 12px;">
+                        <a href="../view-db-leads/lead-details.html?id=${lead.id}" target="_blank" class="btn btn-secondary btn-sm" style="width: 100%; justify-content: center; display: inline-flex; gap: 6px;">
+                            <i class="fas fa-eye"></i> Lead Details
+                        </a>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderPersonsTable(persons) {
+            const tableContainer = document.getElementById('personsTableContainer');
+            const tbody = document.getElementById('personsTableBody');
+
+            if (persons.length === 0) {
+                tableContainer.innerHTML = `<div class="empty-section-message"><i class="fas fa-id-card-alt" style="font-size: 24px; margin-bottom: 8px; display:block; color:var(--text-muted);"></i>No contact personnel records match this company name or ID.</div>`;
+                return;
+            }
+
+            tbody.innerHTML = '';
+            persons.forEach(p => {
+                const phoneList = p.phones || (p.phone ? [p.phone] : []);
+                const emailList = p.emails || (p.email ? [p.email] : []);
+                const leadsList = p.leadsId || [];
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${p.name}</strong></td>
+                    <td><code style="font-family: monospace; background-color: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px;">${p.customId || p.id.substring(0, 8)}</code></td>
+                    <td>
+                        <div class="contact-info-small">
+                            ${phoneList.map(ph => `<div><i class="fas fa-phone"></i> ${ph}</div>`).join('')}
+                            ${emailList.map(em => `<div><i class="fas fa-envelope"></i> ${em}</div>`).join('')}
+                            ${phoneList.length === 0 && emailList.length === 0 ? '<span class="text-muted">No contacts</span>' : ''}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="tags-container" style="gap: 4px;">
+                            ${leadsList.map(l => `<span class="tag-pill" style="font-size: 11px; padding: 2px 8px;">${l}</span>`).join('')}
+                            ${leadsList.length === 0 ? '<span class="text-muted">None linked</span>' : ''}
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderError(title, message) {
+            document.title = 'Error - Ezzy Free CRM';
+            document.getElementById('companyNameHeader').textContent = 'Error';
+            const panel = document.querySelector('.view-section');
+            if (panel) {
+                panel.innerHTML = `
+                    <div style="max-width: 600px; margin: 80px auto; text-align: center; padding: 40px; background-color: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 64px; color: #ef4444; margin-bottom: 24px;"></i>
+                        <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 12px; color: var(--text-main);">${title}</h2>
+                        <p style="color: var(--text-muted); font-size: 15px; margin-bottom: 24px; line-height: 1.5;">${message}</p>
+                        <a href="index.html" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+                    </div>
+                `;
+            }
+        }
+
+        // Edit Modal Logic
+        function openEditCompanyModal() {
+            if (!currentCompany) return;
+            document.getElementById('editCompName').value = currentCompany.name || '';
+            document.getElementById('editCompIndustry').value = currentCompany.industry || '';
+            document.getElementById('editCompLocation').value = currentCompany.location || '';
+            document.getElementById('editCompWebsite').value = currentCompany.website || '';
+            document.getElementById('editCompEmail').value = currentCompany.email || '';
+            document.getElementById('editCompWhatsapp').value = currentCompany.whatsapp || '';
+            document.getElementById('editCompAddress').value = currentCompany.address || '';
+            
+            document.getElementById('editCompanyModal').classList.add('active');
+        }
+
+        function closeEditCompanyModal() {
+            document.getElementById('editCompanyModal').classList.remove('active');
+        }
+
+        document.getElementById('editCompanyForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentCompany) return;
+            
+            const btnSubmit = document.getElementById('btnSubmitEditComp');
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+            const updatedData = {
+                name: document.getElementById('editCompName').value.trim(),
+                industry: document.getElementById('editCompIndustry').value.trim(),
+                location: document.getElementById('editCompLocation').value.trim(),
+                website: document.getElementById('editCompWebsite').value.trim(),
+                email: document.getElementById('editCompEmail').value.trim(),
+                whatsapp: document.getElementById('editCompWhatsapp').value.trim(),
+                address: document.getElementById('editCompAddress').value.trim()
+            };
+
+            try {
+                const res = await fetch(`${API_BASE}/companies/${currentCompany.id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedData)
+                });
+                
+                if (res.ok) {
+                    const savedComp = await res.json();
+                    currentCompany = { ...currentCompany, ...savedComp };
+                    renderCoreProfile(currentCompany);
+                    closeEditCompanyModal();
+                    
+                    // Show a toast notification if available (we will inject showToast)
+                    showToast('Company details updated successfully!');
+                } else {
+                    alert('Failed to update company.');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('An error occurred while saving.');
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = 'Save Changes';
+            }
+        });
+
+        function showToast(message) {
+            let toast = document.getElementById('detailsToast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'detailsToast';
+                toast.style.cssText = `
+                    position: fixed;
+                    bottom: 24px;
+                    right: 24px;
+                    background: var(--primary);
+                    color: white;
+                    padding: 12px 24px;
+                    border-radius: var(--radius-md);
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                    font-size: 14px;
+                    font-weight: 500;
+                    z-index: 9999;
+                    opacity: 0;
+                    transform: translateY(10px);
+                    transition: opacity 0.3s, transform 0.3s;
+                `;
+                document.body.appendChild(toast);
+            }
+            toast.textContent = message;
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateY(0)';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

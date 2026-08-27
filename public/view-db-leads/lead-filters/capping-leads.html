@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capping Machine Leads - Ezzy Free CRM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar"><script>if(localStorage.getItem('sidebarCollapsed')==='true')document.querySelector('.sidebar').classList.add('collapsed');</script>
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <h2>Ezzy Free CRM</h2>
+            </div>
+            <nav class="nav-menu">
+                <a href="../../index.html" class="nav-item"><i class="fas fa-chart-pie"></i> Dashboard</a>
+                <a href="../../leads-board.html" class="nav-item"><i class="fas fa-columns"></i> Kanban Board</a>
+                <a href="../../lead-database.html" class="nav-item"><i class="fas fa-database"></i> Lead Database</a>
+                <a href="../../company-database.html" class="nav-item"><i class="fas fa-building"></i> Company Database</a>
+                <a href="../../person-database.html" class="nav-item"><i class="fas fa-user-friends"></i> Person Database</a>
+                <a href="../../auto-reply/index.html" class="nav-item"><i class="fas fa-reply-all"></i> Auto Reply</a>
+                <a href="../../settings.html" class="nav-item"><i class="fas fa-cog"></i> Settings</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search capping leads by name, requirement, or company...">
+                </div>
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Admin+User&background=6366f1&color=fff" alt="Admin Profile">
+                    <span>Admin</span>
+                </div>
+            </header>
+
+            <div class="content-header" style="flex-direction: column; align-items: stretch; gap: 15px; border-bottom: none; padding-bottom: 0;">
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <div class="header-titles">
+                        <h1><i class="fas fa-bottle-water" style="color: var(--primary-color); margin-right: 10px;"></i> Capping Machine Leads</h1>
+                        <p>Advanced product-specific lead intelligence for capping machinery.</p>
+                    </div>
+                    <a href="../../lead-database.html" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Database
+                    </a>
+                </div>
+                
+                <div class="filters-row" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; background: var(--bg-surface); padding: 15px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin-bottom: 20px;">
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <label style="font-size: 11px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">Year(s)</label>
+                        <input type="text" id="filterYear" class="form-control" placeholder="e.g. 2022, 2025" style="width: 120px;">
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <label style="font-size: 11px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">Company</label>
+                        <input type="text" id="filterCompany" class="form-control" placeholder="Search company..." style="width: 150px;">
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <label style="font-size: 11px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">Status</label>
+                        <select id="filterStatus" class="form-control" style="width: 140px;">
+                            <option value="all">All Statuses</option>
+                            <option value="New">New</option>
+                            <option value="Contacted">Contacted</option>
+                            <option value="Qualified">Qualified</option>
+                            <option value="Closed">Closed</option>
+                        </select>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <label style="font-size: 11px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">Source</label>
+                        <select id="filterSource" class="form-control" style="width: 160px;">
+                            <option value="all">All Sources</option>
+                            <option value="direct">Direct</option>
+                            <option value="exhibition">Exhibition (All)</option>
+                            <option value="PMEC India 2025">PMEC India 2025</option>
+                            <option value="Pharma Tech Expo 2025">Pharma Tech Expo 2025</option>
+                            <option value="P-MEC 2023">P-MEC 2023</option>
+                            <option value="PackPlus 2022">PackPlus 2022</option>
+                        </select>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 4px; margin-left: auto;">
+                        <label style="font-size: 11px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">Sort By</label>
+                        <select id="sortSelect" class="form-control" style="width: 140px;">
+                            <option value="latest">Latest First</option>
+                            <option value="oldest">Oldest First</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Date & Source</th>
+                            <th>Lead & Company</th>
+                            <th>Requirement</th>
+                            <th>Contact Info</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cappingLeadsList">
+                        <!-- Injected by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const API_BASE = '/api';
+        let allLeads = [];
+        let cappingLeads = [];
+
+        async function init() {
+            try {
+                const response = await fetch(`${API_BASE}/leads`);
+                allLeads = await response.json();
+                
+                // Filter for capping leads initially
+                cappingLeads = allLeads.filter(l => {
+                    const req = (l.requirement || '').toLowerCase();
+                    const tags = (l.tags || '').toLowerCase();
+                    return req.includes('capping') || req.includes('capper') || 
+                           tags.includes('capping') || tags.includes('capper');
+                });
+                
+                applyFilters();
+                
+                // Bind listeners
+                document.getElementById('filterYear').addEventListener('input', applyFilters);
+                document.getElementById('filterCompany').addEventListener('input', applyFilters);
+                document.getElementById('filterStatus').addEventListener('change', applyFilters);
+                document.getElementById('filterSource').addEventListener('change', applyFilters);
+                document.getElementById('sortSelect').addEventListener('change', applyFilters);
+                document.getElementById('searchInput').addEventListener('input', applyFilters);
+                
+            } catch (error) {
+                console.error('Error fetching leads:', error);
+            }
+        }
+
+        function applyFilters() {
+            const filterYear = document.getElementById('filterYear').value.trim();
+            const filterCompany = document.getElementById('filterCompany').value.trim().toLowerCase();
+            const filterStatus = document.getElementById('filterStatus').value;
+            const filterSource = document.getElementById('filterSource').value;
+            const sortVal = document.getElementById('sortSelect').value;
+            const searchVal = document.getElementById('searchInput').value.trim().toLowerCase();
+
+            let filtered = cappingLeads.filter(l => {
+                // Global Search
+                if (searchVal) {
+                    const name = (l.name || '').toLowerCase();
+                    const req = (l.requirement || '').toLowerCase();
+                    const comp = (l.company || '').toLowerCase();
+                    if (!name.includes(searchVal) && !req.includes(searchVal) && !comp.includes(searchVal)) {
+                        return false;
+                    }
+                }
+
+                // Year
+                if (filterYear) {
+                    const dStr = l.leadDate || l.createdAt;
+                    const yearStr = dStr && !isNaN(new Date(dStr).getTime()) ? new Date(dStr).getFullYear().toString() : '';
+                    const allowedYears = filterYear.split(',').map(y => y.trim()).filter(y => y);
+                    if (allowedYears.length > 0 && !allowedYears.includes(yearStr)) return false;
+                }
+                
+                // Company
+                if (filterCompany) {
+                    const compStr = (l.company || '').toLowerCase();
+                    if (!compStr.includes(filterCompany)) return false;
+                }
+                
+                // Status
+                if (filterStatus !== 'all' && l.status !== filterStatus) return false;
+                
+                // Source
+                if (filterSource !== 'all') {
+                    const srcLower = (l.source || '').toLowerCase();
+                    const tagLower = (l.sourceTag || '').toLowerCase();
+                    
+                    if (filterSource === 'exhibition') {
+                        if (srcLower !== 'exhibition') return false;
+                    } else {
+                        if (!tagLower.includes(filterSource.toLowerCase()) && !srcLower.includes(filterSource.toLowerCase())) return false;
+                    }
+                }
+
+                return true;
+            });
+
+            // Sort
+            filtered.sort((a, b) => {
+                const getTime = (lead) => {
+                    const dStr = lead.leadDate || lead.createdAt;
+                    if (!dStr) return 0;
+                    const d = new Date(dStr);
+                    return isNaN(d.getTime()) ? 0 : d.getTime();
+                };
+                const timeA = getTime(a);
+                const timeB = getTime(b);
+                return sortVal === 'latest' ? timeB - timeA : timeA - timeB;
+            });
+
+            renderTable(filtered);
+        }
+
+        function renderTable(leads) {
+            const list = document.getElementById('cappingLeadsList');
+            list.innerHTML = '';
+
+            if (leads.length === 0) {
+                list.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 30px; color: var(--text-muted);">No matching capping leads found.</td></tr>`;
+                return;
+            }
+
+            leads.forEach(lead => {
+                const tr = document.createElement('tr');
+                const dStr = lead.leadDate || lead.createdAt;
+                const dateStr = dStr && !isNaN(new Date(dStr).getTime()) ? new Date(dStr).toLocaleDateString() : 'Unknown Date';
+                
+                let sourceText = lead.source || 'Direct';
+                if (lead.sourceTag) sourceText += ` — ${lead.sourceTag}`;
+
+                const phones = lead.phones && lead.phones.length > 0 ? lead.phones : (lead.phone ? [lead.phone] : []);
+                const emails = lead.emails && lead.emails.length > 0 ? lead.emails : (lead.email ? [lead.email] : []);
+
+                const phoneHtml = phones.map(p => `<div><i class="fas fa-phone text-muted" style="font-size:11px;"></i> ${p}</div>`).join('');
+                const emailHtml = emails.map(e => `<div><i class="fas fa-envelope text-muted" style="font-size:11px;"></i> ${e}</div>`).join('');
+
+                const statusClass = lead.status ? lead.status.toLowerCase() : 'new';
+
+                tr.innerHTML = `
+                    <td>
+                        <strong>${dateStr}</strong><br>
+                        <small class="text-muted">${sourceText}</small>
+                    </td>
+                    <td>
+                        <strong>${lead.name || 'Unknown'}</strong><br>
+                        <small class="text-muted">${lead.company || 'No Company'}</small>
+                    </td>
+                    <td style="max-width: 300px; font-size: 13px;">
+                        ${lead.requirement || '-'}
+                    </td>
+                    <td>
+                        <div class="contact-info-small" style="display:flex; flex-direction:column; gap:2px;">
+                            ${phoneHtml}
+                            ${emailHtml}
+                        </div>
+                    </td>
+                    <td>
+                        <span class="status-badge ${statusClass}">${lead.status || 'New'}</span>
+                    </td>
+                `;
+                list.appendChild(tr);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

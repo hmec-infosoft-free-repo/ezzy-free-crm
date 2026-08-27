@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!--  ezzy free crm - v 1.0.0 -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Ezzy Free CRM</title>
+    <!-- Google Fonts for typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Main application stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Script to load the current version of the site -->
+    <script src="site-hf/version.js"></script>
+</head>
+
+<body>
+    <!-- Main application wrapper ensuring full-height layout -->
+    <div class="app-container">
+        
+        <!-- Sidebar Navigation: Dynamically populated by app.js -->
+        <aside class="sidebar"><script>if(localStorage.getItem('sidebarCollapsed')==='true')document.querySelector('.sidebar').classList.add('collapsed');</script></aside>
+
+        <!-- Main Content Area: Contains header, page content, and hidden views -->
+        <main class="main-content">
+            
+            <!-- Top Bar: Contains global search and user profile -->
+            <header class="top-bar"></header>
+
+            <!-- Page Header: Title and controls for the current view -->
+            <div class="content-header">
+                <div class="header-titles">
+                    <h1>Business Dashboard</h1>
+                    <p>Performance metrics and recent activity overview.</p>
+                </div>
+                <!-- Controls for limiting the number of leads fetched -->
+                <div class="limit-selector-container" style="display: flex; align-items: center; gap: 8px;">
+                    <label for="leadLimitSelect" style="font-size: 11px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap;">Load Limit</label>
+                    <select id="leadLimitSelect" class="form-control" style="width: auto;">
+                        <option value="250">Latest 250</option>
+                        <option value="500">Latest 500</option>
+                        <option value="1000">Latest 1000</option>
+                        <option value="2500">Latest 2500</option>
+                        <option value="all">All Leads</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Dashboard View: The primary view for this page -->
+            <div id="dashboardView" class="view-section">
+                
+                <!-- Metrics Grid: Displays key performance indicators -->
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-users"></i></div>
+                        <div class="stat-info">
+                            <h3>Total Leads</h3>
+                            <p id="stat-total-leads">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon won"><i class="fas fa-check-circle"></i></div>
+                        <div class="stat-info">
+                            <h3>Won</h3>
+                            <p id="stat-won-leads">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon lost"><i class="fas fa-times-circle"></i></div>
+                        <div class="stat-info">
+                            <h3>Lost</h3>
+                            <p id="stat-lost-leads">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon pending"><i class="fas fa-clock"></i></div>
+                        <div class="stat-info">
+                            <h3>Pending</h3>
+                            <p id="stat-pending-leads">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity Section -->
+                <div class="dashboard-details-grid mt-4">
+                    <div class="detail-card-full">
+                        <h4>Recent Lead Activity</h4>
+                        <!-- Container for list of recent leads, populated dynamically -->
+                        <div id="recent-leads-list" class="recent-items-list">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hidden View Elements: Required for app.js routing compatibility -->
+            <!-- Even though these views aren't used here, app.js references them -->
+            <div id="leadsView" class="hidden"></div>
+            <div id="leadDatabaseView" class="hidden"></div>
+            <div id="companiesView" class="hidden"></div>
+            <div id="settingsView" class="hidden"></div>
+            <div id="addLeadBtn" class="hidden"></div>
+        </main>
+    </div>
+
+    <!-- Core Application Logic -->
+    <script src="app.js"></script>
+</body>
+
+</html>

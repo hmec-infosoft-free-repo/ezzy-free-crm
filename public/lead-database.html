@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lead Database - Ezzy Free CRM</title>
+    <!-- External CSS libraries -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Versioning script -->
+    <script src="site-hf/version.js"></script>
+</head>
+<body>
+    <!-- Main application wrapper ensuring full-height layout -->
+    <div class="app-container">
+        <!-- Sidebar Navigation: Dynamically populated by app.js -->
+        <aside class="sidebar"><script>if(localStorage.getItem('sidebarCollapsed')==='true')document.querySelector('.sidebar').classList.add('collapsed');</script></aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Navigation Bar: Contains global search and user profile -->
+            <header class="top-bar"></header>
+
+            <!-- Lead Database View: Primary view container. Set to flex to allow internal elements to scroll naturally. -->
+            <div id="leadDatabaseView" class="view-section">
+                <div class="content-header" style="flex-direction: column; align-items: stretch; gap: 15px; border-bottom: none; padding-bottom: 0; flex-shrink: 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <div class="header-titles">
+                            <h1>Lead Database</h1>
+                            <p>Comprehensive list of all leads in your system.</p>
+                        </div>
+                        <button class="btn btn-primary" id="addLeadBtn">
+                            <i class="fas fa-plus"></i> New Lead
+                        </button>
+                    </div>
+                    
+                    <!-- Filters Row: Contains multiple inputs to filter and sort the leads database -->
+                    <div class="filters-row" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; background: var(--bg-surface); padding: 15px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin-bottom: 20px;">
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <label style="font-size: 11px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">Year(s)</label>
+                            <input type="text" id="filterYear" class="form-control" placeholder="e.g. 2022, 2023" title="Type multiple years separated by commas" style="width: 120px;">
+                        </div>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <label style="font-size: 11px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">Company</label>
+                            <input type="text" id="filterCompany" class="form-control" placeholder="Search company..." style="width: 150px;">
+                        </div>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <label style="font-size: 11px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">Requirement</label>
+                            <input type="text" id="filterRequirement" class="form-control" placeholder="Keyword or tag..." style="width: 150px;">
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <label style="font-size: 11px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">Location</label>
+                            <input type="text" id="filterLocation" class="form-control" placeholder="City or Country..." style="width: 130px;">
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <label style="font-size: 11px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">Source</label>
+                            <select id="filterSource" class="form-control" style="width: 140px;">
+                                <option value="all">All Sources</option>
+                                <option value="direct">Direct</option>
+                                <option value="website">Website</option>
+                                <option value="whatsapp">WhatsApp</option>
+                                <option value="email">Email</option>
+                                <option value="call">Call</option>
+                                <option value="youtube">YouTube</option>
+                                <option value="exhibition">Exhibition (All)</option>
+                                <option value="pmec">PMEC (All)</option>
+                                <option value="pmec 2022">PMEC 2022</option>
+                                <option value="packplus">PackPlus (All)</option>
+                                <option value="packplus 2022">PackPlus 2022</option>
+                                <option value="packplus south 2023">PackPlus South 2023</option>
+                            </select>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 4px; margin-left: auto;">
+                            <label style="font-size: 11px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">Load Limit</label>
+                            <select id="leadLimitSelect" class="form-control" style="width: 140px;">
+                                <option value="500" selected>Latest 500</option>
+                                <option value="250">Latest 250</option>
+                                <option value="1000">Latest 1000</option>
+                                <option value="2500">Latest 2500</option>
+                                <option value="all">All Leads</option>
+                            </select>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <label style="font-size: 11px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">Sort By</label>
+                            <select id="sortSelect" class="form-control" style="width: 140px;">
+                                <option value="latest">Latest First</option>
+                                <option value="oldest">Oldest First</option>
+                                <option value="value-high">Quality: High-Low</option>
+                                <option value="value-low">Quality: Low-High</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Container for specific database tabs (e.g. Lead, Company, Person). Loaded dynamically. -->
+                <div id="leadsNavContainer" style="flex-shrink: 0;"></div>
+
+                <!-- Data Table Container: Wraps the main table and allows horizontal overflow if columns exceed screen width -->
+                <div class="table-container" style="flex-grow: 1;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Date / Source</th>
+                                <th>Lead & Company</th>
+                                <th>Requirement</th>
+                                <th>Contact Info</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leadDatabaseList">
+                            <!-- Rows injected by JavaScript based on local JSON data and filters -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Hidden Views: Required to exist for the router logic in app.js, preventing errors when rendering -->
+            <div id="leadsView" class="view-section hidden"></div>
+            <div id="companiesView" class="view-section hidden"></div>
+            <div id="dashboardView" class="view-section hidden"></div>
+            <div id="settingsView" class="view-section hidden"></div>
+        </main>
+    </div>
+
+    <!-- Modals Section -->
+    <!-- Lead Modals Container: Will be populated dynamically by app.js fetching lead-form.html -->
+    <div id="leadFormContainer"></div>
+
+    <!-- Hidden Modals: Retained for app.js compatibility if referenced -->
+    <div id="companyModal" class="hidden"></div>
+
+    <!-- Core Application Logic -->
+    <script src="app.js"></script>
+    <script>
+        // Immediately fetch and load the secondary navigation tabs (sub-header navigation)
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const res = await fetch('site-hf/leads-nav.html');
+                let html = await res.text();
+                html = html.replace(/{root}/g, '');
+                const container = document.getElementById('leadsNavContainer');
+                if (container) {
+                    container.innerHTML = html;
+                    document.getElementById('tab-lead-list').classList.add('active');
+                }
+            } catch (err) {
+                console.error('Error loading leads nav:', err);
+            }
+        });
+    </script>
+</body>
+</html>
